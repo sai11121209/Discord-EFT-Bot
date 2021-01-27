@@ -4,10 +4,17 @@ import discord
 import random
 import keep_alive
 
+try:
+    from .local_settings import *
+except ImportError:
+    pass
+
 keep_alive.keep_alive()
 
 # 自分のBotのアクセストークンに置き換えてください
-TOKEN = os.getenv("TOKEN")
+if os.getenv("TOKEN"):
+    TOKEN = os.getenv("TOKEN")
+
 
 # 接続に必要なオブジェクトを生成
 client = discord.Client()
