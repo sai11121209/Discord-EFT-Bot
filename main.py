@@ -1,9 +1,13 @@
 # インストールした discord.py を読み込む
+import os
 import discord
 import random
+import keep_alive
+
+keep_alive.keep_alive()
 
 # 自分のBotのアクセストークンに置き換えてください
-TOKEN = "ODAzNzcwMzQ5OTA4MTMxODUw.YBCneA.kNGweDt1Yu2XKklbBfZWWucqlbw"
+TOKEN = os.getenv("TOKEN")
 
 # 接続に必要なオブジェクトを生成
 client = discord.Client()
