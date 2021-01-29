@@ -124,7 +124,7 @@ async def on_message(message):
         elif message.content.upper() == f"{Prefix}HELP":
             embed = discord.Embed(
                 title="ヘルプ",
-                description="EFT(Escape from Tarkov) Wiki Bot使用可能コマンド一覧",
+                description="EFT(Escape from Tarkov) Wiki Bot使用可能コマンド一覧\n大文字,小文字不問です。",
                 color=0x2ECC69,
             )
             for Key, Values in CommandList.items():
