@@ -51,6 +51,7 @@ async def on_message(message):
         "各マップ情報取得": Maps,
         "武器一覧": "WEAPON",
         "マップ抽選": "RANDOM",
+        "早見表": "CHART",
     }
     # メッセージ送信者がBotだった場合は無視する
     if message.author.bot:
@@ -117,7 +118,7 @@ async def on_message(message):
             await message.channel.send(embed=embed)
 
         elif message.content.upper() == f"{Prefix}WEAPON":
-            Text = f"{Prefix}武器一覧\n"
+            Text = "武器一覧\n"
             Text += f"{Url}武器一覧"
             await message.channel.send(Text)
 
@@ -136,6 +137,12 @@ async def on_message(message):
                     Text = f"{Prefix}{Values}\n"
                 embed.add_field(name=f"{Key}コマンド", value=Text, inline=False)
             await message.channel.send(embed=embed)
+
+        elif message.content.upper() == f"{Prefix}CHART":
+            Text = "各種早見表\n"
+            Text += "https://cdn.discordapp.com/attachments/803425039864561675/804873530335690802/image0.jpg\n"
+            Text += "https://cdn.discordapp.com/attachments/803425039864561675/804873530637811772/image1.jpg"
+            await message.channel.send(Text)
 
 
 # Botの起動とDiscordサーバーへの接続
