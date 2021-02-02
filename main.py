@@ -2,14 +2,14 @@
 import os
 import discord
 import random
-import keep_alive
 
 try:
-    from .local_settings import *
+    from local_settings import *
 except ImportError:
-    pass
+    import keep_alive
 
-keep_alive.keep_alive()
+    keep_alive.keep_alive()
+
 
 # 自分のBotのアクセストークンに置き換えてください
 if os.getenv("TOKEN"):
@@ -18,6 +18,31 @@ if os.getenv("TOKEN"):
 
 # 接続に必要なオブジェクトを生成
 client = discord.Client()
+Prefix = "/"
+Url = "https://wikiwiki.jp/eft/"
+SendTemplateText = "EFT(Escape from Tarkov) Wiki "
+ReceivedText = None
+Maps = [
+    "FACTORY",
+    "WOODS",
+    "CUSTOMS",
+    "SHORELINE",
+    "INTERCHANGE",
+    "LABORATORY",
+    "RESERVE",
+]
+# 新規コマンド追加時は必ずCommandListに追加
+CommandList = {
+    "EFT公式サイト": "TOP",
+    "EFT日本語Wikiトップ": "WIKITOP",
+    "マップ一覧": "MAP",
+    "各マップ情報取得": Maps,
+    "武器一覧": "WEAPON",
+    "各武器情報取得": "武器名",
+    "マップ抽選": "RANDOM",
+    "早見表": "CHART",
+}
+
 
 # 起動時に動作する処理
 @client.event
@@ -29,30 +54,7 @@ async def on_ready():
 # メッセージ受信時に動作する処理
 @client.event
 async def on_message(message):
-    Prefix = "/"
-    Url = "https://wikiwiki.jp/eft/"
-    SendTemplateText = "EFT(Escape from Tarkov) Wiki "
-    ReceivedText = None
-    Maps = [
-        "FACTORY",
-        "WOODS",
-        "CUSTOMS",
-        "SHORELINE",
-        "INTERCHANGE",
-        "LABORATORY",
-        "RESERVE",
-    ]
-
-    # 新規コマンド追加時は必ずCommandListに追加
-    CommandList = {
-        "EFT公式サイト": "TOP",
-        "EFT日本語Wikiトップ": "WIKITOP",
-        "マップ一覧": "MAP",
-        "各マップ情報取得": Maps,
-        "武器一覧": "WEAPON",
-        "マップ抽選": "RANDOM",
-        "早見表": "CHART",
-    }
+    WeaponsData, ColName = GetWeaponData()
     # メッセージ送信者がBotだった場合は無視する
     if message.author.bot:
         return
@@ -118,9 +120,41 @@ async def on_message(message):
             await message.channel.send(embed=embed)
 
         elif message.content.upper() == f"{Prefix}WEAPON":
-            Text = "武器一覧\n"
-            Text += f"{Url}武器一覧"
-            await message.channel.send(Text)
+            BulletsData = GetBulletData()
+            embeds = []
+            for n, (index, values) in enumerate(WeaponsData.items()):
+                embed = discord.Embed(
+                    title=f"武器一覧({n+1}/{len(WeaponsData)})", url=f"{Url}武器一覧"
+                )
+                embed.add_field(
+                    name=f"{index}",
+                    value=f"[{index}wikiリンク]({Url}武器一覧#h2_content_1_{n})",
+                    inline=False,
+                )
+                infostr = ""
+                for value in values:
+                    urlencord = value[0].replace(" ", "%20")
+                    infostr += f"[{value[0]}]({Url}{urlencord})  "
+                    for c, v in zip(ColName[index][2:], value[2:]):
+                        if c == "使用弾薬":
+                            fixName = v.replace("×", "x")
+                            fixName = fixName.replace(" ", "")
+                            infostr += (
+                                f"**{c}**: [{v}]({Url}弾薬{BulletsData[fixName]})  "
+                            )
+                        else:
+                            infostr += f"**{c}**: {v}  "
+                    embed.add_field(
+                        name=value[0], value=f"{infostr}", inline=False,
+                    )
+                    infostr = ""
+                embed.set_footer(
+                    text=f"Escape from Tarkov 日本語 Wiki: {Url}",
+                    icon_url=client.user.avatarURL,
+                )
+                embeds.append(embed)
+            for embed in embeds:
+                await message.channel.send(embed=embed)
 
         elif message.content.upper() == f"{Prefix}HELP":
             embed = discord.Embed(
@@ -139,10 +173,60 @@ async def on_message(message):
             await message.channel.send(embed=embed)
 
         elif message.content.upper() == f"{Prefix}CHART":
-            Text = "各種早見表\n"
-            Text += "https://cdn.discordapp.com/attachments/803425039864561675/804873530335690802/image0.jpg\n"
-            Text += "https://cdn.discordapp.com/attachments/803425039864561675/804873530637811772/image1.jpg"
+            Text = "https://cdn.discordapp.com/attachments/803425039864561675/804873530335690802/image0.jpg\n"
+            Text += "https://cdn.discordapp.com/attachments/803425039864561675/804873530637811772/image1.jpg\n"
+            Text += "https://cdn.discordapp.com/attachments/616231205032951831/805997840140599366/image0.jpg"
             await message.channel.send(Text)
+
+
+def GetBulletData():
+    import requests as rq
+    from bs4 import BeautifulSoup
+
+    Url = "https://wikiwiki.jp/eft/"
+
+    Res = rq.get(f"{Url}弾薬")
+    Soup = BeautifulSoup(Res.text, "html.parser")
+    Exclusion = ["概要", "表の見方", "弾薬の選び方", "拳銃弾", "PDW弾", "ライフル弾", "散弾", "グレネード弾", "未実装"]
+    BulletsData = {
+        s.get_text().replace(" ", ""): s.get("href")
+        for s in Soup.find("div", {"class": "contents"}).find("ul").find_all("a")
+        if s.get_text().replace(" ", "") not in Exclusion
+    }
+    return BulletsData
+
+
+def GetWeaponData():
+    import requests as rq
+    from bs4 import BeautifulSoup
+
+    Res = rq.get(f"{Url}武器一覧")
+    Soup = BeautifulSoup(Res.text, "html.parser")
+    Exclusion = ["", "開発進行中", "企画中", "コメント", "削除済み"]
+    ColName = {}
+    WeaponsData = {
+        s.get_text().replace(" ", ""): []
+        for s in Soup.find("div", {"class": "contents"}).find_all("a")
+        if s.get_text().replace(" ", "") not in Exclusion
+    }
+    for index, s in zip(
+        WeaponsData, Soup.find_all("div", {"class": "wikiwiki-tablesorter-wrapper"}),
+    ):
+        WeaponData = []
+        NewInfoData = []
+        OldInfoData = []
+        ColName_soup = s.find("tr").find_all("strong")
+        ColName[index] = [str.get_text() for str in ColName_soup]
+        for i in s.find("tbody").find_all("tr"):
+            if len(i.find_all("td")) != 2:
+                NewInfoData = [j.get_text() for j in i.find_all("td")]
+            elif len(i.find_all("td")) == 2:
+                NewInfoData = [j.get_text() for j in i.find_all("td")]
+                NewInfoData += OldInfoData[2:]
+            OldInfoData = NewInfoData
+            WeaponData.append(NewInfoData)
+        WeaponsData[index] = WeaponData
+    return WeaponsData, ColName
 
 
 # Botの起動とDiscordサーバーへの接続
