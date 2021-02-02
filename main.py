@@ -33,21 +33,24 @@ Maps = [
 ]
 # 新規コマンド追加時は必ずCommandListに追加
 CommandList = {
-    "EFT公式サイト": "TOP",
-    "EFT日本語Wikiトップ": "WIKITOP",
-    "マップ一覧": "MAP",
-    "各マップ情報取得": Maps,
-    "武器一覧": "WEAPON",
+    "EFT公式サイト表示": "TOP",
+    "EFT日本語Wikiトップ表示": "WIKITOP",
+    "マップ一覧表示": "MAP",
+    "各マップ情報表示": Maps,
+    "武器一覧表示": "WEAPON",
     "マップ抽選": "RANDOM",
     "早見表表示": "CHART",
     "更新履歴表示": "PATCH",
 }
 # 上に追記していくこと
-PatchNote = [
-    "2021/02/02: 更新履歴表示コマンドを追加しました。",
-    "2021/02/02: 武器一覧機能の挙動を大幅に変更しました。",
-    "2021/02/02: 早見表に料金表を追加しました。",
-]
+PatchNotes = {
+    "2021/02/02": [
+        "更新履歴表示コマンドを追加しました。",
+        "武器一覧表示コマンドの挙動を大幅に変更しました。",
+        "早見表表示コマンドに料金表を追加しました。",
+    ],
+    "2021/01/30": ["早見表表示コマンドを追加しました。", "早見表コマンドにアイテム早見表を追加しました。"],
+}
 
 
 # 起動時に動作する処理
@@ -182,10 +185,14 @@ async def on_message(message):
             await message.channel.send(Text)
 
         elif message.content.upper() == f"{Prefix}PATCH":
-            Text = "更新履歴 (最終更新: 2021/02/02)\n"
-            for pn in PatchNote:
-                Text += f"{pn}\n"
-            await message.channel.send(Text)
+            embed = discord.Embed(title="更新履歴一覧")
+            for index, values in PatchNotes.items():
+                Text = ""
+                for n, value in enumerate(values):
+                    Text += f"{n+1}. {value}\n"
+                embed.add_field(name=index, value=Text, inline=False)
+            embed.set_footer(text="最終更新: 2021/02/02")
+            await message.channel.send(embed=embed)
 
 
 def GetBulletData():
