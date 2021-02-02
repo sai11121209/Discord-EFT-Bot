@@ -37,10 +37,10 @@ CommandList = {
     "EFT日本語Wikiトップ表示": "WIKITOP",
     "マップ一覧表示": "MAP",
     "各マップ情報表示": Maps,
-    "武器一覧表示": "WEAPON",
+    "武器一覧表示 ← NEW!!": "WEAPON",
     "マップ抽選": "RANDOM",
-    "早見表表示": "CHART",
-    "更新履歴表示": "PATCH",
+    "早見表表示 ← NEW!!": "CHART",
+    "更新履歴表示 ← NEW!!": "PATCH",
 }
 # 上に追記していくこと
 PatchNotes = {
