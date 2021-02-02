@@ -148,10 +148,7 @@ async def on_message(message):
                         name=value[0], value=f"{infostr}", inline=False,
                     )
                     infostr = ""
-                embed.set_footer(
-                    text=f"Escape from Tarkov 日本語 Wiki: {Url}",
-                    icon_url=client.user.avatarURL,
-                )
+                embed.set_footer(text=f"Escape from Tarkov 日本語 Wiki: {Url}")
                 embeds.append(embed)
             for embed in embeds:
                 await message.channel.send(embed=embed)
