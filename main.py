@@ -38,10 +38,16 @@ CommandList = {
     "マップ一覧": "MAP",
     "各マップ情報取得": Maps,
     "武器一覧": "WEAPON",
-    "各武器情報取得": "武器名",
     "マップ抽選": "RANDOM",
-    "早見表": "CHART",
+    "早見表表示": "CHART",
+    "更新履歴表示": "PATCH",
 }
+# 上に追記していくこと
+PatchNote = [
+    "2021/02/02: 更新履歴表示コマンドを追加しました。",
+    "2021/02/02: 武器一覧機能の挙動を大幅に変更しました。",
+    "2021/02/02: 早見表に料金表を追加しました。",
+]
 
 
 # 起動時に動作する処理
@@ -173,6 +179,12 @@ async def on_message(message):
             Text = "https://cdn.discordapp.com/attachments/803425039864561675/804873530335690802/image0.jpg\n"
             Text += "https://cdn.discordapp.com/attachments/803425039864561675/804873530637811772/image1.jpg\n"
             Text += "https://cdn.discordapp.com/attachments/616231205032951831/805997840140599366/image0.jpg"
+            await message.channel.send(Text)
+
+        elif message.content.upper() == f"{Prefix}PATCH":
+            Text = "更新履歴 (最終更新: 2021/02/02)\n"
+            for pn in PatchNote:
+                Text += f"{pn}\n"
             await message.channel.send(Text)
 
 
