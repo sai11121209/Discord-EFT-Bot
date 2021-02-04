@@ -2,6 +2,8 @@
 import os
 import discord
 import random
+import difflib
+import itertools
 
 try:
     from local_settings import *
@@ -33,23 +35,30 @@ Maps = [
 ]
 # 新規コマンド追加時は必ずCommandListに追加
 CommandList = {
-    "EFT公式サイト表示": "TOP",
-    "EFT日本語Wikiトップ表示": "WIKITOP",
-    "マップ一覧表示": "MAP",
+    "EFT公式サイト表示": ["TOP"],
+    "EFT日本語Wikiトップ表示": ["WIKITOP"],
+    "マップ一覧表示": ["MAP"],
     "各マップ情報表示": Maps,
-    "武器一覧表示 ← NEW!!": "WEAPON",
-    "マップ抽選": "RANDOM",
-    "早見表表示 ← NEW!!": "CHART",
-    "更新履歴表示 ← NEW!!": "PATCH",
+    "武器一覧表示 ← NEW!!": ["WEAPON"],
+    "各武器詳細表示 ← NEW!!": [],
+    "マップ抽選": ["RANDOM"],
+    "早見表表示": ["CHART"],
+    "更新履歴表示 ← NEW!!": ["PATCH"],
+    "ソースコード表示 ← NEW!!": ["SOURCE"],
 }
 # 上に追記していくこと
 PatchNotes = {
+    "2021/02/04": [
+        "入力されたコマンドに近いコマンドを表示するヒント機能を追加しました。",
+        "各武器名を入力することで入力された武器の詳細情報のみにアクセスできるようになりました。",
+        "BOTのソースコードにアクセスできるコマンド 'SOURCE' を追加しました。",
+    ],
     "2021/02/02": [
-        "更新履歴表示コマンドを追加しました。",
+        "更新履歴表示コマンド 'PATCH' を追加しました。",
         "武器一覧表示コマンドの挙動を大幅に変更しました。",
         "早見表表示コマンドに料金表を追加しました。",
     ],
-    "2021/01/30": ["早見表表示コマンドを追加しました。", "早見表コマンドにアイテム早見表を追加しました。"],
+    "2021/01/30": ["早見表表示コマンド 'CHART' を追加しました。", "早見表コマンドにアイテム早見表を追加しました。"],
 }
 
 
@@ -63,7 +72,17 @@ async def on_ready():
 # メッセージ受信時に動作する処理
 @client.event
 async def on_message(message):
-    WeaponsData, ColName = GetWeaponData()
+    WeaponsName, WeaponsData, ColName = GetWeaponData()
+    CommandList["各武器詳細表示"] = WeaponsName
+    # コマンドの予測変換
+    hints = [
+        Command
+        for Command in list(itertools.chain.from_iterable(CommandList.values()))
+        if difflib.SequenceMatcher(
+            None, message.content.upper(), Prefix + Command
+        ).ratio()
+        >= 0.65
+    ]
     # メッセージ送信者がBotだった場合は無視する
     if message.author.bot:
         return
@@ -154,13 +173,33 @@ async def on_message(message):
                         else:
                             infostr += f"**{c}**: {v}  "
                     embed.add_field(
-                        name=value[0], value=f"{infostr}", inline=False,
+                        name=value[0], value=infostr, inline=False,
                     )
                     infostr = ""
                 embed.set_footer(text=f"Escape from Tarkov 日本語 Wiki: {Url}")
                 embeds.append(embed)
             for embed in embeds:
                 await message.channel.send(embed=embed)
+
+        elif message.content.upper().split("/")[1] in WeaponsName:
+            BulletsData = GetBulletData()
+            InfoStr = ""
+            FixText = message.content.upper().replace(" ", "").split("/")[1]
+            WeaponName = WeaponsName[FixText]
+            UrlEncord = WeaponName[1].replace(" ", "%20")
+            # InfoStr += f"[{WeaponName[1]}]({Url}{UrlEncord})  "
+            for c, v in zip(ColName[WeaponName[0]][2:], WeaponName[3:]):
+                if c == "使用弾薬":
+                    FixName = v.replace("×", "x")
+                    FixName = FixName.replace(" ", "")
+                    InfoStr += f"**{c}**: [{v}]({Url}弾薬{BulletsData[FixName]})  "
+                else:
+                    InfoStr += f"**{c}**: {v}  "
+            Embed = discord.Embed(
+                title=WeaponName[1], url=f"{Url}{UrlEncord}", description=InfoStr
+            )
+            Embed.set_image(url=WeaponName[2])
+            await message.channel.send(embed=Embed)
 
         elif message.content.upper() == f"{Prefix}HELP":
             embed = discord.Embed(
@@ -169,12 +208,15 @@ async def on_message(message):
                 color=0x2ECC69,
             )
             for Key, Values in CommandList.items():
-                if type(Values) == list:
-                    Text = ""
-                    for Value in Values:
-                        Text += f"{Prefix}{Value}\n"
+                if Key != "各武器詳細表示":
+                    if type(Values) == list:
+                        Text = ""
+                        for Value in Values:
+                            Text += f"{Prefix}{Value}\n"
+                    else:
+                        Text = f"{Prefix}{Values}\n"
                 else:
-                    Text = f"{Prefix}{Values}\n"
+                    Text = "/武器名"
                 embed.add_field(name=f"{Key}コマンド", value=Text, inline=False)
             await message.channel.send(embed=embed)
 
@@ -191,8 +233,25 @@ async def on_message(message):
                 for n, value in enumerate(values):
                     Text += f"{n+1}. {value}\n"
                 embed.add_field(name=index, value=Text, inline=False)
-            embed.set_footer(text="最終更新: 2021/02/02")
+            embed.set_footer(text=f"最終更新: {list(PatchNotes.keys())[0]}")
             await message.channel.send(embed=embed)
+
+        elif message.content.upper() == f"{Prefix}SOURCE":
+            Text = "BOTのソースコードです。\n"
+            Text += "https://github.com/sai11121209/Discord-EFT-Bot"
+            await message.channel.send(Text)
+
+        elif len(hints) > 0:
+            Text = "Hint: もしかして以下のコマンドですか?\n"
+            for n, hint in enumerate(hints):
+                Text += f"{n+1}. {Prefix}{hint}\n"
+            Text += "その他使用可能コマンド表示は /help で確認できます。"
+            await message.channel.send(Text)
+
+        else:
+            Text = "そのようなコマンドは存在しません。\n"
+            Text += "使用可能コマンド表示は /help で確認できます。"
+            await message.channel.send(Text)
 
 
 def GetBulletData():
@@ -234,15 +293,21 @@ def GetWeaponData():
         ColName_soup = s.find("tr").find_all("strong")
         ColName[index] = [str.get_text() for str in ColName_soup]
         for i in s.find("tbody").find_all("tr"):
-            if len(i.find_all("td")) != 2:
-                NewInfoData = [j.get_text() for j in i.find_all("td")]
-            elif len(i.find_all("td")) == 2:
-                NewInfoData = [j.get_text() for j in i.find_all("td")]
+            NewInfoData = [
+                j.find("img")["src"] if j.find("img") else j.get_text()
+                for j in i.find_all("td")
+            ]
+            if len(i.find_all("td")) == 2:
                 NewInfoData += OldInfoData[2:]
             OldInfoData = NewInfoData
             WeaponData.append(NewInfoData)
         WeaponsData[index] = WeaponData
-    return WeaponsData, ColName
+    WeaponsName = {
+        Value[0]: [Key] + Value
+        for Key, Values in WeaponsData.items()
+        for Value in Values
+    }
+    return WeaponsName, WeaponsData, ColName
 
 
 # Botの起動とDiscordサーバーへの接続
