@@ -39,12 +39,12 @@ CommandList = {
     "EFT日本語Wikiトップ表示": ["WIKITOP"],
     "マップ一覧表示": ["MAP"],
     "各マップ情報表示": Maps,
-    "武器一覧表示 ← NEW!!": ["WEAPON"],
-    "各武器詳細表示 ← NEW!!": [],
+    "武器一覧表示": ["WEAPON"],
+    "各武器詳細表示": [],
     "マップ抽選": ["RANDOM"],
     "早見表表示": ["CHART"],
-    "更新履歴表示 ← NEW!!": ["PATCH"],
-    "ソースコード表示 ← NEW!!": ["SOURCE"],
+    "更新履歴表示": ["PATCH"],
+    "ソースコード表示": ["SOURCE"],
 }
 # 上に追記していくこと
 PatchNotes = {
@@ -204,7 +204,7 @@ async def on_message(message):
         elif message.content.upper() == f"{Prefix}HELP":
             embed = discord.Embed(
                 title="ヘルプ",
-                description="EFT(Escape from Tarkov) Wiki Bot使用可能コマンド一覧\n大文字,小文字不問です。",
+                description="EFT(Escape from Tarkov) Wiki Bot使用可能コマンド一覧",
                 color=0x2ECC69,
             )
             for Key, Values in CommandList.items():
