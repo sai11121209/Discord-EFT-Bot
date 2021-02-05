@@ -4,6 +4,8 @@ import discord
 import random
 import difflib
 import itertools
+import requests as rq
+from bs4 import BeautifulSoup
 
 try:
     from local_settings import *
@@ -72,17 +74,6 @@ async def on_ready():
 # メッセージ受信時に動作する処理
 @client.event
 async def on_message(message):
-    WeaponsName, WeaponsData, ColName = GetWeaponData()
-    CommandList["各武器詳細表示"] = WeaponsName
-    # コマンドの予測変換
-    hints = [
-        Command
-        for Command in list(itertools.chain.from_iterable(CommandList.values()))
-        if difflib.SequenceMatcher(
-            None, message.content.upper(), Prefix + Command
-        ).ratio()
-        >= 0.65
-    ]
     # メッセージ送信者がBotだった場合は無視する
     if message.author.bot:
         return
@@ -92,17 +83,22 @@ async def on_message(message):
             Text = f"{Prefix}EFT公式サイト\n"
             Text += "https://www.escapefromtarkov.com/"
             await message.channel.send(Text)
+            return 0
 
-        if message.content.upper() == f"{Prefix}WIKITOP":
+        elif message.content.upper() == f"{Prefix}WIKITOP":
             Text = f"{Prefix}EFT日本語Wikiトップ\n"
             Text += Url
             await message.channel.send(Text)
+            return 0
+
         elif message.content.upper() == f"{Prefix}MAP":
             Text = "マップ一覧\n"
             for Map in Maps:
                 Text += f"{Map}: {Url}{Map}\n"
             Text += f"{Prefix}マップ名で各マップの詳細情報にアクセスできます。 例: /reserve"
             await message.channel.send(Text)
+            return 0
+
         elif message.content.upper().split("/")[1] in Maps:
             ReceivedText = message.content.upper().split("/")[1]
             Text = f"{SendTemplateText}{ReceivedText} INFORMATION\n"
@@ -139,6 +135,7 @@ async def on_message(message):
                 Text += "https://cdn.wikiwiki.jp/to/w/eft/RESERVE/::attach/ReserveUnderground.jpg"
 
             await message.channel.send(Text)
+            return 0
         elif message.content.upper() == f"{Prefix}RANDOM":
             embed = discord.Embed(
                 title="迷ったときのEFTマップ抽選", description="今回のマップは...", color=0x2ECC69,
@@ -146,6 +143,51 @@ async def on_message(message):
             # embed.set_thumbnail(url=message.author.avatar_url)
             embed.add_field(name="MAP", value=random.choice(Maps), inline=False)
             await message.channel.send(embed=embed)
+            return 0
+
+        elif message.content.upper() == f"{Prefix}HELP":
+            embed = discord.Embed(
+                title="ヘルプ",
+                description="EFT(Escape from Tarkov) Wiki Bot使用可能コマンド一覧",
+                color=0x2ECC69,
+            )
+            for Key, Values in CommandList.items():
+                if Key != "各武器詳細表示":
+                    if type(Values) == list:
+                        Text = ""
+                        for Value in Values:
+                            Text += f"{Prefix}{Value}\n"
+                    else:
+                        Text = f"{Prefix}{Values}\n"
+                else:
+                    Text = "/武器名"
+                embed.add_field(name=f"{Key}コマンド", value=Text, inline=False)
+            await message.channel.send(embed=embed)
+            return 0
+
+        elif message.content.upper() == f"{Prefix}CHART":
+            Text = "https://cdn.discordapp.com/attachments/803425039864561675/804873530335690802/image0.jpg\n"
+            Text += "https://cdn.discordapp.com/attachments/803425039864561675/804873530637811772/image1.jpg\n"
+            Text += "https://cdn.discordapp.com/attachments/616231205032951831/805997840140599366/image0.jpg"
+            await message.channel.send(Text)
+            return 0
+
+        elif message.content.upper() == f"{Prefix}PATCH":
+            embed = discord.Embed(title="更新履歴一覧")
+            for index, values in PatchNotes.items():
+                Text = ""
+                for n, value in enumerate(values):
+                    Text += f"{n+1}. {value}\n"
+                embed.add_field(name=index, value=Text, inline=False)
+            embed.set_footer(text=f"最終更新: {list(PatchNotes.keys())[0]}")
+            await message.channel.send(embed=embed)
+            return 0
+
+        elif message.content.upper() == f"{Prefix}SOURCE":
+            Text = "BOTのソースコードです。\n"
+            Text += "https://github.com/sai11121209/Discord-EFT-Bot"
+            await message.channel.send(Text)
+            return 0
 
         elif message.content.upper() == f"{Prefix}WEAPON":
             BulletsData = GetBulletData()
@@ -180,8 +222,21 @@ async def on_message(message):
                 embeds.append(embed)
             for embed in embeds:
                 await message.channel.send(embed=embed)
+            return 0
 
-        elif message.content.upper().split("/")[1] in WeaponsName:
+        WeaponsName, WeaponsData, ColName = GetWeaponData()
+        CommandList["各武器詳細表示"] = WeaponsName
+        # コマンドの予測変換
+        hints = [
+            Command
+            for Command in list(itertools.chain.from_iterable(CommandList.values()))
+            if difflib.SequenceMatcher(
+                None, message.content.upper(), Prefix + Command
+            ).ratio()
+            >= 0.65
+        ]
+
+        if message.content.upper().split("/")[1] in WeaponsName:
             BulletsData = GetBulletData()
             InfoStr = ""
             FixText = message.content.upper().replace(" ", "").split("/")[1]
@@ -200,46 +255,7 @@ async def on_message(message):
             )
             Embed.set_image(url=WeaponName[2])
             await message.channel.send(embed=Embed)
-
-        elif message.content.upper() == f"{Prefix}HELP":
-            embed = discord.Embed(
-                title="ヘルプ",
-                description="EFT(Escape from Tarkov) Wiki Bot使用可能コマンド一覧",
-                color=0x2ECC69,
-            )
-            for Key, Values in CommandList.items():
-                if Key != "各武器詳細表示":
-                    if type(Values) == list:
-                        Text = ""
-                        for Value in Values:
-                            Text += f"{Prefix}{Value}\n"
-                    else:
-                        Text = f"{Prefix}{Values}\n"
-                else:
-                    Text = "/武器名"
-                embed.add_field(name=f"{Key}コマンド", value=Text, inline=False)
-            await message.channel.send(embed=embed)
-
-        elif message.content.upper() == f"{Prefix}CHART":
-            Text = "https://cdn.discordapp.com/attachments/803425039864561675/804873530335690802/image0.jpg\n"
-            Text += "https://cdn.discordapp.com/attachments/803425039864561675/804873530637811772/image1.jpg\n"
-            Text += "https://cdn.discordapp.com/attachments/616231205032951831/805997840140599366/image0.jpg"
-            await message.channel.send(Text)
-
-        elif message.content.upper() == f"{Prefix}PATCH":
-            embed = discord.Embed(title="更新履歴一覧")
-            for index, values in PatchNotes.items():
-                Text = ""
-                for n, value in enumerate(values):
-                    Text += f"{n+1}. {value}\n"
-                embed.add_field(name=index, value=Text, inline=False)
-            embed.set_footer(text=f"最終更新: {list(PatchNotes.keys())[0]}")
-            await message.channel.send(embed=embed)
-
-        elif message.content.upper() == f"{Prefix}SOURCE":
-            Text = "BOTのソースコードです。\n"
-            Text += "https://github.com/sai11121209/Discord-EFT-Bot"
-            await message.channel.send(Text)
+            return 0
 
         elif len(hints) > 0:
             Text = "Hint: もしかして以下のコマンドですか?\n"
@@ -247,19 +263,16 @@ async def on_message(message):
                 Text += f"{n+1}. {Prefix}{hint}\n"
             Text += "その他使用可能コマンド表示は /help で確認できます。"
             await message.channel.send(Text)
+            return 0
 
         else:
             Text = "そのようなコマンドは存在しません。\n"
             Text += "使用可能コマンド表示は /help で確認できます。"
             await message.channel.send(Text)
+            return 0
 
 
 def GetBulletData():
-    import requests as rq
-    from bs4 import BeautifulSoup
-
-    Url = "https://wikiwiki.jp/eft/"
-
     Res = rq.get(f"{Url}弾薬")
     Soup = BeautifulSoup(Res.text, "html.parser", from_encoding="utf-8")
     Exclusion = ["概要", "表の見方", "弾薬の選び方", "拳銃弾", "PDW弾", "ライフル弾", "散弾", "グレネード弾", "未実装"]
@@ -272,9 +285,6 @@ def GetBulletData():
 
 
 def GetWeaponData():
-    import requests as rq
-    from bs4 import BeautifulSoup
-
     Res = rq.get(f"{Url}武器一覧")
     Soup = BeautifulSoup(Res.text, "html.parser", from_encoding="utf-8")
     Exclusion = ["", "開発進行中", "企画中", "コメント", "削除済み"]
