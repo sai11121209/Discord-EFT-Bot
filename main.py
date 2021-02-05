@@ -261,7 +261,7 @@ def GetBulletData():
     Url = "https://wikiwiki.jp/eft/"
 
     Res = rq.get(f"{Url}弾薬")
-    Soup = BeautifulSoup(Res.text, "html.parser")
+    Soup = BeautifulSoup(Res.text, "html.parser", from_encoding="utf-8")
     Exclusion = ["概要", "表の見方", "弾薬の選び方", "拳銃弾", "PDW弾", "ライフル弾", "散弾", "グレネード弾", "未実装"]
     BulletsData = {
         s.get_text().replace(" ", ""): s.get("href")
@@ -276,7 +276,7 @@ def GetWeaponData():
     from bs4 import BeautifulSoup
 
     Res = rq.get(f"{Url}武器一覧")
-    Soup = BeautifulSoup(Res.text, "html.parser")
+    Soup = BeautifulSoup(Res.text, "html.parser", from_encoding="utf-8")
     Exclusion = ["", "開発進行中", "企画中", "コメント", "削除済み"]
     ColName = {}
     WeaponsData = {
