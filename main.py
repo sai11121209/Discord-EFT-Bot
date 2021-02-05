@@ -275,7 +275,7 @@ async def on_message(message):
 
 def GetBulletData():
     Res = rq.get(f"{Url}弾薬")
-    Soup = BeautifulSoup(Res.text, "html.parser", from_encoding="utf-8").find(
+    Soup = BeautifulSoup(Res.text, "lxml", from_encoding="utf-8").find(
         "div", {"class": "container-wrapper"}
     )
     Exclusion = ["概要", "表の見方", "弾薬の選び方", "拳銃弾", "PDW弾", "ライフル弾", "散弾", "グレネード弾", "未実装"]
@@ -289,7 +289,7 @@ def GetBulletData():
 
 def GetWeaponData():
     Res = rq.get(f"{Url}武器一覧")
-    Soup = BeautifulSoup(Res.text, "html.parser", from_encoding="utf-8").find(
+    Soup = BeautifulSoup(Res.text, "lxml", from_encoding="utf-8").find(
         "div", {"class": "container-wrapper"}
     )
     Exclusion = ["", "開発進行中", "企画中", "コメント", "削除済み"]
