@@ -189,8 +189,9 @@ async def on_message(message):
             Text += "https://github.com/sai11121209/Discord-EFT-Bot"
             await message.channel.send(Text)
             return 0
-
-        elif message.content.upper() == f"{Prefix}WEAPON":
+        
+        WeaponsName, WeaponsData, ColName = GetWeaponData()
+        if message.content.upper() == f"{Prefix}WEAPON":
             BulletsData = GetBulletData()
             embeds = []
             for n, (index, values) in enumerate(WeaponsData.items()):
@@ -225,7 +226,6 @@ async def on_message(message):
                 await message.channel.send(embed=embed)
             return 0
 
-        WeaponsName, WeaponsData, ColName = GetWeaponData()
         CommandList["各武器詳細表示"] = WeaponsName
         # コマンドの予測変換
         hints = [
