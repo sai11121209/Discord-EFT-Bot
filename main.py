@@ -50,7 +50,8 @@ CommandList = {
 }
 # 上に追記していくこと
 PatchNotes = {
-    "2021/02/05": ["一部コマンドを除いたレスポンスの向上",],
+    "2021/02/08": ["一部コマンドのレスポンス内容の変更を行いました。"],
+    "2021/02/05": ["一部コマンドを除いたレスポンスの向上"],
     "2021/02/04": [
         "入力されたコマンドに近いコマンドを表示するヒント機能を追加しました。",
         "各武器名を入力することで入力された武器の詳細情報のみにアクセスできるようになりました。",
@@ -81,29 +82,49 @@ async def on_message(message):
 
     if Prefix in message.content:
         if message.content.upper() == f"{Prefix}TOP":
-            Text = f"{Prefix}EFT公式サイト\n"
-            Text += "https://www.escapefromtarkov.com/"
-            await message.channel.send(Text)
+            Text = "www.escapefromtarkov.com"
+            Embed = discord.Embed(
+                title="Escape from Tarkov official page",
+                url="https://www.escapefromtarkov.com/",
+                description=Text,
+                color=0x2ECC69,
+            )
+            Embed.set_thumbnail(
+                url="https://www.escapefromtarkov.com/themes/eft/images/eft_logo_promo.jpg"
+            )
+            await message.channel.send(embed=Embed)
             return 0
 
         elif message.content.upper() == f"{Prefix}WIKITOP":
-            Text = f"{Prefix}EFT日本語Wikiトップ\n"
-            Text += Url
-            await message.channel.send(Text)
+            Text = "wikiwiki.jp"
+            Embed = discord.Embed(
+                title="Escape from Tarkov 日本語WIKI",
+                url=Url,
+                description=Text,
+                color=0x2ECC69,
+            )
+            Embed.set_thumbnail(
+                url="https://www.escapefromtarkov.com/themes/eft/images/eft_logo_promo.jpg"
+            )
+            await message.channel.send(embed=Embed)
             return 0
 
         elif message.content.upper() == f"{Prefix}MAP":
-            Text = "マップ一覧\n"
+            Text = ""
             for Map in Maps:
-                Text += f"{Map}: {Url}{Map}\n"
-            Text += f"{Prefix}マップ名で各マップの詳細情報にアクセスできます。 例: /reserve"
-            await message.channel.send(Text)
+                Text += f"[{Map}]({Url}{Map})\n"
+            Embed = discord.Embed(
+                title="マップ", url=f"{Url}", description=Text, color=0x2ECC69,
+            )
+            Embed.set_footer(text=f"{Prefix}マップ名で各マップの詳細情報にアクセスできます。 例: /reserve")
+            await message.channel.send(embed=Embed)
             return 0
 
         elif message.content.upper().split("/")[1] in Maps:
             ReceivedText = message.content.upper().split("/")[1]
             Text = f"{SendTemplateText}{ReceivedText} INFORMATION\n"
             Text += f"{ReceivedText}(EFT 日本語 Wiki URL): {Url}{ReceivedText}\n"
+
             if message.content.upper() == "/FACTORY":
                 Text += "https://cdn.wikiwiki.jp/to/w/eft/img/::attach/FactoryMap.jpg"
 
@@ -137,11 +158,11 @@ async def on_message(message):
 
             await message.channel.send(Text)
             return 0
+
         elif message.content.upper() == f"{Prefix}RANDOM":
             embed = discord.Embed(
                 title="迷ったときのEFTマップ抽選", description="今回のマップは...", color=0x2ECC69,
             )
-            # embed.set_thumbnail(url=message.author.avatar_url)
             embed.add_field(name="MAP", value=random.choice(Maps), inline=False)
             await message.channel.send(embed=embed)
             return 0
@@ -174,58 +195,68 @@ async def on_message(message):
             return 0
 
         elif message.content.upper() == f"{Prefix}PATCH":
-            embed = discord.Embed(title="更新履歴一覧")
-            for index, values in PatchNotes.items():
+            Embed = discord.Embed(title="更新履歴一覧")
+            for Index, Values in PatchNotes.items():
                 Text = ""
-                for n, value in enumerate(values):
-                    Text += f"{n+1}. {value}\n"
-                embed.add_field(name=index, value=Text, inline=False)
-            embed.set_footer(text=f"最終更新: {list(PatchNotes.keys())[0]}")
-            await message.channel.send(embed=embed)
+                for N, Value in enumerate(Values):
+                    Text += f"{N+1}. {Value}\n"
+                Embed.add_field(name=Index, value=Text, inline=False)
+            Embed.set_footer(text=f"最終更新: {list(PatchNotes.keys())[0]}")
+            await message.channel.send(embed=Embed)
             return 0
 
         elif message.content.upper() == f"{Prefix}SOURCE":
-            Text = "BOTのソースコードです。\n"
-            Text += "https://github.com/sai11121209/Discord-EFT-Bot"
-            await message.channel.send(Text)
-            return 0
-        
-        WeaponsName, WeaponsData, ColName = GetWeaponData()
-        if message.content.upper() == f"{Prefix}WEAPON":
-            BulletsData = GetBulletData()
-            embeds = []
-            for n, (index, values) in enumerate(WeaponsData.items()):
-                embed = discord.Embed(
-                    title=f"武器一覧({n+1}/{len(WeaponsData)})", url=f"{Url}武器一覧"
-                )
-                embed.add_field(
-                    name=f"{index}",
-                    value=f"[{index}wikiリンク]({Url}武器一覧#h2_content_1_{n})",
-                    inline=False,
-                )
-                infostr = ""
-                for value in values:
-                    urlencord = value[0].replace(" ", "%20")
-                    infostr += f"[{value[0]}]({Url}{urlencord})  "
-                    for c, v in zip(ColName[index][2:], value[2:]):
-                        if c == "使用弾薬":
-                            fixName = v.replace("×", "x")
-                            fixName = fixName.replace(" ", "")
-                            infostr += (
-                                f"**{c}**: [{v}]({Url}弾薬{BulletsData[fixName]})  "
-                            )
-                        else:
-                            infostr += f"**{c}**: {v}  "
-                    embed.add_field(
-                        name=value[0], value=infostr, inline=False,
-                    )
-                    infostr = ""
-                embed.set_footer(text=f"Escape from Tarkov 日本語 Wiki: {Url}")
-                embeds.append(embed)
-            for embed in embeds:
-                await message.channel.send(embed=embed)
+            Text = "Contribute to sai11121209/Discord-EFT-Bot development by creating an account on GitHub."
+            Embed = discord.Embed(
+                title="GitHub",
+                url="https://github.com/sai11121209/Discord-EFT-Bot",
+                description=Text,
+                color=0x2ECC69,
+            )
+            Embed.set_thumbnail(
+                url="https://avatars.githubusercontent.com/u/55883274?s=400&v=4"
+            )
+            await message.channel.send(embed=Embed)
             return 0
 
+        WeaponsName, WeaponsData, ColName = GetWeaponData()
+
+        if message.content.upper() == f"{Prefix}WEAPON":
+            BulletsData = GetBulletData()
+            Embeds = []
+            for N, (Index, Values) in enumerate(WeaponsData.items()):
+                Embed = discord.Embed(
+                    title=f"武器一覧({N+1}/{len(WeaponsData)})", url=f"{Url}武器一覧"
+                )
+                Embed.add_field(
+                    name=f"{Index}",
+                    value=f"[{Index}wikiリンク]({Url}武器一覧#h2_content_1_{N})",
+                    inline=False,
+                )
+                Infostr = ""
+                for Value in Values:
+                    Urlencord = Value[0].replace(" ", "%20")
+                    Infostr += f"[{Value[0]}]({Url}{Urlencord})  "
+                    for c, v in zip(ColName[Index][2:], Value[2:]):
+                        if c == "使用弾薬":
+                            FixName = v.replace("×", "x")
+                            FixName = FixName.replace(" ", "")
+                            Infostr += (
+                                f"**{c}**: [{v}]({Url}弾薬{BulletsData[FixName]})  "
+                            )
+                        else:
+                            Infostr += f"**{c}**: {v}  "
+                    Embed.add_field(
+                        name=Value[0], value=Infostr, inline=False,
+                    )
+                    Infostr = ""
+                Embed.set_footer(text=f"Escape from Tarkov 日本語 Wiki: {Url}")
+                Embeds.append(Embed)
+            for Embed in Embeds:
+                await message.channel.send(embed=Embed)
+            return 0
+
+        WeaponsName, WeaponsData, ColName = GetWeaponData()
         CommandList["各武器詳細表示"] = WeaponsName
         # コマンドの予測変換
         hints = [
