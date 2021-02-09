@@ -43,6 +43,7 @@ CommandList = {
     "各マップ情報表示": Maps,
     "武器一覧表示": ["WEAPON"],
     "各武器詳細表示": [],
+    "タスク一覧表示": ["TASK"],
     "マップ抽選": ["RANDOM"],
     "早見表表示": ["CHART"],
     "更新履歴表示": ["PATCH"],
@@ -50,6 +51,7 @@ CommandList = {
 }
 # 上に追記していくこと
 PatchNotes = {
+    "2021/02/10": ["タスク一覧表示コマンド 'TASK' を追加しました。"],
     "2021/02/08": ["一部コマンドのレスポンス内容の変更を行いました。"],
     "2021/02/05": ["一部コマンドを除いたレスポンスの向上"],
     "2021/02/04": [
@@ -64,7 +66,6 @@ PatchNotes = {
     ],
     "2021/01/30": ["早見表表示コマンド 'CHART' を追加しました。", "早見表コマンドにアイテム早見表を追加しました。"],
 }
-
 
 # 起動時に動作する処理
 @client.event
@@ -219,9 +220,20 @@ async def on_message(message):
             await message.channel.send(embed=Embed)
             return 0
 
-        WeaponsName, WeaponsData, ColName = GetWeaponData()
+        elif message.content.upper() == f"{Prefix}TASK":
+            TraderNames = GetTraderNames()
+            Text = ""
+            for TraderName in TraderNames:
+                Text += f"[{TraderName}]({Url}{TraderName.capitalize()}タスク)\n"
+            Embed = discord.Embed(
+                title="タスク", url=f"{Url}タスク", description=Text, color=0x2ECC69,
+            )
+            Embed.set_footer(text="トレーダー名をクリックすることで各トレーダータスクの詳細情報にアクセスできます。")
+            await message.channel.send(embed=Embed)
+            return 0
 
         if message.content.upper() == f"{Prefix}WEAPON":
+            WeaponsName, WeaponsData, ColName = GetWeaponData()
             BulletsData = GetBulletData()
             Embeds = []
             for N, (Index, Values) in enumerate(WeaponsData.items()):
@@ -302,6 +314,13 @@ async def on_message(message):
             Text += "使用可能コマンド表示は /help で確認できます。"
             await message.channel.send(Text)
             return 0
+
+
+def GetTraderNames():
+    Res = rq.get(f"{Url}タスク")
+    Soup = BeautifulSoup(Res.text, "lxml", from_encoding="utf-8")
+    Soup = Soup.find("div", {"class": "contents"}).find_all("ul", {"class": "list2"})[1]
+    return [s.get_text().replace(" ", "") for s in Soup.find_all("a")]
 
 
 def GetBulletData():
