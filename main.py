@@ -43,6 +43,7 @@ CommandList = {
     "各マップ情報表示": Maps,
     "武器一覧表示": ["WEAPON"],
     "各武器詳細表示": [],
+    "弾薬性能表示": ["AMMO"],
     "タスク一覧表示": ["TASK"],
     "マップ抽選": ["RANDOM"],
     "早見表表示": ["CHART"],
@@ -232,7 +233,19 @@ async def on_message(message):
             await message.channel.send(embed=Embed)
             return 0
 
-        if message.content.upper() == f"{Prefix}WEAPON":
+        elif message.content.upper() == f"{Prefix}AMMO":
+            Text = "eft.monster"
+            Embed = discord.Embed(
+                title="弾薬性能表",
+                url="https://eft.monster/",
+                description=Text,
+                color=0x2ECC69,
+            )
+            Embed.set_thumbnail(url="https://eft.monster/ogre_color.png")
+            await message.channel.send(embed=Embed)
+            return 0
+
+        elif message.content.upper() == f"{Prefix}WEAPON":
             WeaponsName, WeaponsData, ColName = GetWeaponData()
             BulletsData = GetBulletData()
             Embeds = []
