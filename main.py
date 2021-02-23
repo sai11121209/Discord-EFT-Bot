@@ -52,6 +52,7 @@ CommandList = {
 }
 # 上に追記していくこと
 PatchNotes = {
+    "2021/02/23": [f"最初の文字が '{Prefix}' 以外の文字の場合コマンドとして認識しないように修正。"],
     "2021/02/10": ["タスク一覧表示コマンド 'TASK' を追加しました。", "弾薬性能表示コマンド 'AMMO' を追加しました。"],
     "2021/02/08": ["一部コマンドのレスポンス内容の変更を行いました。"],
     "2021/02/05": ["一部コマンドを除いたレスポンスの向上"],
@@ -73,6 +74,9 @@ PatchNotes = {
 async def on_ready():
     # 起動したらターミナルにログイン通知が表示される
     print("ログインしました")
+    await client.change_presence(
+        activity=discord.Game(name="Escape from Tarkov", type=1)
+    )
 
 
 # メッセージ受信時に動作する処理
@@ -82,7 +86,7 @@ async def on_message(message):
     if message.author.bot:
         return
 
-    if Prefix in message.content:
+    if Prefix == message.content[0]:
         if message.content.upper() == f"{Prefix}TOP":
             Text = "www.escapefromtarkov.com"
             Embed = discord.Embed(
