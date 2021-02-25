@@ -52,6 +52,7 @@ CommandList = {
 }
 # 上に追記していくこと
 PatchNotes = {
+    "2021/02/25": ["早見表表示コマンドに2件早見表を追加しました。"],
     "2021/02/23": [f"最初の文字が '{Prefix}' 以外の文字の場合コマンドとして認識しないように修正。"],
     "2021/02/10": ["タスク一覧表示コマンド 'TASK' を追加しました。", "弾薬性能表示コマンド 'AMMO' を追加しました。"],
     "2021/02/08": ["一部コマンドのレスポンス内容の変更を行いました。"],
@@ -196,7 +197,9 @@ async def on_message(message):
         elif message.content.upper() == f"{Prefix}CHART":
             Text = "https://cdn.discordapp.com/attachments/803425039864561675/804873530335690802/image0.jpg\n"
             Text += "https://cdn.discordapp.com/attachments/803425039864561675/804873530637811772/image1.jpg\n"
-            Text += "https://cdn.discordapp.com/attachments/616231205032951831/805997840140599366/image0.jpg"
+            Text += "https://cdn.discordapp.com/attachments/616231205032951831/805997840140599366/image0.jpg\n"
+            Text += "https://cdn.discordapp.com/attachments/808820772536582154/814055787479564318/image0.webp\n"
+            Text += "https://media.discordapp.net/attachments/808820772536582154/814055787898077215/image1.webp"
             await message.channel.send(Text)
             return 0
 
