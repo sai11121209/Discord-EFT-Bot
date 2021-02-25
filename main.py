@@ -334,6 +334,15 @@ async def on_message(message):
             Text += "使用可能コマンド表示は /help で確認できます。"
             await message.channel.send(Text)
             return 0
+    elif "@everyone BOTの更新をしました!" == message.content:
+        Embed = discord.Embed(title="更新履歴一覧")
+        for Index, Values in PatchNotes.items():
+            Text = ""
+            for N, Value in enumerate(Values):
+                Text += f"{N+1}. {Value}\n"
+            Embed.add_field(name=Index, value=Text, inline=False)
+        Embed.set_footer(text=f"最終更新: {list(PatchNotes.keys())[0]}")
+        await message.channel.send(embed=Embed)
 
 
 def GetTraderNames():
