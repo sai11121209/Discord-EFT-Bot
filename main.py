@@ -52,6 +52,7 @@ CommandList = {
 }
 # 上に追記していくこと
 PatchNotes = {
+    "2021/03/04": ["botがよりフレンドリーな返答をするようになりました。"],
     "2021/02/25": ["早見表表示コマンドに2件早見表を追加しました。"],
     "2021/02/23": [f"最初の文字が '{Prefix}' 以外の文字の場合コマンドとして認識しないように修正。"],
     "2021/02/10": ["タスク一覧表示コマンド 'TASK' を追加しました。", "弾薬性能表示コマンド 'AMMO' を追加しました。"],
@@ -123,7 +124,7 @@ async def on_message(message):
             Embed = discord.Embed(
                 title="マップ", url=f"{Url}", description=Text, color=0x2ECC69,
             )
-            Embed.set_footer(text=f"{Prefix}マップ名で各マップの詳細情報にアクセスできます。 例: /reserve")
+            Embed.set_footer(text=f"{Prefix}マップ名で各マップの詳細情報にアクセスできるよー。 例: /reserve")
             await message.channel.send(embed=Embed)
             return 0
 
@@ -177,7 +178,7 @@ async def on_message(message):
         elif message.content.upper() == f"{Prefix}HELP":
             embed = discord.Embed(
                 title="ヘルプ",
-                description="EFT(Escape from Tarkov) Wiki Bot使用可能コマンド一覧",
+                description="EFT(Escape from Tarkov) Wiki Bot使用可能コマンド一覧だよ!",
                 color=0x2ECC69,
             )
             for Key, Values in CommandList.items():
@@ -236,7 +237,7 @@ async def on_message(message):
             Embed = discord.Embed(
                 title="タスク", url=f"{Url}タスク", description=Text, color=0x2ECC69,
             )
-            Embed.set_footer(text="トレーダー名をクリックすることで各トレーダータスクの詳細情報にアクセスできます。")
+            Embed.set_footer(text="トレーダー名をクリックすることで各トレーダータスクの詳細情報にアクセスできるよー。")
             await message.channel.send(embed=Embed)
             return 0
 
@@ -322,16 +323,16 @@ async def on_message(message):
             return 0
 
         elif len(hints) > 0:
-            Text = "Hint: もしかして以下のコマンドですか?\n"
+            Text = "Hint: もしかして以下のコマンドじゃね?\n"
             for n, hint in enumerate(hints):
                 Text += f"{n+1}. {Prefix}{hint}\n"
-            Text += "その他使用可能コマンド表示は /help で確認できます。"
+            Text += "これ以外に使えるコマンドは /help で確認できるよ!"
             await message.channel.send(Text)
             return 0
 
         else:
-            Text = "そのようなコマンドは存在しません。\n"
-            Text += "使用可能コマンド表示は /help で確認できます。"
+            Text = "入力されたがコマンドが見つからなかった...ごめんなさい。\n"
+            Text += "これ以外に使えるコマンドは /help で確認できるよ!"
             await message.channel.send(Text)
             return 0
     elif "@everyone BOTの更新をしました!" == message.content:
