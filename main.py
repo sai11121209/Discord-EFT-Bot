@@ -52,7 +52,8 @@ CommandList = {
 }
 # 上に追記していくこと
 PatchNotes = {
-    "2021/03/04": ["botがよりフレンドリーな返答をするようになりました。"],
+    "2021/03/06": ["BOTが公式アナウンスを自動的に翻訳してくれるようになりました。"],
+    "2021/03/04": ["BOTがよりフレンドリーな返答をするようになりました。"],
     "2021/02/25": ["早見表表示コマンドに2件早見表を追加しました。"],
     "2021/02/23": [f"最初の文字が '{Prefix}' 以外の文字の場合コマンドとして認識しないように修正。"],
     "2021/02/10": ["タスク一覧表示コマンド 'TASK' を追加しました。", "弾薬性能表示コマンド 'AMMO' を追加しました。"],
@@ -85,10 +86,30 @@ async def on_ready():
 @client.event
 async def on_message(message):
     # メッセージ送信者がBotだった場合は無視する
+    print(message)
     if message.author.bot:
-        return
+        SpecificChannelId = 811566006132408340
+        SpecificUserId = 803770349908131850
+        if (
+            message.channel.id == SpecificChannelId
+            and message.author.id != SpecificUserId
+        ):
+            # 翻訳文書
+            Text = message.content
+            # 翻訳前言語
+            Source = "en"
+            # 翻訳後言語
+            Target = "ja"
+            url = f"https://script.google.com/macros/s/AKfycbxvCS-29LVgrm9-cSynGl19QUIB7jTpzuvFqflus_P0BJtXX80ahLazltfm2rbMGVVs/exec?text={Text}&source={Source}&target={Target}"
+            Res = rq.get(url).json()
+            if Res["code"] == 200:
+                Text = "多分英語わからんやろ... 翻訳したるわ。感謝しな\n\n"
+                Text += Res["text"]
+                await message.channel.send(Text)
+            else:
+                pass
 
-    if Prefix == message.content[0]:
+    elif Prefix == message.content[0]:
         if message.content.upper() == f"{Prefix}TOP":
             Text = "www.escapefromtarkov.com"
             Embed = discord.Embed(
