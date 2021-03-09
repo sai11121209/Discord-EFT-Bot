@@ -1,4 +1,5 @@
 pip install discord
+pip install requests
 pip install beautifulsoup4
-pip3 install lxml
-python main.py
+pip install lxml
+python src/main.py
