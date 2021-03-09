@@ -87,12 +87,10 @@ async def on_ready():
 async def on_voice_state_update(member, before, after):
     channel = client.get_channel(818751361511718942)
     user = str(member).split("#")[0]
-    print(before)
-    print(after)
-    if after:
-        await channel.send(f"{user}がボイスチャンネル{after.channel}にてボイスチャットを開始しました。")
+    if after.chnnel:
+        await channel.send(f"{user} がボイスチャンネル {after.channel} にてボイスチャットを開始しました。")
     else:
-        await channel.send(f"{user}がボイスチャンネルを終了しました。")
+        await channel.send(f"{user} がボイスチャンネル {before.channel} を終了しました。")
 
 
 # メッセージ受信時に動作する処理
