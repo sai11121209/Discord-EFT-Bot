@@ -52,7 +52,8 @@ CommandList = {
 }
 # 上に追記していくこと
 PatchNotes = {
-    "2021/03/09": ["BOTボイスチャンネル開始時に通知をしてくれるようになりました。"],
+    "2021/03/11": ["ボイスチャンネル開始時の通知挙動の修正をしました。"],
+    "2021/03/09": ["BOTがボイスチャンネル開始時に通知をしてくれるようになりました。"],
     "2021/03/06": ["BOTが公式アナウンスを自動的に翻訳してくれるようになりました。"],
     "2021/03/04": ["BOTがよりフレンドリーな返答をするようになりました。"],
     "2021/02/25": ["早見表表示コマンドに2件早見表を追加しました。"],
@@ -86,14 +87,25 @@ async def on_ready():
 # メッセージ受信時に動作する処理
 @client.event
 async def on_voice_state_update(member, before, after):
+    # 本番テキストチャンネル
     channel = client.get_channel(818751361511718942)
+    # テストテキストチャンネル
+    # channel = client.get_channel(808821063387316254)
     user = str(member).split("#")[0]
-    if after.chnnel:
+    print("before: ")
+    print(before)
+    print("after: ")
+    print(after)
+    if before.channel == None and after.channel:
         await channel.send(
             f"@everyone {user} がボイスチャンネル {after.channel} にてボイスチャットを開始しました。"
         )
-    else:
-        await channel.send(f"@everyone {user} がボイスチャンネル {before.channel} を終了しました。")
+    elif before.channel and after.channel and before.self_stream ==False and after.self_stream ==False:
+        await channel.send(
+            f"@everyone {user} がボイスチャンネル {before.channel} からボイスチャンネル {after.channel} に移動しました。"
+        )
+    elif before.channel and after.channel == None:
+        await channel.send(f"@everyone {user} がボイスチャンネル {before.channel} を退出しました。")
 
 
 # メッセージ受信時に動作する処理
