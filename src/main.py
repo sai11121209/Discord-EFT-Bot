@@ -52,7 +52,8 @@ CommandList = {
 }
 # 上に追記していくこと
 PatchNotes = {
-    "2021/03/11": ["ボイスチャンネル開始時の通知挙動の修正をしました。"],
+    "2021/03/14": ["ボイスチャンネル開始、終了時の通知挙動の修正をしました。 ※最終修正"],
+    "2021/03/11": ["ボイスチャンネル開始、終了時の通知挙動の修正をしました。"],
     "2021/03/09": ["BOTがボイスチャンネル開始時に通知をしてくれるようになりました。"],
     "2021/03/06": ["BOTが公式アナウンスを自動的に翻訳してくれるようになりました。"],
     "2021/03/04": ["BOTがよりフレンドリーな返答をするようになりました。"],
@@ -88,19 +89,19 @@ async def on_ready():
 @client.event
 async def on_voice_state_update(member, before, after):
     # 本番テキストチャンネル
-    channel = client.get_channel(818751361511718942)
+    #channel = client.get_channel(818751361511718942)
     # テストテキストチャンネル
-    # channel = client.get_channel(808821063387316254)
-    user = str(member).split("#")[0]
-    print("before: ")
+    channel = client.get_channel(808821063387316254)
+    print("before")
     print(before)
-    print("after: ")
+    print("after")
     print(after)
+    user = str(member).split("#")[0]
     if before.channel == None and after.channel:
         await channel.send(
             f"@everyone {user} がボイスチャンネル {after.channel} にてボイスチャットを開始しました。"
         )
-    elif before.channel and after.channel and before.self_stream ==False and after.self_stream ==False:
+    elif before.channel and after.channel and before.deaf == after.deaf and before.mute == after.mute and  before.self_deaf == after.self_deaf and before.self_mute == after.self_mute and before.self_stream == after.self_stream and  before.self_video ==  after.self_video:
         await channel.send(
             f"@everyone {user} がボイスチャンネル {before.channel} からボイスチャンネル {after.channel} に移動しました。"
         )
@@ -112,7 +113,6 @@ async def on_voice_state_update(member, before, after):
 @client.event
 async def on_message(message):
     # メッセージ送信者がBotだった場合は無視する
-    print(message)
     if message.author.bot:
         SpecificChannelId = 811566006132408340
         SpecificUserId = 803770349908131850
