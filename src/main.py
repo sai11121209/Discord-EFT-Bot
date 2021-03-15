@@ -89,9 +89,9 @@ async def on_ready():
 @client.event
 async def on_voice_state_update(member, before, after):
     # 本番テキストチャンネル
-    #channel = client.get_channel(818751361511718942)
+    channel = client.get_channel(818751361511718942)
     # テストテキストチャンネル
-    channel = client.get_channel(808821063387316254)
+    #channel = client.get_channel(808821063387316254)
     print("before")
     print(before)
     print("after")
