@@ -6,6 +6,9 @@ import difflib
 import itertools
 import requests as rq
 from bs4 import BeautifulSoup
+import datetime
+from datetime import datetime as dt
+
 
 try:
     from local_settings import *
@@ -44,14 +47,18 @@ CommandList = {
     "武器一覧表示": ["WEAPON"],
     "各武器詳細表示": [],
     "弾薬性能表示": ["AMMO"],
+    "フリーマーケット情報表示": ["MARKET"],
     "タスク一覧表示": ["TASK"],
     "マップ抽選": ["RANDOM"],
     "早見表表示": ["CHART"],
     "更新履歴表示": ["PATCH"],
+    "現在時刻表示": ["NOW"],
     "ソースコード表示": ["SOURCE"],
 }
 # 上に追記していくこと
 PatchNotes = {
+    "2021/03/17": ["現在時刻表示コマンド 'NOW' を追加しました。"],
+    "2021/03/15": ["フリーマーケット情報表示コマンド 'MARKET' を追加しました。"],
     "2021/03/14": ["ボイスチャンネル開始、終了時の通知挙動の修正をしました。 ※最終修正"],
     "2021/03/11": ["ボイスチャンネル開始、終了時の通知挙動の修正をしました。"],
     "2021/03/09": ["BOTがボイスチャンネル開始時に通知をしてくれるようになりました。"],
@@ -114,7 +121,10 @@ async def on_voice_state_update(member, before, after):
 async def on_message(message):
     # メッセージ送信者がBotだった場合は無視する
     if message.author.bot:
+        # 本番テキストチャンネル
         SpecificChannelId = 811566006132408340
+        # テストテキストチャンネル
+        #SpecificChannelId = 808821063387316254
         SpecificUserId = 803770349908131850
         if (
             message.channel.id == SpecificChannelId
@@ -134,6 +144,12 @@ async def on_message(message):
                 await message.channel.send(Text)
             else:
                 pass
+            if "period" in message.content:
+                channel = client.get_channel(803425039864561675)
+                Text = "@everyone 重要なお知らせかもしれないからこっちにも貼っとくで\n"
+                Text += message.content
+                await channel.send(f"{Text}{message.content}")
+
 
     elif Prefix == message.content[0]:
         if message.content.upper() == f"{Prefix}TOP":
@@ -297,6 +313,49 @@ async def on_message(message):
                 color=0x2ECC69,
             )
             Embed.set_thumbnail(url="https://eft.monster/ogre_color.png")
+            await message.channel.send(embed=Embed)
+            return 0
+        
+        elif message.content.upper() == f"{Prefix}MARKET":
+            Text = "Actual prices, online monitoring, hideout, charts, price history"
+            Embed = discord.Embed(
+                title="Tarkov Market",
+                url="https://tarkov-market.com/",
+                description=Text,
+                color=0x2ECC69,
+            )
+            await message.channel.send(embed=Embed)
+            return 0
+
+        elif message.content.upper() == f"{Prefix}NOW":
+            Embed = discord.Embed(
+                title="現在時刻",
+                description="主要タイムゾーン時刻",
+                color=0x2ECC69,
+            )
+            Embed.add_field(
+                name="日本時間(JST)",
+                value=dt.now().strftime("%Y/%m/%d %H:%M:%S"),
+                inline=False,
+            )
+            Embed.add_field(
+                name="モスクワ時間(EAT)",
+                value=dt.now(datetime.timezone(datetime.timedelta(hours=3), name="EAT")).strftime("%Y/%m/%d %H:%M:%S"),
+                inline=False,
+            )
+            Embed.add_field(
+                name="太平洋標準時刻(PST)",
+                value=dt.now(datetime.timezone(datetime.timedelta(hours=-8), name="PST")).strftime("%Y/%m/%d %H:%M:%S"),
+                inline=False,
+            )
+            Embed.add_field(
+                name="太平洋夏時刻(PDT)",
+                value=dt.now(datetime.timezone(datetime.timedelta(hours=-7), name="PDT")).strftime("%Y/%m/%d %H:%M:%S"),
+                inline=False,
+            )
+            Embed.set_footer(
+                text="夏時間は3月の第2日曜日午前2時から11月の第1日曜日午前2時まで。"
+            )
             await message.channel.send(embed=Embed)
             return 0
 
