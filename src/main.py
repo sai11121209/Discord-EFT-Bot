@@ -455,6 +455,7 @@ async def on_message(message):
                 name="最安値", value="{:,}".format(SummaryJpy["price"]["low"]) + " RUB"
             )
             await message.channel.send(embed=Embed, file=file)
+            return 0
 
         elif message.content.upper() == f"{Prefix}WEAPON":
             WeaponsName, WeaponsData, ColName = GetWeaponData()
