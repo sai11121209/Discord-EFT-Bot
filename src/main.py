@@ -265,7 +265,7 @@ async def on_message(message):
             for Key, Values in CommandList.items():
                 if Key == "各武器詳細表示":
                     Text = "/武器名"
-                elif Key == "フリーマーケット価格表示":
+                elif Key == "各アイテムのフリーマーケット価格表示":
                     Text = "!p {アイテム名}"
                 else:
                     if type(Values) == list:
