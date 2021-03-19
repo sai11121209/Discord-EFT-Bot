@@ -420,6 +420,7 @@ async def on_message(message):
             Embed.add_field(
                 name="最安値", value="{:,}".format(SummaryJpy["price"]["low"]) + " 円"
             )
+            Embed.set_footer(text="Cryptowat Market REST APIを使用しております。")
             await message.channel.send(embed=Embed, file=file)
 
             BtcRubData = rq.get(
@@ -454,6 +455,7 @@ async def on_message(message):
             Embed.add_field(
                 name="最安値", value="{:,}".format(SummaryJpy["price"]["low"]) + " RUB"
             )
+            Embed.set_footer(text="Cryptowat Market REST APIを使用しております。")
             await message.channel.send(embed=Embed, file=file)
             return 0
 
