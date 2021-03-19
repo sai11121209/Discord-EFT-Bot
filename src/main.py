@@ -1,13 +1,17 @@
 # インストールした discord.py を読み込む
 import os
+import pytz
 import discord
 import random
 import difflib
 import itertools
+import pandas as pd
 import requests as rq
-from bs4 import BeautifulSoup
 import datetime
+from matplotlib import pyplot as plt
 from datetime import datetime as dt
+from dateutil.relativedelta import relativedelta
+from bs4 import BeautifulSoup
 
 
 try:
@@ -48,15 +52,21 @@ CommandList = {
     "各武器詳細表示": [],
     "弾薬性能表示": ["AMMO"],
     "フリーマーケット情報表示": ["MARKET"],
+    "各アイテムのフリーマーケット価格表示": [],
     "タスク一覧表示": ["TASK"],
     "マップ抽選": ["RANDOM"],
     "早見表表示": ["CHART"],
     "更新履歴表示": ["PATCH"],
     "現在時刻表示": ["NOW"],
+    "ビットコイン価格表示": ["BTC"],
     "ソースコード表示": ["SOURCE"],
 }
 # 上に追記していくこと
 PatchNotes = {
+    "2021/03/19": [
+        "ビットコイン価格表示コマンド 'BTC' を追加しました。",
+        "メンテナンス関連のアナウンスがあった場合、テキストチャンネル 'escape-from-tarkov' に通知を送るようにしました。",
+    ],
     "2021/03/17": ["現在時刻表示コマンド 'NOW' を追加しました。"],
     "2021/03/15": ["フリーマーケット情報表示コマンド 'MARKET' を追加しました。"],
     "2021/03/14": ["ボイスチャンネル開始、終了時の通知挙動の修正をしました。 ※最終修正"],
@@ -98,7 +108,7 @@ async def on_voice_state_update(member, before, after):
     # 本番テキストチャンネル
     channel = client.get_channel(818751361511718942)
     # テストテキストチャンネル
-    #channel = client.get_channel(808821063387316254)
+    # channel = client.get_channel(808821063387316254)
     print("before")
     print(before)
     print("after")
@@ -108,7 +118,16 @@ async def on_voice_state_update(member, before, after):
         await channel.send(
             f"@everyone {user} がボイスチャンネル {after.channel} にてボイスチャットを開始しました。"
         )
-    elif before.channel and after.channel and before.deaf == after.deaf and before.mute == after.mute and  before.self_deaf == after.self_deaf and before.self_mute == after.self_mute and before.self_stream == after.self_stream and  before.self_video ==  after.self_video:
+    elif (
+        before.channel
+        and after.channel
+        and before.deaf == after.deaf
+        and before.mute == after.mute
+        and before.self_deaf == after.self_deaf
+        and before.self_mute == after.self_mute
+        and before.self_stream == after.self_stream
+        and before.self_video == after.self_video
+    ):
         await channel.send(
             f"@everyone {user} がボイスチャンネル {before.channel} からボイスチャンネル {after.channel} に移動しました。"
         )
@@ -124,7 +143,7 @@ async def on_message(message):
         # 本番テキストチャンネル
         SpecificChannelId = 811566006132408340
         # テストテキストチャンネル
-        #SpecificChannelId = 808821063387316254
+        # SpecificChannelId = 808821063387316254
         SpecificUserId = 803770349908131850
         if (
             message.channel.id == SpecificChannelId
@@ -149,7 +168,6 @@ async def on_message(message):
                 Text = "@everyone 重要なお知らせかもしれないからこっちにも貼っとくで\n"
                 Text += message.content
                 await channel.send(f"{Text}{message.content}")
-
 
     elif Prefix == message.content[0]:
         if message.content.upper() == f"{Prefix}TOP":
@@ -245,15 +263,17 @@ async def on_message(message):
                 color=0x2ECC69,
             )
             for Key, Values in CommandList.items():
-                if Key != "各武器詳細表示":
+                if Key == "各武器詳細表示":
+                    Text = "/武器名"
+                elif Key == "フリーマーケット価格表示":
+                    Text = "!p {アイテム名}"
+                else:
                     if type(Values) == list:
                         Text = ""
                         for Value in Values:
                             Text += f"{Prefix}{Value}\n"
                     else:
                         Text = f"{Prefix}{Values}\n"
-                else:
-                    Text = "/武器名"
                 embed.add_field(name=f"{Key}コマンド", value=Text, inline=False)
             await message.channel.send(embed=embed)
             return 0
@@ -315,7 +335,7 @@ async def on_message(message):
             Embed.set_thumbnail(url="https://eft.monster/ogre_color.png")
             await message.channel.send(embed=Embed)
             return 0
-        
+
         elif message.content.upper() == f"{Prefix}MARKET":
             Text = "Actual prices, online monitoring, hideout, charts, price history"
             Embed = discord.Embed(
@@ -329,9 +349,7 @@ async def on_message(message):
 
         elif message.content.upper() == f"{Prefix}NOW":
             Embed = discord.Embed(
-                title="現在時刻",
-                description="主要タイムゾーン時刻",
-                color=0x2ECC69,
+                title="現在時刻", description="主要タイムゾーン時刻", color=0x2ECC69,
             )
             Embed.add_field(
                 name="日本時間(JST)",
@@ -340,24 +358,103 @@ async def on_message(message):
             )
             Embed.add_field(
                 name="モスクワ時間(EAT)",
-                value=dt.now(datetime.timezone(datetime.timedelta(hours=3), name="EAT")).strftime("%Y/%m/%d %H:%M:%S"),
+                value=dt.now(
+                    datetime.timezone(datetime.timedelta(hours=3), name="EAT")
+                ).strftime("%Y/%m/%d %H:%M:%S"),
                 inline=False,
             )
             Embed.add_field(
                 name="太平洋標準時刻(PST)",
-                value=dt.now(datetime.timezone(datetime.timedelta(hours=-8), name="PST")).strftime("%Y/%m/%d %H:%M:%S"),
+                value=dt.now(
+                    datetime.timezone(datetime.timedelta(hours=-8), name="PST")
+                ).strftime("%Y/%m/%d %H:%M:%S"),
                 inline=False,
             )
             Embed.add_field(
                 name="太平洋夏時刻(PDT)",
-                value=dt.now(datetime.timezone(datetime.timedelta(hours=-7), name="PDT")).strftime("%Y/%m/%d %H:%M:%S"),
+                value=dt.now(
+                    datetime.timezone(datetime.timedelta(hours=-7), name="PDT")
+                ).strftime("%Y/%m/%d %H:%M:%S"),
                 inline=False,
             )
-            Embed.set_footer(
-                text="夏時間は3月の第2日曜日午前2時から11月の第1日曜日午前2時まで。"
-            )
+            Embed.set_footer(text="夏時間は3月の第2日曜日午前2時から11月の第1日曜日午前2時まで。")
             await message.channel.send(embed=Embed)
             return 0
+
+        elif message.content.upper() == f"{Prefix}BTC":
+            Timestamp = (
+                dt.now(pytz.timezone("Asia/Tokyo")) - relativedelta(months=1)
+            ).timestamp()
+            SummaryJpy = rq.get(
+                "https://api.cryptowat.ch/markets/bitflyer/btcjpy/summary"
+            ).json()["result"]
+            BtcJpyData = rq.get(
+                f"https://api.cryptowat.ch/markets/bitflyer/btcjpy/ohlc?periods=1800&after={int(Timestamp)}"
+            ).json()["result"]
+            PD_BtcData = pd.DataFrame(BtcJpyData["1800"])
+            PD_BtcData[0] = pd.to_datetime(PD_BtcData[0].astype(int), unit="s")
+            plt.figure(figsize=(15, 10), dpi=100)
+            plt.plot(PD_BtcData[0], PD_BtcData[1], label="OpenPrice")
+            plt.plot(PD_BtcData[0], PD_BtcData[2], label="HighPrice")
+            plt.plot(PD_BtcData[0], PD_BtcData[3], label="LowPrice")
+            plt.title("BTC_JPY Rate")
+            plt.grid(axis="y", linestyle="dotted", color="b")
+            plt.tight_layout()
+            plt.legend()
+            plt.savefig("btc_jpy.png")
+            plt.close()
+            BtcJpyPrice = rq.get(
+                "https://api.cryptowat.ch/markets/bitflyer/btcjpy/price"
+            ).json()["result"]["price"]
+            file = discord.File("btc_jpy.png")
+            Embed = discord.Embed(title="1 ビットコイン → 日本円", color=0xFFFF00,)
+            Embed.set_image(url="attachment://btc_jpy.png")
+            Embed.add_field(name="現在の金額", value="{:,}".format(BtcJpyPrice) + " 円")
+            Embed.add_field(
+                name="0.2BTCあたりの金額",
+                value="約 " + "{:,}".format(int(BtcJpyPrice * 0.2)) + " 円",
+            )
+            Embed.add_field(
+                name="最高値", value="{:,}".format(SummaryJpy["price"]["high"]) + " 円"
+            )
+            Embed.add_field(
+                name="最安値", value="{:,}".format(SummaryJpy["price"]["low"]) + " 円"
+            )
+            await message.channel.send(embed=Embed, file=file)
+
+            BtcRubData = rq.get(
+                f"https://api.cryptowat.ch/markets/cexio/btcrub/ohlc?periods=1800&after={int(Timestamp)}"
+            ).json()["result"]
+            PD_BtcData = pd.DataFrame(BtcRubData["1800"])
+            PD_BtcData[0] = pd.to_datetime(PD_BtcData[0].astype(int), unit="s")
+            plt.figure(figsize=(15, 10), dpi=100)
+            plt.plot(PD_BtcData[0], PD_BtcData[1], label="OpenPrice")
+            plt.plot(PD_BtcData[0], PD_BtcData[2], label="HighPrice")
+            plt.plot(PD_BtcData[0], PD_BtcData[3], label="LowPrice")
+            plt.title("BTC_RUB Rate")
+            plt.grid(axis="y", linestyle="dotted", color="b")
+            plt.tight_layout()
+            plt.legend()
+            plt.savefig("btc_rub.png")
+            plt.close()
+            BtcRubPrice = rq.get(
+                "https://api.cryptowat.ch/markets/cexio/btcrub/price"
+            ).json()["result"]["price"]
+            file = discord.File("btc_rub.png")
+            Embed = discord.Embed(title="1 ビットコイン → ルーブル", color=0xFFFF00,)
+            Embed.set_image(url="attachment://btc_rub.png")
+            Embed.add_field(name="現在の金額", value="{:,}".format(BtcRubPrice) + " RUB")
+            Embed.add_field(
+                name="0.2BTCあたりの金額",
+                value="約 " + "{:,}".format(int(BtcRubPrice * 0.2)) + " RUB",
+            )
+            Embed.add_field(
+                name="最高値", value="{:,}".format(SummaryJpy["price"]["high"]) + " RUB"
+            )
+            Embed.add_field(
+                name="最安値", value="{:,}".format(SummaryJpy["price"]["low"]) + " RUB"
+            )
+            await message.channel.send(embed=Embed, file=file)
 
         elif message.content.upper() == f"{Prefix}WEAPON":
             WeaponsName, WeaponsData, ColName = GetWeaponData()
