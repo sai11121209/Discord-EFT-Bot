@@ -30,7 +30,8 @@ if os.getenv("TOKEN"):
 # 接続に必要なオブジェクトを生成
 client = discord.Client()
 prefix = "/"
-url = "https://wikiwiki.jp/eft/"
+jaWikiUrl = "https://wikiwiki.jp/eft/"
+enWikiUrl = "https://escapefromtarkov.fandom.com/wiki/Escape_from_Tarkov_Wiki"
 sendTemplatetext = "EFT(Escape from Tarkov) Wiki "
 receivedtext = None
 maps = [
@@ -45,7 +46,8 @@ maps = [
 # 新規コマンド追加時は必ずcommandListに追加
 commandList = {
     "EFT公式サイト表示": ["TOP"],
-    "EFT日本語Wikiトップ表示": ["WIKITOP"],
+    "日本EFTWiki表示": ["JAWIKI"],
+    "海外EFTWiki表示": ["ENWIKI"],
     "マップ一覧表示": ["MAP"],
     "各マップ情報表示": maps,
     "武器一覧表示": ["WEAPON"],
@@ -63,7 +65,11 @@ commandList = {
 }
 # 上に追記していくこと
 patchNotes = {
-    "2021/03/23": ["内部処理エラーによる 'WEAPON' コマンドの修正"],
+    "2021/03/23": [
+        "各マップ情報表示コマンド 'MAP' の挙動を大幅に改良しました。",
+        "海外公式wiki表示コマンド 'ENWIKI' 追加に伴い日本EFTWiki表示コマンドの呼び出しコマンドが 　'WIKITOP' から 'JAWIKI' に変更されました。",
+    ],
+    "2021/03/22": ["内部処理エラーによる 'WEAPON' コマンドの修正"],
     "2021/03/19": [
         "ビットコイン価格表示コマンド 'BTC' を追加しました。",
         "メンテナンス関連のアナウンスがあった場合、テキストチャンネル 'escape-from-tarkov' に通知を送るようにしました。",
@@ -181,11 +187,11 @@ async def on_message(message):
             await message.channel.send(embed=embed)
             return 0
 
-        elif message.content.upper() == f"{prefix}WIKITOP":
+        elif message.content.upper() == f"{prefix}JAWIKI":
             text = "wikiwiki.jp"
             embed = discord.Embed(
-                title="Escape from Tarkov 日本語WIKI",
-                url=url,
+                title="日本Escape from Tarkov WIKI",
+                url=jaWikiUrl,
                 description=text,
                 color=0x2ECC69,
             )
@@ -195,12 +201,26 @@ async def on_message(message):
             await message.channel.send(embed=embed)
             return 0
 
+        elif message.content.upper() == f"{prefix}ENWIKI":
+            text = "The Official Escape from Tarkov Wiki"
+            embed = discord.Embed(
+                title="海外Escape from Tarkov WIKI",
+                url=enWikiUrl,
+                description=text,
+                color=0x2ECC69,
+            )
+            embed.set_thumbnail(
+                url="https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/b/bc/Wiki.png/revision/latest/scale-to-width-down/200?cb=20200612143203"
+            )
+            await message.channel.send(embed=embed)
+            return 0
+
         elif message.content.upper() == f"{prefix}MAP":
             text = ""
             for map in maps:
-                text += f"[{map}]({url}{map})\n"
+                text += f"[{map}]({jaWikiUrl}{map})\n"
             embed = discord.Embed(
-                title="マップ", url=f"{url}", description=text, color=0x2ECC69,
+                title="マップ", url=f"{jaWikiUrl}", description=text, color=0x2ECC69,
             )
             embed.set_footer(text=f"{prefix}マップ名で各マップの詳細情報にアクセスできるよー。 例: /reserve")
             await message.channel.send(embed=embed)
@@ -208,41 +228,23 @@ async def on_message(message):
 
         elif message.content.upper().split("/")[1] in maps:
             receivedtext = message.content.upper().split("/")[1]
-            text = f"{sendTemplatetext}{receivedtext} INFORMATION\n"
-            text += f"{receivedtext}(EFT 日本語 Wiki URL): {url}{receivedtext}\n"
-
-            if message.content.upper() == "/FACTORY":
-                text += "https://cdn.wikiwiki.jp/to/w/eft/img/::attach/Factorymap.jpg"
-
-            if message.content.upper() == "/WOODS":
-                text += "https://images-ext-1.discordapp.net/external/NyBjPcCWLdnVfdUSAjWs3aGk4Un8qRAZCjnk3eF_8uo/https/cdn.wikiwiki.jp/to/w/eft/WOODS/%3A%3Aattach/Woods_map_v0.12.9b.jpg"
-
-            if message.content.upper() == "/CUSTOMS":
-                text += "https://cdn.wikiwiki.jp/to/w/eft/CUSTOMS/::attach/Customs_0.12.7.jpg"
-
-            if message.content.upper() == "/SHORELINE":
-                text += "https://cdn.wikiwiki.jp/to/w/eft/SHORELINE/::attach/ShoreLine_Exit_Loot.jpg\n"
-                text += "https://cdn.wikiwiki.jp/to/w/eft/SHORELINE/::attach/resort.jpg"
-
-            if message.content.upper() == "/INTERCHANGE":
-                text += (
-                    "https://cdn.wikiwiki.jp/to/w/eft/img/::ref/Interchange_map.jpg\n"
+            text = f"{receivedtext} MAP INFORMATION\n"
+            # LABORATORYのみ海外公式wikiのURLがThe_Labとなるため例外
+            if receivedtext == "LABORATORY":
+                receivedtext = "The_Lab"
+                mapImages = GetMapImage(receivedtext)
+            else:
+                mapImages = GetMapImage(receivedtext.capitalize())
+            n = 1
+            for key, value in mapImages.items():
+                embed = discord.Embed(
+                    title=f"({n}/{len(mapImages)}){text}",
+                    description=f"[{key}]({value})",
                 )
-                text += "https://cdn.wikiwiki.jp/proxy-image?url=https%3A%2F%2Fwww.eftmaps.net%2Fwp-content%2Fuploads%2F2020%2F05%2Finterchange_map.png"
-
-            if message.content.upper() == "/LABORATORY":
-                text += "https://cdn.wikiwiki.jp/to/w/eft/LABORATORY/::ref/111000.png\n"
-                text += (
-                    "https://cdn.wikiwiki.jp/to/w/eft/LABORATORY/::attach/Labmap.jpg"
-                )
-
-            if message.content.upper() == "/RESERVE":
-                text += "https://cdn.wikiwiki.jp/to/w/eft/RESERVE/::attach/reserve_map_Translated%20fix.jpg\n"
-                text += "https://cdn.wikiwiki.jp/to/w/eft/RESERVE/::attach/800px-3D_map_by_loweffortsaltbox.png\n"
-                text += "https://cdn.wikiwiki.jp/to/w/eft/RESERVE/::attach/reservekeys.jpg\n"
-                text += "https://cdn.wikiwiki.jp/to/w/eft/RESERVE/::attach/reserveUnderground.jpg"
-
-            await message.channel.send(text)
+                embed.set_image(url=value)
+                embed.set_footer(text=f"Source: The Official Escape from Tarkov Wiki")
+                await message.channel.send(embed=embed)
+                n += 1
             return 0
 
         elif message.content.upper() == f"{prefix}RANDOM":
@@ -272,7 +274,6 @@ async def on_message(message):
                     else:
                         text = f"{prefix}{values}\n"
                 embed.add_field(name=f"{key}コマンド", value=text, inline=False)
-            print(len(embed))
             await message.channel.send(embed=embed)
             return 0
 
@@ -293,7 +294,6 @@ async def on_message(message):
                     text += f"{N+1}. {value}\n"
                 embed.add_field(name=index, value=text, inline=False)
             embed.set_footer(text=f"最終更新: {list(patchNotes.keys())[0]}")
-            print(len(embed))
             await message.channel.send(embed=embed)
             return 0
 
@@ -312,12 +312,12 @@ async def on_message(message):
             return 0
 
         elif message.content.upper() == f"{prefix}TASK":
-            TraderNames = GetTraderNames()
+            TraderNames = GetTraderName()
             text = ""
             for TraderName in TraderNames:
-                text += f"[{TraderName}]({url}{TraderName.capitalize()}タスク)\n"
+                text += f"[{TraderName}]({jaWikiUrl}{TraderName.capitalize()}タスク)\n"
             embed = discord.Embed(
-                title="タスク", url=f"{url}タスク", description=text, color=0x2ECC69,
+                title="タスク", url=f"{jaWikiUrl}タスク", description=text, color=0x2ECC69,
             )
             embed.set_footer(text="トレーダー名をクリックすることで各トレーダータスクの詳細情報にアクセスできるよー。")
             await message.channel.send(embed=embed)
@@ -464,23 +464,23 @@ async def on_message(message):
             embeds = []
             for n, (index, values) in enumerate(weaponsData.items()):
                 embed = discord.Embed(
-                    title=f"武器一覧({n+1}/{len(weaponsData)})", url=f"{url}武器一覧"
+                    title=f"武器一覧({n+1}/{len(weaponsData)})", url=f"{jaWikiUrl}武器一覧"
                 )
                 embed.add_field(
                     name=f"{index}",
-                    value=f"[{index}wikiリンク]({url}武器一覧#h2_content_1_{n})",
+                    value=f"[{index}wikiリンク]({jaWikiUrl}武器一覧#h2_content_1_{n})",
                     inline=False,
                 )
                 infostr = ""
                 for value in values:
                     urlencord = value[0].replace(" ", "%20")
-                    infostr += f"[{value[0]}]({url}{urlencord})  "
+                    infostr += f"[{value[0]}]({jaWikiUrl}{urlencord})  "
                     for c, v in zip(colName[index][2:], value[2:]):
                         if c == "使用弾薬":
                             fixName = v.replace("×", "x")
                             fixName = fixName.replace(" ", "")
                             infostr += (
-                                f"**{c}**: [{v}]({url}弾薬{bulletsData[fixName]})  "
+                                f"**{c}**: [{v}]({jaWikiUrl}弾薬{bulletsData[fixName]})  "
                             )
                         else:
                             infostr += f"**{c}**: {v}  "
@@ -488,7 +488,7 @@ async def on_message(message):
                         name=value[0], value=infostr, inline=False,
                     )
                     infostr = ""
-                embed.set_footer(text=f"Escape from Tarkov 日本語 Wiki: {url}")
+                embed.set_footer(text=f"Escape from Tarkov 日本語 Wiki: {jaWikiUrl}")
                 embeds.append(embed)
             for embed in embeds:
                 await message.channel.send(embed=embed)
@@ -517,11 +517,11 @@ async def on_message(message):
                 if c == "使用弾薬":
                     fixName = v.replace("×", "x")
                     fixName = fixName.replace(" ", "")
-                    infoStr += f"**{c}**: [{v}]({url}弾薬{bulletsData[fixName]})  "
+                    infoStr += f"**{c}**: [{v}]({jaWikiUrl}弾薬{bulletsData[fixName]})  "
                 else:
                     infoStr += f"**{c}**: {v}  "
             embed = discord.Embed(
-                title=weaponName[1], url=f"{url}{urlEncord}", description=infoStr
+                title=weaponName[1], url=f"{jaWikiUrl}{urlEncord}", description=infoStr
             )
             embed.set_image(url=weaponName[2])
             await message.channel.send(embed=embed)
@@ -551,15 +551,15 @@ async def on_message(message):
         await message.channel.send(embed=embed)
 
 
-def GetTraderNames():
-    res = rq.get(f"{url}タスク")
+def GetTraderName():
+    res = rq.get(f"{jaWikiUrl}タスク")
     soup = BeautifulSoup(res.text, "lxml", from_encoding="utf-8")
     soup = soup.find("div", {"class": "contents"}).find_all("ul", {"class": "list2"})[1]
     return [s.get_text().replace(" ", "") for s in soup.find_all("a")]
 
 
 def GetBulletData():
-    res = rq.get(f"{url}弾薬")
+    res = rq.get(f"{jaWikiUrl}弾薬")
     soup = BeautifulSoup(res.text, "lxml", from_encoding="utf-8").find(
         "div", {"class": "container-wrapper"}
     )
@@ -572,12 +572,11 @@ def GetBulletData():
         for s in soup.find("div", {"class": "contents"}).find("ul").find_all("a")
         if s.get_text().replace(" ", "") not in exclusion
     }
-    print(bulletsData)
     return bulletsData
 
 
 def GetweaponData():
-    res = rq.get(f"{url}武器一覧")
+    res = rq.get(f"{jaWikiUrl}武器一覧")
     soup = BeautifulSoup(res.text, "lxml", from_encoding="utf-8").find(
         "div", {"class": "container-wrapper"}
     )
@@ -612,6 +611,42 @@ def GetweaponData():
         for value in values
     }
     return weaponsName, weaponsData, colName
+
+
+# マップ画像取得
+def GetMapImage(mapName):
+    url = "https://escapefromtarkov.fandom.com/wiki/"
+    mapImages = {}
+    res = rq.get(f"{url}{mapName}")
+    soup = BeautifulSoup(res.text, "lxml", from_encoding="utf-8").find(
+        "div", {"class": "mw-parser-output"}
+    )
+    # Map情報以外のimgタグを除去
+    for s in soup.find_all("table"):
+        s.decompose()
+    soup.find("center").decompose()
+    try:
+        soup.find("div", {"class": "thumb"}).decompose()
+    except:
+        pass
+    # Map情報の全imgタグを取得
+    images = soup.find_all("img")
+    for image in images:
+        if (
+            # customs: "FullScreenMapIcon.png"
+            image["alt"] != "FullScreenMapIcon.png"
+            # interchange: "The Power Switch"
+            and image["alt"] != "The Power Switch"
+            # laboratory: "TheLab-Insurance-Messages-01.PNG"
+            and image["alt"] != "TheLab-Insurance-Messages-01.PNG"
+            and image["alt"] != ""
+        ):
+            # 参照画像サイズを800px -> オリジナル画像サイズに変換
+            mapImages[image["alt"]] = (
+                image["src"].replace("/scale-to-width-down/800", "")
+                + "&format=original"
+            )
+    return mapImages
 
 
 # Botの起動とDiscordサーバーへの接続
