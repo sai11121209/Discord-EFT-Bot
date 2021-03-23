@@ -65,11 +65,11 @@ commandList = {
 }
 # 上に追記していくこと
 patchNotes = {
-    "2021/03/23": [
+    "2021/03/23 18:00": [
         "各マップ情報表示コマンド 'MAP' の挙動を大幅に改良しました。",
         "海外公式wiki表示コマンド 'ENWIKI' 追加に伴い日本EFTWiki表示コマンドの呼び出しコマンドが 　'WIKITOP' から 'JAWIKI' に変更されました。",
     ],
-    "2021/03/22": ["内部処理エラーによる 'WEAPON' コマンドの修正"],
+    "2021/03/22 23:00": ["内部処理エラーによる 'WEAPON' コマンドの修正"],
     "2021/03/19": [
         "ビットコイン価格表示コマンド 'BTC' を追加しました。",
         "メンテナンス関連のアナウンスがあった場合、テキストチャンネル 'escape-from-tarkov' に通知を送るようにしました。",
@@ -257,9 +257,14 @@ async def on_message(message):
 
         elif message.content.upper() == f"{prefix}HELP":
             embed = discord.Embed(
-                title="ヘルプ",
-                description="EFT(Escape from Tarkov) Wiki Bot使用可能コマンド一覧だよ!",
+                title="EFT(Escape from Tarkov) Wiki Bot使用可能コマンド一覧だよ!",
+                description=f"```Prefix:{prefix}```",
                 color=0x2ECC69,
+                timestamp=datetime.datetime.utcfromtimestamp(
+                    dt.strptime(
+                        list(patchNotes.keys())[0], "%Y/%m/%d %H:%M"
+                    ).timestamp()
+                ),
             )
             for key, values in commandList.items():
                 if key == "各武器詳細表示":
@@ -273,7 +278,14 @@ async def on_message(message):
                             text += f"{prefix}{value}\n"
                     else:
                         text = f"{prefix}{values}\n"
-                embed.add_field(name=f"{key}コマンド", value=text, inline=False)
+                embed.add_field(name=f"{key}コマンド", value=text)
+            embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
+            embed.set_author(
+                name="sai11121209#6843",
+                url="https://github.com/sai11121209",
+                icon_url=client.get_user(279995095124803595).avatar_url,
+            )
+            embed.set_footer(text="最終更新")
             await message.channel.send(embed=embed)
             return 0
 
@@ -287,13 +299,26 @@ async def on_message(message):
             return 0
 
         elif message.content.upper() == f"{prefix}PATCH":
-            embed = discord.Embed(title="更新履歴一覧")
+            embed = discord.Embed(
+                title="更新履歴一覧",
+                timestamp=datetime.datetime.utcfromtimestamp(
+                    dt.strptime(
+                        list(patchNotes.keys())[0], "%Y/%m/%d %H:%M"
+                    ).timestamp()
+                ),
+            )
             for index, values in patchNotes.items():
                 text = ""
                 for N, value in enumerate(values):
                     text += f"{N+1}. {value}\n"
                 embed.add_field(name=index, value=text, inline=False)
-            embed.set_footer(text=f"最終更新: {list(patchNotes.keys())[0]}")
+            embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
+            embed.set_author(
+                name="sai11121209#6843",
+                url="https://github.com/sai11121209",
+                icon_url=client.get_user(279995095124803595).avatar_url,
+            )
+            embed.set_footer(text=f"最終更新")
             await message.channel.send(embed=embed)
             return 0
 
@@ -406,7 +431,13 @@ async def on_message(message):
                 "https://api.cryptowat.ch/markets/bitflyer/btcjpy/price"
             ).json()["result"]["price"]
             file = discord.File("btc_jpy.png")
-            embed = discord.Embed(title="1 ビットコイン → 日本円", color=0xFFFF00,)
+            embed = discord.Embed(
+                title="1 ビットコイン → 日本円",
+                color=0xFFFF00,
+                timestamp=datetime.datetime.utcfromtimestamp(
+                    dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
+                ),
+            )
             embed.set_image(url="attachment://btc_jpy.png")
             embed.add_field(name="現在の金額", value="{:,}".format(BtcJpyPrice) + " 円")
             embed.add_field(
@@ -419,7 +450,7 @@ async def on_message(message):
             embed.add_field(
                 name="最安値", value="{:,}".format(summaryJpy["price"]["low"]) + " 円"
             )
-            embed.set_footer(text="Cryptowat Market REST APIを使用しております。")
+            embed.set_footer(text="Cryptowat Market REST APIを使用しております。取得日時")
             await message.channel.send(embed=embed, file=file)
 
             BtcRubData = rq.get(
@@ -441,7 +472,13 @@ async def on_message(message):
                 "https://api.cryptowat.ch/markets/cexio/btcrub/price"
             ).json()["result"]["price"]
             file = discord.File("btc_rub.png")
-            embed = discord.Embed(title="1 ビットコイン → ルーブル", color=0xFFFF00,)
+            embed = discord.Embed(
+                title="1 ビットコイン → ルーブル",
+                color=0xFFFF00,
+                timestamp=datetime.datetime.utcfromtimestamp(
+                    dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
+                ),
+            )
             embed.set_image(url="attachment://btc_rub.png")
             embed.add_field(name="現在の金額", value="{:,}".format(BtcRubPrice) + " RUB")
             embed.add_field(
@@ -454,7 +491,7 @@ async def on_message(message):
             embed.add_field(
                 name="最安値", value="{:,}".format(summaryJpy["price"]["low"]) + " RUB"
             )
-            embed.set_footer(text="Cryptowat Market REST APIを使用しております。")
+            embed.set_footer(text="Cryptowat Market REST APIを使用しております。取得日時")
             await message.channel.send(embed=embed, file=file)
             return 0
 
