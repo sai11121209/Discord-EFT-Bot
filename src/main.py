@@ -279,11 +279,11 @@ async def on_message(message):
                     else:
                         text = f"{prefix}{values}\n"
                 embed.add_field(name=f"{key}コマンド", value=text)
-            embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
+            #embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
             embed.set_author(
                 name="sai11121209#6843",
                 url="https://github.com/sai11121209",
-                icon_url=client.get_user(279995095124803595).avatar_url,
+                #icon_url=client.get_user(279995095124803595).avatar_url,
             )
             embed.set_footer(text="最終更新")
             await message.channel.send(embed=embed)
@@ -312,11 +312,11 @@ async def on_message(message):
                 for N, value in enumerate(values):
                     text += f"{N+1}. {value}\n"
                 embed.add_field(name=index, value=text, inline=False)
-            embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
+            #embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
             embed.set_author(
                 name="sai11121209#6843",
                 url="https://github.com/sai11121209",
-                icon_url=client.get_user(279995095124803595).avatar_url,
+                #icon_url=client.get_user(279995095124803595).avatar_url,
             )
             embed.set_footer(text=f"最終更新")
             await message.channel.send(embed=embed)
