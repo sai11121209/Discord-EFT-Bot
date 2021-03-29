@@ -17,6 +17,8 @@ from bs4 import BeautifulSoup
 
 try:
     from local_settings import *
+
+    LOCAL_HOST = True
 except ImportError:
     import keep_alive
 
@@ -26,12 +28,13 @@ except ImportError:
 # 自分のBotのアクセストークンに置き換えてください
 if os.getenv("TOKEN"):
     TOKEN = os.getenv("TOKEN")
+    DEVELOPMODE = os.getenv("DEVELOPMODE")
+    LOCAL_HOST = False
 
 
 # 接続に必要なオブジェクトを生成
 client = discord.Client()
 prefix = "/"
-developMode = False
 jaWikiUrl = "https://wikiwiki.jp/eft/"
 enWikiUrl = "https://escapefromtarkov.fandom.com/wiki/"
 sendTemplatetext = "EFT(Escape from Tarkov) Wiki "
@@ -106,6 +109,9 @@ patchNotes = {
 async def on_ready():
     # 起動したらターミナルにログイン通知が表示される
     print("ログインしました")
+    await client.change_presence(
+        activity=discord.Game(name="Escape from Tarkov", type=1)
+    )
 
 
 # メッセージ受信時に動作する処理
@@ -142,7 +148,7 @@ async def on_voice_state_update(member, before, after):
 async def on_message(message):
     global developMode
     # メッセージ送信者がBotだった場合は無視する
-    if message.author.bot:
+    if message.author.bot and LOCAL_HOST == False:
         # 本番テキストチャンネル
         specificChannelId = 811566006132408340
         # テストテキストチャンネル
@@ -172,11 +178,11 @@ async def on_message(message):
                 text += message.content
                 await channel.send(f"{text}{message.content}")
 
-    if prefix == message.content[0]:
+    if prefix == message.content[0] and LOCAL_HOST == False:
         if message.content.upper() == f"{prefix}DEVELOP":
-            developMode = not developMode
-            text = f"開発モード: {developMode}に切り替わりました"
-            if developMode:
+            DEVELOPMODE = not DEVELOPMODE
+            text = f"開発モード: {DEVELOPMODE}に切り替わりました"
+            if DEVELOPMODE:
                 await client.change_presence(
                     activity=discord.Activity(name="機能改善会議(メンテナンス中)", type=5)
                 )
@@ -187,7 +193,7 @@ async def on_message(message):
             await message.channel.send(text)
             return 0
 
-    if prefix == message.content[0] and developMode == False:
+    if prefix == message.content[0] and DEVELOPMODE == False:
         if message.content.upper() == f"{prefix}TOP":
             text = "www.escapefromtarkov.com"
             embed = discord.Embed(
