@@ -39,15 +39,57 @@ jaWikiUrl = "https://wikiwiki.jp/eft/"
 enWikiUrl = "https://escapefromtarkov.fandom.com/wiki/"
 sendTemplatetext = "EFT(Escape from Tarkov) Wiki "
 receivedtext = None
-maps = [
-    "FACTORY",
-    "WOODS",
-    "CUSTOMS",
-    "SHORELINE",
-    "INTERCHANGE",
-    "LABORATORY",
-    "RESERVE",
-]
+maps = {
+    "FACTORY": {
+        "Overview": "ここ第16科学工場の施設はTerraグループに違法に使用されていた。\n契約戦争の間、プラント施設は、Tarkovの工場地区の支配をめぐりUSECとBEARとの間で多くの戦いの場となった。\n混乱の後、プラント施設は避難民やSCAV、その他の勢力、USECとBEARが残した物資を含む避難所と変わった。",
+        "time": {"day": 20, "nigth": 25},
+        "difficulty": "BREEZE",
+        "number": {"day": "4-5", "nigth": "4-6"},
+        "enemies": ["Scavs"],
+    },
+    "WOODS": {
+        "Overview": "Prozersk自然保護区は最近、北西連邦の国立野生動物保護区のリストに含まれていた。",
+        "time": 50,
+        "difficulty": "NORMAL",
+        "number": "8-14",
+        "enemies": ["Scavs", "Cultists", "Shturman"],
+    },
+    "CUSTOMS": {
+        "Overview": "工場に隣接する大規模な工業団地。ターミナル、寮、燃料タンクやその他のオブジェクトが多数存在する。",
+        "time": 45,
+        "difficulty": "NORMAL",
+        "number": "8-12",
+        "enemies": ["Scavs", "Cultists", "Reshala"],
+    },
+    "SHORELINE": {
+        "Overview": "海岸線(SHORELINE)は、ポートエリアに隣接するタルコフ郊外の主要な部分。\n地域には部分的に放棄された村、近代的な民家と畑、ボート施設付きの長い海岸線、ガソリンスタンド、気象ステーション、携帯電話基地局が存在する。\nその主要なポイントは、独自の水力発電所を備えたいくつかの豪華な建物からなる大規模な「Azure Coast」保養地。\nこのリゾートは、かつてタルコフ港を通じた脱出に備えて、TERRAグループとその関連会社のスタッフの一時的な宿泊施設として使用されていた。",
+        "time": 50,
+        "difficulty": "HARD",
+        "number": "10-13",
+        "enemies": ["Scavs", "Cultists", "Sanitar"],
+    },
+    "INTERCHANGE": {
+        "Overview": "南インターチェンジは市内での輸送の重要な場所。\nこの戦略的エリアはポートランド港とタルコフの工業郊外を結んでいる。\n大型のウルトラショッピングモールがあり、EMERCOM救出作戦の主要拠点として使用されていた。",
+        "time": 45,
+        "difficulty": "HARD",
+        "number": "10-14",
+        "enemies": ["Scavs", "Killa"],
+    },
+    "LABORATORY": {
+        "Overview": "タルコフ市中心部の地下に存在するTERRAグループの秘密研究施設。\n非公式な存在であり、化学、物理学、生物学、ハイテク分野での研究開発を秘密裏に行っていた。",
+        "time": 40,
+        "difficulty": "INSANE",
+        "number": "6-10",
+        "enemies": ["ScavRaiders"],
+    },
+    "RESERVE": {
+        "Overview": "都市伝説となっている連邦準備局の秘密基地。\nそこには核戦争にも耐えうる数年分の備蓄（食料、医薬品、その他物資）が含まれているという。",
+        "time": 50,
+        "difficulty": "HARD",
+        "number": "9-12",
+        "enemies": ["Scavs", "ScavRaiders", "Glukhar"],
+    },
+}
 # 新規コマンド追加時は必ずcommandListに追加
 commandList = {
     "EFT公式サイト表示": ["TOP"],
@@ -70,38 +112,43 @@ commandList = {
 }
 # 上に追記していくこと
 patchNotes = {
+    "2021/03/30 01:35": [
+        "マップ一覧表示コマンド __`MAP`__ の挙動を大幅に改良しました。",
+        "類似コマンドが存在し、かつ類似コマンドが1つの場合該当コマンドを実行するようになるようになりました。",
+        "使用可能コマンド一覧表示コマンド __`HELP`__ を見やすいように表示方法改善sしました。",
+    ],
     "2021/03/23 18:00": [
-        "各マップ情報表示コマンド 'MAP' の挙動を大幅に改良しました。",
-        "海外公式wiki表示コマンド 'ENWIKI' 追加に伴い日本EFTWiki表示コマンドの呼び出しコマンドが 　'WIKITOP' から 'JAWIKI' に変更されました。",
+        "各マップ情報表示コマンドの挙動を大幅に改良しました。",
+        "海外公式wiki表示コマンド __`ENWIKI`__ 追加に伴い日本EFTWiki表示コマンドの呼び出しコマンドが 　~~__`WIKITOP`__~~ から __`JAWIKI`__ に変更されました。",
     ],
-    "2021/03/22 23:00": ["内部処理エラーによる 'WEAPON' コマンドの修正"],
+    "2021/03/22 23:00": ["内部処理エラーによる __`WEAPON`__ コマンドの修正"],
     "2021/03/19": [
-        "ビットコイン価格表示コマンド 'BTC' を追加しました。",
-        "メンテナンス関連のアナウンスがあった場合、テキストチャンネル 'escape-from-tarkov' に通知を送るようにしました。",
+        "ビットコイン価格表示コマンド __`BTC`__ を追加しました。",
+        "メンテナンス関連のアナウンスがあった場合、テキストチャンネル __`escape-from-tarkov`__ に通知を送るようにしました。",
     ],
-    "2021/03/17": ["現在時刻表示コマンド 'NOW' を追加しました。"],
-    "2021/03/15": ["フリーマーケット情報表示コマンド 'MARKET' を追加しました。"],
+    "2021/03/17": ["現在時刻表示コマンド __`NOW`__ を追加しました。"],
+    "2021/03/15": ["フリーマーケット情報表示コマンド __`MARKET`__ を追加しました。"],
     "2021/03/14": ["ボイスチャンネル開始、終了時の通知挙動の修正をしました。 ※最終修正"],
     "2021/03/11": ["ボイスチャンネル開始、終了時の通知挙動の修正をしました。"],
     "2021/03/09": ["BOTがボイスチャンネル開始時に通知をしてくれるようになりました。"],
     "2021/03/06": ["BOTが公式アナウンスを自動的に翻訳してくれるようになりました。"],
     "2021/03/04": ["BOTがよりフレンドリーな返答をするようになりました。"],
     "2021/02/25": ["早見表表示コマンドに2件早見表を追加しました。"],
-    "2021/02/23": [f"最初の文字が '{prefix}' 以外の文字の場合コマンドとして認識しないように修正。"],
-    "2021/02/10": ["タスク一覧表示コマンド 'TASK' を追加しました。", "弾薬性能表示コマンド 'AMMO' を追加しました。"],
+    "2021/02/23": [f"最初の文字が __`{prefix}`__ 以外の文字の場合コマンドとして認識しないように修正。"],
+    "2021/02/10": ["タスク一覧表示コマンド __`TASK`__ を追加しました。", "弾薬性能表示コマンド __`AMMO`__ を追加しました。"],
     "2021/02/08": ["一部コマンドのレスポンス内容の変更を行いました。"],
     "2021/02/05": ["一部コマンドを除いたレスポンスの向上"],
     "2021/02/04": [
         "入力されたコマンドに近いコマンドを表示するヒント機能を追加しました。",
         "各武器名を入力することで入力された武器の詳細情報のみにアクセスできるようになりました。",
-        "BOTのソースコードにアクセスできるコマンド 'SOURCE' を追加しました。",
+        "BOTのソースコードにアクセスできるコマンド __`SOURCE`__ を追加しました。",
     ],
     "2021/02/02": [
-        "更新履歴表示コマンド 'PATCH' を追加しました。",
+        "更新履歴表示コマンド __`PATCH`__ を追加しました。",
         "武器一覧表示コマンドの挙動を大幅に変更しました。",
         "早見表表示コマンドに料金表を追加しました。",
     ],
-    "2021/01/30": ["早見表表示コマンド 'CHART' を追加しました。", "早見表コマンドにアイテム早見表を追加しました。"],
+    "2021/01/30": ["早見表表示コマンド __`CHART`__ を追加しました。", "早見表コマンドにアイテム早見表を追加しました。"],
 }
 
 # 起動時に動作する処理
@@ -237,20 +284,46 @@ async def on_message(message):
             return 0
 
         elif message.content.upper() == f"{prefix}MAP":
-            print(f"{developMode} MAP")
-            text = ""
-            for map in maps:
+            embed = discord.Embed(title="マップ", url=f"{enWikiUrl}Map", color=0x2ECC69,)
+            for map, values in maps.items():
+                text = ""
                 if map == "LABORATORY":
                     receivedtext = "The_Lab"
                 else:
                     receivedtext = map.capitalize()
-                text += (
-                    f"{map} [ja]({jaWikiUrl}{map})/[en]({enWikiUrl}{receivedtext})\n"
-                )
-            embed = discord.Embed(
-                title="マップ", url=f"{enWikiUrl}Map", description=text, color=0x2ECC69,
+                for key, value in values.items():
+                    if key == "time":
+                        text += f"**時間制限**: "
+                        try:
+                            day = value["day"]
+                            nigth = value["nigth"]
+                            text += f"__昼間:{day}分__ __夜間:{nigth}分__"
+                        except:
+                            text += f"__{value}分__"
+                    elif key == "difficulty":
+                        text += f"**難易度**: __{value}__"
+                    elif key == "number":
+                        text += f"**人数**: "
+                        try:
+                            day = value["day"]
+                            nigth = value["nigth"]
+                            text += f"__昼間:{day}人__ __夜間:{nigth}人__"
+                        except:
+                            text += f"__{value}人__"
+                    elif key == "enemies":
+                        text += f"**出現敵兵**: "
+                        for v in value:
+                            if v == "ScavRaiders":
+                                text += f"__[{v}]({enWikiUrl}Scav_Raiders)__ "
+                            else:
+                                text += f"__[{v}]({enWikiUrl}{v})__ "
+                    text += "\n"
+                text += f"**詳細情報**: __[JA]({jaWikiUrl}{map})__ / __[EN]({enWikiUrl}{receivedtext})__\n"
+                embed.add_field(name=map, value=text)
+            embed.set_thumbnail(
+                url="https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/4/43/Map.png/revision/latest?cb=20200619104902&format=original"
             )
-            embed.set_footer(text=f"{prefix}マップ名で各マップの詳細情報にアクセスできるよー。 例: /reserve")
+            embed.set_footer(text=f"{prefix}マップ名で各マップの地形情報を表示できるよー。 例: /reserve")
             await message.channel.send(embed=embed)
             return 0
 
@@ -296,16 +369,16 @@ async def on_message(message):
             )
             for key, values in commandList.items():
                 if key == "各武器詳細表示":
-                    text = "/武器名"
+                    text = "```/{武器名}```"
                 elif key == "各アイテムのフリーマーケット価格表示":
-                    text = "!p {アイテム名}"
+                    text = "```!p {アイテム名}```"
+                elif key == "各マップ情報表示":
+                    text = "```/{マップ名}```"
                 else:
-                    if type(values) == list:
-                        text = ""
-                        for value in values:
-                            text += f"{prefix}{value}\n"
-                    else:
-                        text = f"{prefix}{values}\n"
+                    text = "```"
+                    for value in values:
+                        text += f"{prefix}{value}\n"
+                    text += "```"
                 embed.add_field(name=f"{key}コマンド", value=text)
             # embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
             embed.set_author(
@@ -594,9 +667,15 @@ async def on_message(message):
 
         elif len(hints) > 0:
             text = "Hint: もしかして以下のコマンドじゃね?\n"
+            n = 0
+            comand = None
             for n, hint in enumerate(hints):
+                comand = hint
                 text += f"{n+1}. {prefix}{hint}\n"
-            text += "これ以外に使えるコマンドは /help で確認できるよ!"
+            if n == 0:
+                text = f"{prefix}{comand}"
+            else:
+                text += "これ以外に使えるコマンドは /help で確認できるよ!"
             await message.channel.send(text)
             return 0
 
