@@ -1,5 +1,6 @@
 # インストールした discord.py を読み込む
 import os
+from typing import Text
 import pytz
 import discord
 import random
@@ -30,8 +31,9 @@ if os.getenv("TOKEN"):
 # 接続に必要なオブジェクトを生成
 client = discord.Client()
 prefix = "/"
+developMode = False
 jaWikiUrl = "https://wikiwiki.jp/eft/"
-enWikiUrl = "https://escapefromtarkov.fandom.com/wiki/Escape_from_Tarkov_Wiki"
+enWikiUrl = "https://escapefromtarkov.fandom.com/wiki/"
 sendTemplatetext = "EFT(Escape from Tarkov) Wiki "
 receivedtext = None
 maps = [
@@ -141,6 +143,7 @@ async def on_voice_state_update(member, before, after):
 # メッセージ受信時に動作する処理
 @client.event
 async def on_message(message):
+    global developMode
     # メッセージ送信者がBotだった場合は無視する
     if message.author.bot:
         # 本番テキストチャンネル
@@ -173,6 +176,13 @@ async def on_message(message):
                 await channel.send(f"{text}{message.content}")
 
     elif prefix == message.content[0]:
+        if message.content.upper() == f"{prefix}DEVELOP":
+            developMode = not developMode
+            Text = f"開発モード: {developMode}に切り替わりました"
+            await message.channel.send(Text)
+            return 0
+
+    elif prefix == message.content[0] and developMode == False:
         if message.content.upper() == f"{prefix}TOP":
             text = "www.escapefromtarkov.com"
             embed = discord.Embed(
@@ -205,7 +215,7 @@ async def on_message(message):
             text = "The Official Escape from Tarkov Wiki"
             embed = discord.Embed(
                 title="海外Escape from Tarkov WIKI",
-                url=enWikiUrl,
+                url=enWikiUrl + "Escape_from_Tarkov_Wiki",
                 description=text,
                 color=0x2ECC69,
             )
@@ -218,9 +228,15 @@ async def on_message(message):
         elif message.content.upper() == f"{prefix}MAP":
             text = ""
             for map in maps:
-                text += f"[{map}]({jaWikiUrl}{map})\n"
+                if map == "LABORATORY":
+                    receivedtext = "The_Lab"
+                else:
+                    receivedtext = map.capitalize()
+                text += (
+                    f"{map} [ja]({jaWikiUrl}{map})/[en]({enWikiUrl}{receivedtext})\n"
+                )
             embed = discord.Embed(
-                title="マップ", url=f"{jaWikiUrl}", description=text, color=0x2ECC69,
+                title="マップ", url=f"{enWikiUrl}Map", description=text, color=0x2ECC69,
             )
             embed.set_footer(text=f"{prefix}マップ名で各マップの詳細情報にアクセスできるよー。 例: /reserve")
             await message.channel.send(embed=embed)
@@ -279,11 +295,11 @@ async def on_message(message):
                     else:
                         text = f"{prefix}{values}\n"
                 embed.add_field(name=f"{key}コマンド", value=text)
-            #embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
+            # embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
             embed.set_author(
                 name="sai11121209#6843",
                 url="https://github.com/sai11121209",
-                #icon_url=client.get_user(279995095124803595).avatar_url,
+                # icon_url=client.get_user(279995095124803595).avatar_url,
             )
             embed.set_footer(text="最終更新")
             await message.channel.send(embed=embed)
@@ -312,11 +328,11 @@ async def on_message(message):
                 for N, value in enumerate(values):
                     text += f"{N+1}. {value}\n"
                 embed.add_field(name=index, value=text, inline=False)
-            #embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
+            # embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
             embed.set_author(
                 name="sai11121209#6843",
                 url="https://github.com/sai11121209",
-                #icon_url=client.get_user(279995095124803595).avatar_url,
+                # icon_url=client.get_user(279995095124803595).avatar_url,
             )
             embed.set_footer(text=f"最終更新")
             await message.channel.send(embed=embed)
