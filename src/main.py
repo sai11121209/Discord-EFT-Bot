@@ -146,7 +146,7 @@ async def on_voice_state_update(member, before, after):
 # メッセージ受信時に動作する処理
 @client.event
 async def on_message(message):
-    global developMode
+    global DEVELOPMODE
     # メッセージ送信者がBotだった場合は無視する
     if message.author.bot and LOCAL_HOST == False:
         # 本番テキストチャンネル
