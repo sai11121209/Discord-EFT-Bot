@@ -28,13 +28,12 @@ except ImportError:
 # 自分のBotのアクセストークンに置き換えてください
 if os.getenv("TOKEN"):
     TOKEN = os.getenv("TOKEN")
-    DEVELOPMODE = os.getenv("DEVELOPMODE")
     LOCAL_HOST = False
 
 
 # 接続に必要なオブジェクトを生成
 client = discord.Client()
-developMode = DEVELOPMODE
+developMode = False
 prefix = "/"
 jaWikiUrl = "https://wikiwiki.jp/eft/"
 enWikiUrl = "https://escapefromtarkov.fandom.com/wiki/"
@@ -193,8 +192,10 @@ async def on_message(message):
                 )
             await message.channel.send(text)
             return 0
-
+    print(message.content[0])
+    print(f"{developMode} OUT")
     if prefix == message.content[0] and developMode == False:
+        print(f"{developMode} IN")
         if message.content.upper() == f"{prefix}TOP":
             text = "www.escapefromtarkov.com"
             embed = discord.Embed(
@@ -238,6 +239,7 @@ async def on_message(message):
             return 0
 
         elif message.content.upper() == f"{prefix}MAP":
+            print(f"{developMode} MAP")
             text = ""
             for map in maps:
                 if map == "LABORATORY":
