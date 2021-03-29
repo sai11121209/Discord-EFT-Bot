@@ -106,9 +106,6 @@ patchNotes = {
 async def on_ready():
     # 起動したらターミナルにログイン通知が表示される
     print("ログインしました")
-    await client.change_presence(
-        activity=discord.Game(name="Escape from Tarkov", type=1)
-    )
 
 
 # メッセージ受信時に動作する処理
@@ -178,8 +175,16 @@ async def on_message(message):
     if prefix == message.content[0]:
         if message.content.upper() == f"{prefix}DEVELOP":
             developMode = not developMode
-            Text = f"開発モード: {developMode}に切り替わりました"
-            await message.channel.send(Text)
+            text = f"開発モード: {developMode}に切り替わりました"
+            if developMode:
+                await client.change_presence(
+                    activity=discord.Activity(name="機能改善会議(メンテナンス中)", type=5)
+                )
+            else:
+                await client.change_presence(
+                    activity=discord.Game(name="Escape from Tarkov", type=1)
+                )
+            await message.channel.send(text)
             return 0
 
     if prefix == message.content[0] and developMode == False:
