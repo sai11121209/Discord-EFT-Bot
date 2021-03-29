@@ -175,14 +175,14 @@ async def on_message(message):
                 text += message.content
                 await channel.send(f"{text}{message.content}")
 
-    elif prefix == message.content[0]:
+    if prefix == message.content[0]:
         if message.content.upper() == f"{prefix}DEVELOP":
             developMode = not developMode
             Text = f"開発モード: {developMode}に切り替わりました"
             await message.channel.send(Text)
             return 0
 
-    elif prefix == message.content[0] and developMode == False:
+    if prefix == message.content[0] and developMode == False:
         if message.content.upper() == f"{prefix}TOP":
             text = "www.escapefromtarkov.com"
             embed = discord.Embed(
