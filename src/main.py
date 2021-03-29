@@ -109,9 +109,10 @@ patchNotes = {
 async def on_ready():
     # 起動したらターミナルにログイン通知が表示される
     print("ログインしました")
-    await client.change_presence(
-        activity=discord.Game(name="Escape from Tarkov", type=1)
-    )
+    if LOCAL_HOST == False:
+        await client.change_presence(
+            activity=discord.Game(name="Escape from Tarkov", type=1)
+        )
 
 
 # メッセージ受信時に動作する処理
@@ -192,10 +193,7 @@ async def on_message(message):
                 )
             await message.channel.send(text)
             return 0
-    print(message.content[0])
-    print(f"{developMode} OUT")
     if prefix == message.content[0] and developMode == False:
-        print(f"{developMode} IN")
         if message.content.upper() == f"{prefix}TOP":
             text = "www.escapefromtarkov.com"
             embed = discord.Embed(
