@@ -34,6 +34,7 @@ if os.getenv("TOKEN"):
 
 # 接続に必要なオブジェクトを生成
 client = discord.Client()
+developMode = DEVELOPMODE
 prefix = "/"
 jaWikiUrl = "https://wikiwiki.jp/eft/"
 enWikiUrl = "https://escapefromtarkov.fandom.com/wiki/"
@@ -146,7 +147,7 @@ async def on_voice_state_update(member, before, after):
 # メッセージ受信時に動作する処理
 @client.event
 async def on_message(message):
-    global DEVELOPMODE
+    global developMode
     # メッセージ送信者がBotだった場合は無視する
     if message.author.bot and LOCAL_HOST == False:
         # 本番テキストチャンネル
@@ -180,9 +181,9 @@ async def on_message(message):
 
     if prefix == message.content[0] and LOCAL_HOST == False:
         if message.content.upper() == f"{prefix}DEVELOP":
-            DEVELOPMODE = not DEVELOPMODE
-            text = f"開発モード: {DEVELOPMODE}に切り替わりました"
-            if DEVELOPMODE:
+            developMode = not developMode
+            text = f"開発モード: {developMode}に切り替わりました"
+            if developMode:
                 await client.change_presence(
                     activity=discord.Activity(name="機能改善会議(メンテナンス中)", type=5)
                 )
@@ -193,7 +194,7 @@ async def on_message(message):
             await message.channel.send(text)
             return 0
 
-    if prefix == message.content[0] and DEVELOPMODE == False:
+    if prefix == message.content[0] and developMode == False:
         if message.content.upper() == f"{prefix}TOP":
             text = "www.escapefromtarkov.com"
             embed = discord.Embed(
