@@ -115,7 +115,7 @@ patchNotes = {
     "2021/03/30 01:35": [
         "マップ一覧表示コマンド __`MAP`__ の挙動を大幅に改良しました。",
         "類似コマンドが存在し、かつ類似コマンドが1つの場合該当コマンドを実行するようになるようになりました。",
-        "使用可能コマンド一覧表示コマンド __`HELP`__ を見やすいように表示方法改善sしました。",
+        "使用可能コマンド一覧表示コマンド __`HELP`__ を見やすいように表示方法改善しました。",
     ],
     "2021/03/23 18:00": [
         "各マップ情報表示コマンドの挙動を大幅に改良しました。",
@@ -397,6 +397,15 @@ async def on_message(message):
             text += "https://cdn.discordapp.com/attachments/808820772536582154/814055787479564318/image0.webp\n"
             text += "https://media.discordapp.net/attachments/808820772536582154/814055787898077215/image1.webp"
             await message.channel.send(text)
+            return 0
+            
+        elif message.content.upper() == "ARMOR":
+            embed = discord.embed(title="この機能は今後仕様変更されます。")
+            text = "https://cdn.discordapp.com/attachments/806055934211653632/826790299619426354/image3.jpg"
+            text += "https://cdn.discordapp.com/attachments/806055934211653632/826790298649624586/image0.jpg\n"
+            text += "https://cdn.discordapp.com/attachments/806055934211653632/826790298918453268/image1.jpg\n"
+            text += "https://cdn.discordapp.com/attachments/806055934211653632/826790299299872798/image2.jpg\n"
+            await message.channel.send(embed=embed)
             return 0
 
         elif message.content.upper() == f"{prefix}PATCH":
