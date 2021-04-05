@@ -242,6 +242,12 @@ async def on_message(message):
             await message.channel.send(text)
             return 0
     if prefix == message.content[0] and developMode == False:
+        if LOCAL_HOST:
+            embed = discord.Embed(
+                title="現在開発環境での処理内容が表示されており、実装の際に採用されない可能性がある機能、表示等が含まれている可能性があります。",
+                color=0xFF0000,
+            )
+            await message.channel.send(embed=embed)
         if message.content.upper() == f"{prefix}TOP":
             text = "www.escapefromtarkov.com"
             embed = discord.Embed(
@@ -646,14 +652,14 @@ async def on_message(message):
         weaponsName, weaponsData, colName = GetweaponData()
         commandList["各武器詳細表示"] = weaponsName
         # コマンドの予測変換
-        hints = [
+        hints = {
             command
             for command in list(itertools.chain.from_iterable(commandList.values()))
             if difflib.SequenceMatcher(
                 None, message.content.upper(), prefix + command
             ).ratio()
             >= 0.65
-        ]
+        }
 
         if message.content.upper().split("/")[1] in weaponsName:
             bulletsData = GetBulletData()
@@ -677,17 +683,21 @@ async def on_message(message):
             return 0
 
         elif len(hints) > 0:
-            text = "Hint: もしかして以下のコマンドじゃね?\n"
+            text = ""
+            embed = discord.Embed(
+                title="Hint", description="もしかして以下のコマンドじゃね?", color=0xFF0000
+            )
             n = 0
             comand = None
             for n, hint in enumerate(hints):
                 comand = hint
-                text += f"{n+1}. {prefix}{hint}\n"
+                embed.add_field(name=f"{n+1}", value=f"__`{prefix}{hint}`__")
             if n == 0:
                 text = f"{prefix}{comand}"
+                await message.channel.send(text)
             else:
-                text += "これ以外に使えるコマンドは /help で確認できるよ!"
-            await message.channel.send(text)
+                embed.set_footer(text="これ以外に使えるコマンドは /help で確認できるよ!")
+                await message.channel.send(embed=embed)
             return 0
 
         else:
@@ -707,10 +717,16 @@ async def on_message(message):
 
 
 def GetTraderName():
-    res = rq.get(f"{jaWikiUrl}タスク")
+    res = rq.get(f"{enWikiUrl}Trading")
     soup = BeautifulSoup(res.text, "lxml", from_encoding="utf-8")
-    soup = soup.find("div", {"class": "contents"}).find_all("ul", {"class": "list2"})[1]
-    return [s.get_text().replace(" ", "") for s in soup.find_all("a")]
+    soup = soup.find(class_="wikitable sortable")
+    for s in soup.find_all("tr"):
+        print(s.find_all("td"))
+    return [
+        s.find_all("a")[0].get_text().replace(" ", "")
+        for s in soup.find_all("tr")
+        if s.find_all("a")
+    ]
 
 
 def GetBulletData():
