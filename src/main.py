@@ -39,55 +39,129 @@ jaWikiUrl = "https://wikiwiki.jp/eft/"
 enWikiUrl = "https://escapefromtarkov.fandom.com/wiki/"
 sendTemplatetext = "EFT(Escape from Tarkov) Wiki "
 receivedtext = None
-maps = {
+mapList = {
     "FACTORY": {
-        "Overview": "ここ第16科学工場の施設はTerraグループに違法に使用されていた。\n契約戦争の間、プラント施設は、Tarkovの工場地区の支配をめぐりUSECとBEARとの間で多くの戦いの場となった。\n混乱の後、プラント施設は避難民やSCAV、その他の勢力、USECとBEARが残した物資を含む避難所と変わった。",
+        "overview": "ここ第16科学工場の施設はTerraグループに違法に使用されていた。\n契約戦争の間、プラント施設は、Tarkovの工場地区の支配をめぐりUSECとBEARとの間で多くの戦いの場となった。\n混乱の後、プラント施設は避難民やSCAV、その他の勢力、USECとBEARが残した物資を含む避難所と変わった。",
         "time": {"day": 20, "nigth": 25},
         "difficulty": "BREEZE",
         "number": {"day": "4-5", "nigth": "4-6"},
         "enemies": ["Scavs"],
     },
     "WOODS": {
-        "Overview": "Prozersk自然保護区は最近、北西連邦の国立野生動物保護区のリストに含まれていた。",
+        "overview": "Prozersk自然保護区は最近、北西連邦の国立野生動物保護区のリストに含まれていた。",
         "time": 50,
         "difficulty": "NORMAL",
         "number": "8-14",
         "enemies": ["Scavs", "Cultists", "Shturman"],
     },
     "CUSTOMS": {
-        "Overview": "工場に隣接する大規模な工業団地。ターミナル、寮、燃料タンクやその他のオブジェクトが多数存在する。",
+        "overview": "工場に隣接する大規模な工業団地。ターミナル、寮、燃料タンクやその他のオブジェクトが多数存在する。",
         "time": 45,
         "difficulty": "NORMAL",
         "number": "8-12",
         "enemies": ["Scavs", "Cultists", "Reshala"],
     },
     "SHORELINE": {
-        "Overview": "海岸線(SHORELINE)は、ポートエリアに隣接するタルコフ郊外の主要な部分。\n地域には部分的に放棄された村、近代的な民家と畑、ボート施設付きの長い海岸線、ガソリンスタンド、気象ステーション、携帯電話基地局が存在する。\nその主要なポイントは、独自の水力発電所を備えたいくつかの豪華な建物からなる大規模な「Azure Coast」保養地。\nこのリゾートは、かつてタルコフ港を通じた脱出に備えて、TERRAグループとその関連会社のスタッフの一時的な宿泊施設として使用されていた。",
+        "overview": "海岸線(SHORELINE)は、ポートエリアに隣接するタルコフ郊外の主要な部分。\n地域には部分的に放棄された村、近代的な民家と畑、ボート施設付きの長い海岸線、ガソリンスタンド、気象ステーション、携帯電話基地局が存在する。\nその主要なポイントは、独自の水力発電所を備えたいくつかの豪華な建物からなる大規模な「Azure Coast」保養地。\nこのリゾートは、かつてタルコフ港を通じた脱出に備えて、TERRAグループとその関連会社のスタッフの一時的な宿泊施設として使用されていた。",
         "time": 50,
         "difficulty": "HARD",
         "number": "10-13",
         "enemies": ["Scavs", "Cultists", "Sanitar"],
     },
     "INTERCHANGE": {
-        "Overview": "南インターチェンジは市内での輸送の重要な場所。\nこの戦略的エリアはポートランド港とタルコフの工業郊外を結んでいる。\n大型のウルトラショッピングモールがあり、EMERCOM救出作戦の主要拠点として使用されていた。",
+        "overview": "南インターチェンジは市内での輸送の重要な場所。\nこの戦略的エリアはポートランド港とタルコフの工業郊外を結んでいる。\n大型のウルトラショッピングモールがあり、EMERCOM救出作戦の主要拠点として使用されていた。",
         "time": 45,
         "difficulty": "HARD",
         "number": "10-14",
         "enemies": ["Scavs", "Killa"],
     },
     "LABORATORY": {
-        "Overview": "タルコフ市中心部の地下に存在するTERRAグループの秘密研究施設。\n非公式な存在であり、化学、物理学、生物学、ハイテク分野での研究開発を秘密裏に行っていた。",
+        "overview": "タルコフ市中心部の地下に存在するTERRAグループの秘密研究施設。\n非公式な存在であり、化学、物理学、生物学、ハイテク分野での研究開発を秘密裏に行っていた。",
         "time": 40,
         "difficulty": "INSANE",
         "number": "6-10",
         "enemies": ["ScavRaiders"],
     },
     "RESERVE": {
-        "Overview": "都市伝説となっている連邦準備局の秘密基地。\nそこには核戦争にも耐えうる数年分の備蓄（食料、医薬品、その他物資）が含まれているという。",
+        "overview": "都市伝説となっている連邦準備局の秘密基地。\nそこには核戦争にも耐えうる数年分の備蓄（食料、医薬品、その他物資）が含まれているという。",
         "time": 50,
         "difficulty": "HARD",
         "number": "9-12",
         "enemies": ["Scavs", "ScavRaiders", "Glukhar"],
+    },
+}
+traderList = {
+    "Prapor": {
+        "stampid": 828552629248327690,
+        "fullname": "Pavel Yegorovich Romanenko",
+        "location": "Town",
+        "origin": "ロシア連邦",
+        "wares": ["武器", "弾薬", "手榴弾", "弾倉", "武器MOD",],
+        "services": ["保険", "修理",],
+        "currencies": ["Roubles (₽)"],
+    },
+    "Therapist": {
+        "stampid": 828552629256192040,
+        "fullname": "Elvira Khabibullina",
+        "location": "Streets of Tarkov",
+        "origin": "ロシア連邦",
+        "wares": ["医療品", "地図", "食料品", "コンテナ",],
+        "services": ["保険",],
+        "currencies": ["Roubles (₽)", "Euros (€)",],
+    },
+    "Fence": {
+        "stampid": 828552627989512204,
+        "fullname": "Real name unknown",
+        "location": "A network of outlets all over Tarkov and its outskirts",
+        "origin": "ロシア連邦",
+        "wares": ["売られたもの全て",],
+        "services": [],
+        "currencies": ["Roubles (₽)",],
+    },
+    "Skier": {
+        "stampid": 828552629436416010,
+        "fullname": "Alexander Fyodorovich Kiselyov",
+        "location": "Customs",
+        "origin": "ロシア連邦",
+        "wares": ["武器", "弾薬", "武器MOD", "コンテナ", "ユーロ",],
+        "services": ["修理",],
+        "currencies": ["Roubles (₽)", "Dollars ($)", "Euros (€)",],
+    },
+    "Peacekeeper": {
+        "stampid": 828552628682096710,
+        "fullname": "Tadeusz Pilsudski",
+        "location": "Terminal",
+        "origin": "ポーランド共和国",
+        "wares": ["欧米・NATOの武器", "弾薬", "手榴弾", "弾倉", "武器MOD", "USドル",],
+        "services": [],
+        "currencies": ["Dollars ($)",],
+    },
+    "Mechanic": {
+        "stampid": 828552628887093328,
+        "fullname": "Sergey Arsenyevich Samoylov",
+        "location": "Factory",
+        "origin": "不明",
+        "wares": ["欧米・NATOの武器", "グロック17/18", "弾薬", "弾倉", "武器MOD",],
+        "services": ["修理",],
+        "currencies": ["Roubles (₽)", "Euros (€)", "Bitcoin (₿)",],
+    },
+    "Ragman": {
+        "stampid": 828552630120349716,
+        "fullname": "Abramyan Arshavir Sarkisivich",
+        "location": "Interchange",
+        "origin": "不明",
+        "wares": ["衣類", "アーマー", "バックパック", "タクティカリグ", "ギア",],
+        "services": ["戦闘服",],
+        "currencies": ["Roubles (₽)",],
+    },
+    "Jaeger": {
+        "stampid": 828552628396621855,
+        "fullname": "Kharitonov Ivan Egorovich",
+        "location": "Woods",
+        "origin": "不明",
+        "wares": ["ソビエト連邦の武器", "弾薬", "弾倉", "武器MOD", "隠れ家素材",],
+        "services": [],
+        "currencies": ["Roubles (₽)",],
     },
 }
 # 新規コマンド追加時は必ずcommandListに追加
@@ -96,13 +170,13 @@ commandList = {
     "日本EFTWiki表示": ["JAWIKI"],
     "海外EFTWiki表示": ["ENWIKI"],
     "マップ一覧表示": ["MAP"],
-    "各マップ情報表示": maps,
+    "各マップ情報表示": mapList,
     "武器一覧表示": ["WEAPON"],
     "各武器詳細表示": [],
     "弾薬性能表示": ["AMMO"],
     "フリーマーケット情報表示": ["MARKET"],
     "各アイテムのフリーマーケット価格表示": [],
-    "タスク一覧表示": ["TASK"],
+    "ディーラー一覧表示": ["DEALER"],
     "マップ抽選": ["RANDOM"],
     "早見表表示": ["CHART"],
     "アーマの早見表表示": ["ARMOR"],
@@ -113,6 +187,10 @@ commandList = {
 }
 # 上に追記していくこと
 patchNotes = {
+    "2021/04/06 03:20": [
+        "機能改善に伴いタスク一覧表示コマンドが　~~__`TASK`__~~  から ディーラー一覧表示コマンドの __`DEALER`__ に統合されました。"
+    ],
+    "2021/04/02 12:00": ["アーマの早見表表示コマンド __`ARMOR`__ が仮実装されました。"],
     "2021/03/30 01:35": [
         "マップ一覧表示コマンド __`MAP`__ の挙動を大幅に改良しました。",
         "類似コマンドが存在し、かつ類似コマンドが1つの場合該当コマンドを実行するようになるようになりました。",
@@ -292,7 +370,7 @@ async def on_message(message):
 
         elif message.content.upper() == f"{prefix}MAP":
             embed = discord.Embed(title="マップ", url=f"{enWikiUrl}Map", color=0x2ECC69,)
-            for map, values in maps.items():
+            for map, values in mapList.items():
                 text = ""
                 if map == "LABORATORY":
                     receivedtext = "The_Lab"
@@ -334,7 +412,7 @@ async def on_message(message):
             await message.channel.send(embed=embed)
             return 0
 
-        elif message.content.upper().split("/")[1] in maps:
+        elif message.content.upper().split("/")[1] in mapList:
             receivedtext = message.content.upper().split("/")[1]
             text = f"{receivedtext} MAP INFORMATION\n"
             # LABORATORYのみ海外公式wikiのURLがThe_Labとなるため例外
@@ -359,7 +437,7 @@ async def on_message(message):
             embed = discord.Embed(
                 title="迷ったときのEFTマップ抽選", description="今回のマップは...", color=0x2ECC69,
             )
-            embed.add_field(name="MAP", value=random.choice(maps), inline=False)
+            embed.add_field(name="MAP", value=random.choice(mapList), inline=False)
             await message.channel.send(embed=embed)
             return 0
 
@@ -389,7 +467,7 @@ async def on_message(message):
                 embed.add_field(name=f"{key}コマンド", value=text)
             # embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
             embed.set_author(
-                name="sai11121209#6843",
+                name="EFT(Escape from Tarkov) Wiki Bot",
                 url="https://github.com/sai11121209",
                 # icon_url=client.get_user(279995095124803595).avatar_url,
             )
@@ -398,16 +476,18 @@ async def on_message(message):
             return 0
 
         elif message.content.upper() == f"{prefix}CHART":
+            embed = discord.Embed(title="この機能は今後仕様変更されます。", color=0xFF0000)
             text = "https://cdn.discordapp.com/attachments/803425039864561675/804873530335690802/image0.jpg\n"
             text += "https://cdn.discordapp.com/attachments/803425039864561675/804873530637811772/image1.jpg\n"
             text += "https://cdn.discordapp.com/attachments/616231205032951831/805997840140599366/image0.jpg\n"
             text += "https://cdn.discordapp.com/attachments/808820772536582154/814055787479564318/image0.webp\n"
             text += "https://media.discordapp.net/attachments/808820772536582154/814055787898077215/image1.webp"
+            await message.channel.send(embed=embed)
             await message.channel.send(text)
             return 0
-            
+
         elif message.content.upper() == f"{prefix}ARMOR":
-            embed = discord.Embed(title="この機能は今後仕様変更されます。", color=0xff0000)
+            embed = discord.Embed(title="この機能は今後仕様変更されます。", color=0xFF0000)
             text = "https://cdn.discordapp.com/attachments/806055934211653632/826790299619426354/image3.jpg\n"
             text += "https://cdn.discordapp.com/attachments/806055934211653632/826790298649624586/image0.jpg\n"
             text += "https://cdn.discordapp.com/attachments/806055934211653632/826790298918453268/image1.jpg\n"
@@ -432,7 +512,7 @@ async def on_message(message):
                 embed.add_field(name=index, value=text, inline=False)
             # embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
             embed.set_author(
-                name="sai11121209#6843",
+                name="EFT(Escape from Tarkov) Wiki Bot",
                 url="https://github.com/sai11121209",
                 # icon_url=client.get_user(279995095124803595).avatar_url,
             )
@@ -454,13 +534,45 @@ async def on_message(message):
             await message.channel.send(embed=embed)
             return 0
 
-        elif message.content.upper() == f"{prefix}TASK":
+        elif message.content.upper() == f"{prefix}DEALER":
             TraderNames = GetTraderName()
-            text = ""
-            for TraderName in TraderNames:
-                text += f"[{TraderName}]({jaWikiUrl}{TraderName.capitalize()}タスク)\n"
             embed = discord.Embed(
-                title="タスク", url=f"{jaWikiUrl}タスク", description=text, color=0x2ECC69,
+                title="ディーラー", url=f"{enWikiUrl}Characters#Dealers", color=0x808080,
+            )
+            for TraderName in TraderNames:
+                trader = traderList[TraderName]
+                text = f"**本名**: __{trader['fullname']}__\n"
+                if (
+                    "A network of outlets all over Tarkov and its outskirts"
+                    != trader["location"]
+                ):
+                    text += f"**場所**: __[{trader['location']}]({enWikiUrl}{trader['location'].replace(' ', '_')})__\n"
+                else:
+                    text += f"**場所**: __{trader['location']}__\n"
+                text += f"**出身地**: __{trader['origin']}__\n"
+                text += "**取り扱い品**:\n"
+                for ware in trader["wares"]:
+                    text += f"・__{ware}__\n"
+                if trader["services"]:
+                    text += "**サービス**:\n"
+                    for service in trader["services"]:
+                        text += f"・__{service}__\n"
+                else:
+                    text += "**サービス**: 無し\n"
+                text += f"**通貨**:\n"
+                for currencie in trader["currencies"]:
+                    text += f"・__{currencie}__\n"
+                    # TraderName.capitalize()
+                text += f"**タスク情報**: [JA]({jaWikiUrl}{TraderName}タスク) / [EN]({enWikiUrl}Quests)\n"
+                text += f"**詳細情報**: [EN]({enWikiUrl}{TraderName})"
+                embed.add_field(
+                    name=f"<:{TraderName}:{trader['stampid']}> {TraderName}",
+                    value=text,
+                )
+            embed.set_author(
+                name="EFT(Escape from Tarkov) Wiki Bot",
+                url="https://github.com/sai11121209",
+                # icon_url=client.get_user(279995095124803595).avatar_url,
             )
             embed.set_footer(text="トレーダー名をクリックすることで各トレーダータスクの詳細情報にアクセスできるよー。")
             await message.channel.send(embed=embed)
