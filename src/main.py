@@ -105,6 +105,7 @@ commandList = {
     "タスク一覧表示": ["TASK"],
     "マップ抽選": ["RANDOM"],
     "早見表表示": ["CHART"],
+    "アーマの早見表表示": ["ARMOR"],
     "更新履歴表示": ["PATCH"],
     "現在時刻表示": ["NOW"],
     "ビットコイン価格表示": ["BTC"],
@@ -399,13 +400,14 @@ async def on_message(message):
             await message.channel.send(text)
             return 0
             
-        elif message.content.upper() == "ARMOR":
-            embed = discord.embed(title="この機能は今後仕様変更されます。")
-            text = "https://cdn.discordapp.com/attachments/806055934211653632/826790299619426354/image3.jpg"
+        elif message.content.upper() == f"{prefix}ARMOR":
+            embed = discord.Embed(title="この機能は今後仕様変更されます。", color=0xff0000)
+            text = "https://cdn.discordapp.com/attachments/806055934211653632/826790299619426354/image3.jpg\n"
             text += "https://cdn.discordapp.com/attachments/806055934211653632/826790298649624586/image0.jpg\n"
             text += "https://cdn.discordapp.com/attachments/806055934211653632/826790298918453268/image1.jpg\n"
-            text += "https://cdn.discordapp.com/attachments/806055934211653632/826790299299872798/image2.jpg\n"
+            text += "https://cdn.discordapp.com/attachments/806055934211653632/826790299299872798/image2.jpg"
             await message.channel.send(embed=embed)
+            await message.channel.send(text)
             return 0
 
         elif message.content.upper() == f"{prefix}PATCH":
