@@ -579,14 +579,19 @@ async def on_message(message):
             return 0
 
         elif message.content.upper() == f"{prefix}AMMO":
-            text = "eft.monster"
             embed = discord.Embed(
-                title="弾薬性能表",
-                url="https://eft.monster/",
-                description=text,
-                color=0x2ECC69,
+                title="(1/2)弾薬早見表", url="https://eft.monster/", color=0x808080
             )
-            embed.set_thumbnail(url="https://eft.monster/ogre_color.png")
+            embed.set_image(
+                url="https://cdn.discordapp.com/attachments/806055934211653632/828931828101546024/image0.jpg"
+            )
+            await message.channel.send(embed=embed)
+            embed = discord.Embed(
+                title="(2/2)弾薬早見表", url="https://eft.monster/", color=0x808080
+            )
+            embed.set_image(
+                url="https://cdn.discordapp.com/attachments/806055934211653632/828931828353073172/image1.jpg"
+            )
             await message.channel.send(embed=embed)
             return 0
 
