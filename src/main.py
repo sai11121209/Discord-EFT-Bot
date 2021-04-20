@@ -187,6 +187,9 @@ commandList = {
 }
 # 上に追記していくこと
 patchNotes = {
+    "2021/04/20 18:35": ["マップ抽選コマンド __`RANDOM`__ で発生していたデータ型キャスト不具合の修正を行いました。",
+        "タイムゾーン未指定による更新日時が正常に表示されていなかった問題の修正。"
+        ],
     "2021/04/06 19:13": ["弾薬性能表示コマンド　__`AMMO`__ の挙動が変更されました。"],
     "2021/04/06 03:20": [
         "機能改善に伴いタスク一覧表示コマンドが　~~__`TASK`__~~  から ディーラー一覧表示コマンドの __`DEALER`__ に統合されました。"
@@ -438,7 +441,7 @@ async def on_message(message):
             embed = discord.Embed(
                 title="迷ったときのEFTマップ抽選", description="今回のマップは...", color=0x2ECC69,
             )
-            embed.add_field(name="MAP", value=random.choice(mapList), inline=False)
+            embed.add_field(name="MAP", value=random.choice(list(mapList)), inline=False)
             await message.channel.send(embed=embed)
             return 0
 
@@ -449,7 +452,7 @@ async def on_message(message):
                 color=0x2ECC69,
                 timestamp=datetime.datetime.utcfromtimestamp(
                     dt.strptime(
-                        list(patchNotes.keys())[0], "%Y/%m/%d %H:%M"
+                        list(patchNotes.keys())[0]+"+09:00", "%Y/%m/%d %H:%M%z"
                     ).timestamp()
                 ),
             )
@@ -502,7 +505,7 @@ async def on_message(message):
                 title="更新履歴一覧",
                 timestamp=datetime.datetime.utcfromtimestamp(
                     dt.strptime(
-                        list(patchNotes.keys())[0], "%Y/%m/%d %H:%M"
+                        list(patchNotes.keys())[0]+"+09:00", "%Y/%m/%d %H:%M%z"
                     ).timestamp()
                 ),
             )
@@ -817,6 +820,7 @@ async def on_message(message):
                 embed.set_footer(text="これ以外に使えるコマンドは /help で確認できるよ!")
                 await message.channel.send(embed=embed)
             return 0
+
 
         else:
             text = "入力されたがコマンドが見つからなかった...ごめんなさい。\n"
