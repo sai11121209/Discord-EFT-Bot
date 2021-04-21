@@ -279,6 +279,8 @@ async def on_voice_state_update(member, before, after):
 async def on_message(message):
     global developMode
     # メッセージ送信者がBotだった場合は無視する
+    if not len(message.content):
+        return 0
     if message.author.bot and LOCAL_HOST == False:
         # 本番テキストチャンネル
         specificChannelId = 811566006132408340
