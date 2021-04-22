@@ -164,6 +164,61 @@ traderList = {
         "currencies": ["Roubles (₽)",],
     },
 }
+
+bossList = {
+    "Reshala": {
+        "stampid": 834774060029706240,
+        "location": ["Customs"],
+        "pawnchance": {"Customs": 38},
+        "drops": ["TT pistol 7.62x25 TT Gold"],
+        "followers": "4",
+    },
+    "Killa": {
+        "stampid": 834774059430313984,
+        "location": ["Interchange"],
+        "pawnchance": {"Interchange": 38},
+        "drops": [
+            "RPK-16 5.45x39 light machine gun",
+            "Maska 1Sch helmet (Killa)",
+            "Maska 1Sch face shield (Killa)",
+            "6B13 M assault armor (tan)",
+            "Blackhawk! Commando Chest Harness (black)",
+        ],
+        "followers": "0",
+    },
+    "Glukhar": {
+        "stampid": 834774058724753418,
+        "location": ["Reserve"],
+        "pawnchance": {"Reserve": 43},
+        "drops": ["ASh-12 12.7x55 assault rifle",],
+        "followers": "6",
+    },
+    "Shturman": {
+        "stampid": 834774058612555777,
+        "location": ["Woods"],
+        "pawnchance": {"Woods": 41},
+        "drops": [
+            "AK-105 5.45x39 assault rifle",
+            "SVDS 7.62x54 Sniper rifle",
+            "Red Rebel Ice pick",
+        ],
+        "followers": "2",
+    },
+    "Sanitar": {
+        "stampid": 834774059522588742,
+        "location": ["Shoreline"],
+        "pawnchance": {"Shoreline": 35},
+        "drops": ["Sanitar bag"],
+        "followers": "2",
+    },
+    "CultistPriest": {
+        "stampid": 834774056091910195,
+        "location": ["Woods", "Shoreline", "Customs"],
+        "pawnchance": {"Woods": 28, "Shoreline": 28, "Customs": 20},
+        "drops": ["Sanitar bag"],
+        "followers": "3-5",
+    },
+}
 # 新規コマンド追加時は必ずcommandListに追加
 commandList = {
     "EFT公式サイト表示": ["TOP"],
@@ -177,6 +232,7 @@ commandList = {
     "フリーマーケット情報表示": ["MARKET"],
     "各アイテムのフリーマーケット価格表示": [],
     "ディーラー一覧表示": ["DEALER"],
+    "ボス一覧表示": ["BOSS"],
     "マップ抽選": ["RANDOMMAP"],
     "武器抽選": ["RANDOMWEAPON"],
     "早見表表示": ["CHART"],
@@ -188,8 +244,9 @@ commandList = {
 }
 # 上に追記していくこと
 patchNotes = {
-    "2021/04/22 17:50": [
-        "武器抽選コマンド __`RANDOMWEAPON`__ 追加に伴いマップ抽選コマンド ~~__`RANDOM`__~~ から __`RANDOMMAP`__ に変更されました。"
+    "2021/04/22 22:10": [
+        "武器抽選コマンド __`RANDOMWEAPON`__ 追加に伴いマップ抽選コマンド ~~__`RANDOM`__~~ から __`RANDOMMAP`__ に変更されました。",
+        "ボス一覧表示コマンド __`BOSS`__ を追加しました。",
     ],
     "2021/04/20 18:35": [
         "マップ抽選コマンド __`RANDOM`__ で発生していたデータ型キャスト不具合の修正を行いました。",
@@ -593,6 +650,49 @@ async def on_message(message):
             await message.channel.send(embed=embed)
             return 0
 
+        elif message.content.upper() == f"{prefix}BOSS":
+            BossNames = GetBossName()
+            embed = discord.Embed(
+                title="ボス", url=f"{enWikiUrl}Characters#Bosses", color=0x808080,
+            )
+            for BossName in BossNames:
+                boss = bossList[BossName]
+                text = ""
+                text += "**場所**:"
+                if len(boss["location"]) == 1:
+                    text += f"__[{boss['location'][0]}]({enWikiUrl}{boss['location'][0]})__\n"
+                    text += (
+                        f"**出現確率**: __{boss['pawnchance'][boss['location'][0]]}%__\n"
+                    )
+                else:
+                    text += "\n"
+                    for location in boss["location"]:
+                        text += f"・__[{location}]({enWikiUrl}{location})__\n"
+                    text += f"**出現確率**:\n"
+                    for location in boss["location"]:
+                        text += (
+                            f"・__{location}__: __{boss['pawnchance'][location]}%__\n"
+                        )
+                text += "**レアドロップ**:\n"
+                for drop in boss["drops"]:
+                    text += f"・__[{drop}]({enWikiUrl}{drop.replace(' ', '_')})__\n"
+                text += f"**護衛**: {boss['followers']}人\n"
+                if BossName != "CultistPriest":
+                    text += f"**詳細情報**: [EN]({enWikiUrl}{BossName})"
+                else:
+                    text += f"**詳細情報**: [EN]({enWikiUrl}Cultists)"
+                embed.add_field(
+                    name=f"<:{BossName}:{boss['stampid']}> {BossName}", value=text,
+                )
+            embed.set_author(
+                name="EFT(Escape from Tarkov) Wiki Bot",
+                url="https://github.com/sai11121209",
+                # icon_url=client.get_user(279995095124803595).avatar_url,
+            )
+            embed.set_footer(text="トレーダー名をクリックすることで各トレーダータスクの詳細情報にアクセスできるよー。")
+            await message.channel.send(embed=embed)
+            return 0
+
         elif message.content.upper() == f"{prefix}AMMO":
             embed = discord.Embed(
                 title="(1/2)弾薬早見表", url="https://eft.monster/", color=0x808080
@@ -880,11 +980,20 @@ def GetTraderName():
     res = rq.get(f"{enWikiUrl}Trading")
     soup = BeautifulSoup(res.text, "lxml", from_encoding="utf-8")
     soup = soup.find(class_="wikitable sortable")
-    for s in soup.find_all("tr"):
-        print(s.find_all("td"))
     return [
         s.find_all("a")[0].get_text().replace(" ", "")
         for s in soup.find_all("tr")
+        if s.find_all("a")
+    ]
+
+
+def GetBossName():
+    res = rq.get(f"{enWikiUrl}Characters")
+    soup = BeautifulSoup(res.text, "lxml", from_encoding="utf-8")
+    soup = soup.find_all(class_="wikitable sortable")
+    return [
+        s.find_all("a")[0].get_text().replace(" ", "")
+        for s in soup[1].find_all("tr")
         if s.find_all("a")
     ]
 
