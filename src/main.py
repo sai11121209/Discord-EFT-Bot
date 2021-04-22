@@ -177,7 +177,8 @@ commandList = {
     "フリーマーケット情報表示": ["MARKET"],
     "各アイテムのフリーマーケット価格表示": [],
     "ディーラー一覧表示": ["DEALER"],
-    "マップ抽選": ["RANDOM"],
+    "マップ抽選": ["RANDOMMAP"],
+    "武器抽選": ["RANDOMWEAPON"],
     "早見表表示": ["CHART"],
     "アーマの早見表表示": ["ARMOR"],
     "更新履歴表示": ["PATCH"],
@@ -187,9 +188,13 @@ commandList = {
 }
 # 上に追記していくこと
 patchNotes = {
-    "2021/04/20 18:35": ["マップ抽選コマンド __`RANDOM`__ で発生していたデータ型キャスト不具合の修正を行いました。",
-        "タイムゾーン未指定による更新日時が正常に表示されていなかった問題の修正。"
-        ],
+    "2021/04/22 17:50": [
+        "武器抽選コマンド __`RANDOMWEAPON`__ 追加に伴いマップ抽選コマンド ~~__`RANDOM`__~~ から __`RANDOMMAP`__ に変更されました。"
+    ],
+    "2021/04/20 18:35": [
+        "マップ抽選コマンド __`RANDOM`__ で発生していたデータ型キャスト不具合の修正を行いました。",
+        "タイムゾーン未指定による更新日時が正常に表示されていなかった問題の修正。",
+    ],
     "2021/04/06 19:13": ["弾薬性能表示コマンド　__`AMMO`__ の挙動が変更されました。"],
     "2021/04/06 03:20": [
         "機能改善に伴いタスク一覧表示コマンドが　~~__`TASK`__~~  から ディーラー一覧表示コマンドの __`DEALER`__ に統合されました。"
@@ -439,11 +444,15 @@ async def on_message(message):
                 n += 1
             return 0
 
-        elif message.content.upper() == f"{prefix}RANDOM":
+        elif message.content.upper() == f"{prefix}RANDOMMAP":
             embed = discord.Embed(
-                title="迷ったときのEFTマップ抽選", description="今回のマップは...", color=0x2ECC69,
+                title="迷ったときのEFTマップ抽選",
+                description=f"{str(message.author).split('#')[0]}が赴くマップは...",
+                color=0x2ECC69,
             )
-            embed.add_field(name="MAP", value=random.choice(list(mapList)), inline=False)
+            embed.add_field(
+                name="MAP", value=random.choice(list(mapList)), inline=False
+            )
             await message.channel.send(embed=embed)
             return 0
 
@@ -454,7 +463,7 @@ async def on_message(message):
                 color=0x2ECC69,
                 timestamp=datetime.datetime.utcfromtimestamp(
                     dt.strptime(
-                        list(patchNotes.keys())[0]+"+09:00", "%Y/%m/%d %H:%M%z"
+                        list(patchNotes.keys())[0] + "+09:00", "%Y/%m/%d %H:%M%z"
                     ).timestamp()
                 ),
             )
@@ -507,7 +516,7 @@ async def on_message(message):
                 title="更新履歴一覧",
                 timestamp=datetime.datetime.utcfromtimestamp(
                     dt.strptime(
-                        list(patchNotes.keys())[0]+"+09:00", "%Y/%m/%d %H:%M%z"
+                        list(patchNotes.keys())[0] + "+09:00", "%Y/%m/%d %H:%M%z"
                     ).timestamp()
                 ),
             )
@@ -805,6 +814,34 @@ async def on_message(message):
             await message.channel.send(embed=embed)
             return 0
 
+        elif message.content.upper() == f"{prefix}RANDOMWEAPON":
+            fixWeaponsData = weaponsData
+            del fixWeaponsData["グレネードランチャー"]
+            del fixWeaponsData["固定武器"]
+            del fixWeaponsData["投擲武器"]
+            del fixWeaponsData["近接武器"]
+
+            bulletsData = GetBulletData()
+            embed = discord.Embed(
+                title="迷ったときのEFT武器抽選",
+                description=f"{str(message.author).split('#')[0]}が使用する武器は...",
+                color=0x2ECC69,
+            )
+            weapon = random.choice(
+                list(itertools.chain.from_iterable(list(fixWeaponsData.values())))
+            )
+            urlEncord = weapon[0].replace(" ", "%20")
+            fixName = weapon[3].replace("×", "x")
+            fixName = fixName.replace(" ", "")
+            embed.add_field(
+                name="WEAPON",
+                value=f"**[{weapon[0]}]({jaWikiUrl}{urlEncord})**\n**発射機構**: {weapon[2]} **使用弾薬**: [{weapon[3]}]({jaWikiUrl}弾薬{bulletsData[fixName]}) **連射速度(rpm)**: {weapon[4]}",
+                inline=False,
+            )
+            embed.set_image(url=weapon[1])
+            await message.channel.send(embed=embed)
+            return 0
+
         elif len(hints) > 0:
             text = ""
             embed = discord.Embed(
@@ -822,7 +859,6 @@ async def on_message(message):
                 embed.set_footer(text="これ以外に使えるコマンドは /help で確認できるよ!")
                 await message.channel.send(embed=embed)
             return 0
-
 
         else:
             text = "入力されたがコマンドが見つからなかった...ごめんなさい。\n"
