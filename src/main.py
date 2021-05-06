@@ -1,5 +1,6 @@
 # インストールした discord.py を読み込む
 import os
+import re
 from typing import Text
 import pytz
 import discord
@@ -38,6 +39,7 @@ prefix = "/"
 jaWikiUrl = "https://wikiwiki.jp/eft/"
 enWikiUrl = "https://escapefromtarkov.fandom.com/wiki/"
 sendTemplatetext = "EFT(Escape from Tarkov) Wiki "
+voiceChatRole = 839773477095211018
 receivedtext = None
 mapList = {
     "FACTORY": {
@@ -244,6 +246,11 @@ commandList = {
 }
 # 上に追記していくこと
 patchNotes = {
+    "2021/05/06 18:00": [
+        "武器一覧表示、各武器詳細表示コマンド __`WEAPON`__ __`武器名`__ の各種データを海外Wikiから取得する様に変更されました。",
+        "武器一覧表示、各武器詳細表示、マップ一覧表示、ボス一覧表示コマンドのレスポンス最適化。",
+        "ボイスチャンネル使用中のユーザがテキストチャンネルに書き込むとボイスチャンネル参加ユーザを自動メンションする様になりました。",
+    ],
     "2021/04/22 22:10": [
         "武器抽選コマンド __`RANDOMWEAPON`__ 追加に伴いマップ抽選コマンド ~~__`RANDOM`__~~ から __`RANDOMMAP`__ に変更されました。",
         "ボス一覧表示コマンド __`BOSS`__ を追加しました。",
@@ -296,10 +303,24 @@ patchNotes = {
     "2021/01/30": ["早見表表示コマンド __`CHART`__ を追加しました。", "早見表コマンドにアイテム早見表を追加しました。"],
 }
 
+
+async def add_role(member):
+    role = member.guild.get_role(voiceChatRole)
+    await member.add_roles(role)
+
+
+async def remove_role(member):
+    role = member.guild.get_role(voiceChatRole)
+    await member.remove_roles(role)
+
+
 # 起動時に動作する処理
 @client.event
 async def on_ready():
     # 起動したらターミナルにログイン通知が表示される
+    print("読み込み開始")
+    global traderNames, bossNames, weaponsName, weaponsData, updateTimestamp
+    traderNames, bossNames, weaponsName, weaponsData, updateTimestamp = Initialize()
     print("ログインしました")
     if LOCAL_HOST == False:
         await client.change_presence(
@@ -319,6 +340,7 @@ async def on_voice_state_update(member, before, after):
         await channel.send(
             f"@everyone {user} がボイスチャンネル {after.channel} にてボイスチャットを開始しました。"
         )
+        await add_role(member)
     elif (
         before.channel
         and after.channel
@@ -334,6 +356,7 @@ async def on_voice_state_update(member, before, after):
         )
     elif before.channel and after.channel == None:
         await channel.send(f"@everyone {user} がボイスチャンネル {before.channel} を退出しました。")
+        await remove_role(member)
 
 
 # メッセージ受信時に動作する処理
@@ -343,6 +366,10 @@ async def on_message(message):
     # メッセージ送信者がBotだった場合は無視する
     if not len(message.content):
         return 0
+
+    if message.guild.get_role(voiceChatRole) in message.author.roles:
+        await message.channel.send(f"<@&{voiceChatRole}>")
+
     if message.author.bot and LOCAL_HOST == False:
         # 本番テキストチャンネル
         specificChannelId = 811566006132408340
@@ -387,6 +414,7 @@ async def on_message(message):
                 )
             await message.channel.send(text)
             return 0
+
     if prefix == message.content[0] and developMode == False:
         if LOCAL_HOST:
             embed = discord.Embed(
@@ -607,11 +635,13 @@ async def on_message(message):
             return 0
 
         elif message.content.upper() == f"{prefix}DEALER":
-            TraderNames = GetTraderName()
             embed = discord.Embed(
-                title="ディーラー", url=f"{enWikiUrl}Characters#Dealers", color=0x808080,
+                title="ディーラー",
+                url=f"{enWikiUrl}Characters#Dealers",
+                color=0x808080,
+                timestamp=updateTimestamp,
             )
-            for TraderName in TraderNames:
+            for TraderName in traderNames:
                 trader = traderList[TraderName]
                 text = f"**本名**: __{trader['fullname']}__\n"
                 if (
@@ -646,17 +676,19 @@ async def on_message(message):
                 url="https://github.com/sai11121209",
                 # icon_url=client.get_user(279995095124803595).avatar_url,
             )
-            embed.set_footer(text="トレーダー名をクリックすることで各トレーダータスクの詳細情報にアクセスできるよー。")
+            embed.set_footer(text="トレーダー名をクリックすることで各トレーダータスクの詳細情報にアクセスできるよー。",)
             await message.channel.send(embed=embed)
             return 0
 
         elif message.content.upper() == f"{prefix}BOSS":
-            BossNames = GetBossName()
             embed = discord.Embed(
-                title="ボス", url=f"{enWikiUrl}Characters#Bosses", color=0x808080,
+                title="ボス",
+                url=f"{enWikiUrl}Characters#Bosses",
+                color=0x808080,
+                timestamp=updateTimestamp,
             )
-            for BossName in BossNames:
-                boss = bossList[BossName]
+            for bossName in bossNames:
+                boss = bossList[bossName]
                 text = ""
                 text += "**場所**:"
                 if len(boss["location"]) == 1:
@@ -677,19 +709,19 @@ async def on_message(message):
                 for drop in boss["drops"]:
                     text += f"・__[{drop}]({enWikiUrl}{drop.replace(' ', '_')})__\n"
                 text += f"**護衛**: {boss['followers']}人\n"
-                if BossName != "CultistPriest":
-                    text += f"**詳細情報**: [EN]({enWikiUrl}{BossName})"
+                if bossName != "CultistPriest":
+                    text += f"**詳細情報**: [EN]({enWikiUrl}{bossName})"
                 else:
                     text += f"**詳細情報**: [EN]({enWikiUrl}Cultists)"
                 embed.add_field(
-                    name=f"<:{BossName}:{boss['stampid']}> {BossName}", value=text,
+                    name=f"<:{bossName}:{boss['stampid']}> {bossName}", value=text,
                 )
             embed.set_author(
                 name="EFT(Escape from Tarkov) Wiki Bot",
                 url="https://github.com/sai11121209",
                 # icon_url=client.get_user(279995095124803595).avatar_url,
             )
-            embed.set_footer(text="トレーダー名をクリックすることで各トレーダータスクの詳細情報にアクセスできるよー。")
+            embed.set_footer(text="トレーダー名をクリックすることで各トレーダータスクの詳細情報にアクセスできるよー。",)
             await message.channel.send(embed=embed)
             return 0
 
@@ -846,6 +878,34 @@ async def on_message(message):
             return 0
 
         elif message.content.upper() == f"{prefix}WEAPON":
+            embeds = []
+            for n, (index, values) in enumerate(weaponsData.items()):
+                embed = discord.Embed(
+                    title=f"武器一覧({n+1}/{len(weaponsData)})",
+                    url=f"{enWikiUrl}Weapons",
+                    timestamp=updateTimestamp,
+                )
+                embed.add_field(
+                    name=f"{index}",
+                    value=f"[{index} Wikiリンク]({enWikiUrl}Weapons#{index.replace(' ', '_')})",
+                    inline=False,
+                )
+                for value in values:
+                    embed.add_field(
+                        name=value["名前"],
+                        value=f"[海外Wikiリンク]({enWikiUrl}{value['weaponUrl']})",
+                        inline=False,
+                    )
+                embed.set_footer(text=f"Escape from Tarkov 海外Wiki 最終更新")
+                embeds.append(embed)
+            for embed in embeds:
+                print(len(embed))
+                await message.channel.send(embed=embed)
+            return 0
+
+        # 日本語wiki版 武器取得廃止
+        """
+        elif message.content.upper() == f"{prefix}WEAPON":
             weaponsName, weaponsData, colName = GetweaponData()
             bulletsData = GetBulletData()
             embeds = []
@@ -880,9 +940,9 @@ async def on_message(message):
             for embed in embeds:
                 await message.channel.send(embed=embed)
             return 0
+        """
 
-        weaponsName, weaponsData, colName = GetweaponData()
-        commandList["各武器詳細表示"] = weaponsName
+        commandList["各武器詳細表示"] = [weaponName.upper() for weaponName in weaponsName]
         # コマンドの予測変換
         hints = {
             command
@@ -893,53 +953,84 @@ async def on_message(message):
             >= 0.65
         }
 
-        if message.content.upper().split("/")[1] in weaponsName:
-            bulletsData = GetBulletData()
+        if message.content.upper().split("/")[1] in [
+            weaponName.upper() for weaponName in weaponsName
+        ]:
             infoStr = ""
             fixtext = message.content.upper().replace(" ", "").split("/")[1]
-            weaponName = weaponsName[fixtext]
-            urlEncord = weaponName[1].replace(" ", "%20")
-            # infoStr += f"[{weaponName[1]}]({url}{urlEncord})  "
-            for c, v in zip(colName[weaponName[0]][2:], weaponName[3:]):
-                if c == "使用弾薬":
-                    fixName = v.replace("×", "x")
-                    fixName = fixName.replace(" ", "")
-                    infoStr += f"**{c}**: [{v}]({jaWikiUrl}弾薬{bulletsData[fixName]})  "
+            weaponData = [
+                value
+                for values in weaponsData.values()
+                for value in values
+                if value["名前"].upper().replace(" ", "") == fixtext
+            ][0]
+            for colName, value in weaponData.items():
+                if colName in [
+                    "名前",
+                    "weaponUrl",
+                    "typeUrl",
+                    "imageUrl",
+                    "cartridgeUrl",
+                    "soldByUrl",
+                ]:
+                    pass
+                elif weaponData[colName] == "":
+                    pass
+                elif colName == "種類":
+                    infoStr += f"\n**{colName.capitalize()}**: __[{weaponData[colName]}]({enWikiUrl}{weaponData['typeUrl']})__"
+                elif colName == "口径":
+                    infoStr += f"\n**{colName.capitalize()}**: __[{weaponData[colName]}]({enWikiUrl}{weaponData['cartridgeUrl']})__"
+                elif colName == "発射機構":
+                    infoStr += f"\n**{colName.capitalize()}**:"
+                    for firingMode in weaponData[colName]:
+                        infoStr += f"\n・__{firingMode}__"
+                elif colName == "販売元":
+                    infoStr += f"\n**{colName.capitalize()}**: __[{weaponData[colName]}]({enWikiUrl}{weaponData['soldByUrl']})__"
+                elif colName == "詳細":
+                    text = weaponData[colName]
+                    # 翻訳前言語
+                    source = "en"
+                    # 翻訳後言語
+                    Target = "ja"
+                    gasUrl = f"https://script.google.com/macros/s/AKfycbxvCS-29LVgrm9-cSynGl19QUIB7jTpzuvFqflus_P0BJtXX80ahLazltfm2rbMGVVs/exec?text={text}&source={source}&target={Target}"
+                    res = rq.get(gasUrl).json()
+                    if res["code"] == 200:
+                        text = res["text"]
+                    infoStr += f"\n**{colName}**:"
+                    infoStr += f"\n```{weaponData[colName]}"
+                    infoStr += f"\n{text}"
+                    infoStr += "\nGoogle翻訳```"
+                elif colName == "使用可能弾薬":
+                    infoStr += f"\n**{colName.capitalize()}**:"
+                    for ammunition in weaponData[colName]:
+                        infoStr += f"\n・__{ammunition}__"
+                elif colName == "リコイル":
+                    infoStr += f"\n**{colName.capitalize()}**:"
+                    for key, value in weaponData[colName].items():
+                        infoStr += f"\n・**{key}**: __{value}__"
                 else:
-                    infoStr += f"**{c}**: {v}  "
+                    infoStr += (
+                        f"\n**{colName.capitalize()}**: __{weaponData[colName]}__"
+                    )
             embed = discord.Embed(
-                title=weaponName[1], url=f"{jaWikiUrl}{urlEncord}", description=infoStr
+                title=weaponData["名前"],
+                url=f"{enWikiUrl}{weaponData['weaponUrl']}",
+                description=infoStr,
+                timestamp=updateTimestamp,
             )
-            embed.set_image(url=weaponName[2])
+            embed.set_footer(text=f"Escape from Tarkov 海外Wiki 最終更新")
+            embed.set_image(url=weaponData["imageUrl"])
             await message.channel.send(embed=embed)
             return 0
 
         elif message.content.upper() == f"{prefix}RANDOMWEAPON":
-            fixWeaponsData = weaponsData
-            del fixWeaponsData["グレネードランチャー"]
-            del fixWeaponsData["固定武器"]
-            del fixWeaponsData["投擲武器"]
-            del fixWeaponsData["近接武器"]
-
-            bulletsData = GetBulletData()
             embed = discord.Embed(
                 title="迷ったときのEFT武器抽選",
                 description=f"{str(message.author).split('#')[0]}が使用する武器は...",
                 color=0x2ECC69,
             )
-            weapon = random.choice(
-                list(itertools.chain.from_iterable(list(fixWeaponsData.values())))
-            )
-            urlEncord = weapon[0].replace(" ", "%20")
-            fixName = weapon[3].replace("×", "x")
-            fixName = fixName.replace(" ", "")
-            embed.add_field(
-                name="WEAPON",
-                value=f"**[{weapon[0]}]({jaWikiUrl}{urlEncord})**\n**発射機構**: {weapon[2]} **使用弾薬**: [{weapon[3]}]({jaWikiUrl}弾薬{bulletsData[fixName]}) **連射速度(rpm)**: {weapon[4]}",
-                inline=False,
-            )
-            embed.set_image(url=weapon[1])
-            await message.channel.send(embed=embed)
+            weapon = random.choice(weaponsName)
+            await message.channel.send(f"/{weapon}")
             return 0
 
         elif len(hints) > 0:
@@ -976,9 +1067,19 @@ async def on_message(message):
         await message.channel.send(embed=embed)
 
 
+def Initialize():
+    traderNames = GetTraderName()
+    bossNames = GetBossName()
+    weaponsName, weaponsData = GetWeaponsData()
+    updateTimestamp = datetime.datetime.utcfromtimestamp(
+        dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
+    )
+    return traderNames, bossNames, weaponsName, weaponsData, updateTimestamp
+
+
 def GetTraderName():
     res = rq.get(f"{enWikiUrl}Trading")
-    soup = BeautifulSoup(res.text, "lxml", from_encoding="utf-8")
+    soup = BeautifulSoup(res.text, "lxml")
     soup = soup.find(class_="wikitable sortable")
     return [
         s.find_all("a")[0].get_text().replace(" ", "")
@@ -989,7 +1090,7 @@ def GetTraderName():
 
 def GetBossName():
     res = rq.get(f"{enWikiUrl}Characters")
-    soup = BeautifulSoup(res.text, "lxml", from_encoding="utf-8")
+    soup = BeautifulSoup(res.text, "lxml")
     soup = soup.find_all(class_="wikitable sortable")
     return [
         s.find_all("a")[0].get_text().replace(" ", "")
@@ -1000,9 +1101,7 @@ def GetBossName():
 
 def GetBulletData():
     res = rq.get(f"{jaWikiUrl}弾薬")
-    soup = BeautifulSoup(res.text, "lxml", from_encoding="utf-8").find(
-        "div", {"class": "container-wrapper"}
-    )
+    soup = BeautifulSoup(res.text, "lxml").find("div", {"class": "container-wrapper"})
     exclusion = ["概要", "表の見方", "弾薬の選び方", "拳銃弾", "PDW弾", "ライフル弾", "散弾", "グレネード弾", "未実装"]
     bulletsData = {
         s.get_text()
@@ -1015,9 +1114,366 @@ def GetBulletData():
     return bulletsData
 
 
+def GetWeaponsData():
+    res = rq.get(f"{enWikiUrl}Weapons")
+    soup = BeautifulSoup(res.text, "lxml")
+    exclusion = [
+        "Primaryweapons",
+        "Secondaryweapons",
+        "Stationaryweapons",
+        "Throwableweapons",
+        "Upcomingweapons",
+        "Primaryweapons",
+        "Secondaryweapons",
+        "Launchers",
+        "Throwableweapons",
+        "Mines",
+        "Stationaryweapons",
+        "Mortar",
+        "AntitankGun",
+        "Unconfirmedweapons",
+        "PrimaryWeapons",
+        "SecondaryWeapons",
+        "Launchers",
+    ]
+    primaryCategory = [
+        "Assault rifles",
+        "Assault carbines",
+        "Light machine guns",
+        "Submachine guns",
+        "Shotguns",
+        "Designated marksman rifles",
+        "Sniper rifles",
+        "Grenade launchers",
+    ]
+    secondaryCategory = ["Pistols"]
+    stationaryCategory = [
+        "Heavy machine guns",
+        "Automatic Grenade launchers",
+    ]
+    meleeCategory = ["Melee weapons"]
+    throwableCategoryOne = [
+        "Fragmentation grenades",
+    ]
+    throwableCategoryTwo = [
+        "Smoke grenades",
+        "Stun grenades",
+    ]
+    weaponCategoryList = [
+        category.get_text()
+        for category in soup.find_all("span", {"class": "toctext"})
+        if category.get_text().replace(" ", "") not in exclusion
+    ]
+    weaponsData = {}
+    for weapons, category in zip(
+        soup.find_all(class_="wikitable sortable")[: len(weaponCategoryList) - 1],
+        weaponCategoryList,
+    ):
+        weaponsData[category] = []
+        if category in primaryCategory or category in secondaryCategory:
+            for weapon in weapons.find("tbody").find_all("tr")[1:]:
+                weaponInformations = GetWeaponInformations(weapon)
+                weaponsData[category].append(
+                    {
+                        "名前": weapon.find_all("td")[0].find("a")["title"],
+                        "種類": weaponInformations["Type"].get_text(),
+                        "typeUrl": weaponInformations["Type"]
+                        .find("a")["href"]
+                        .replace("/wiki/", "", 1),
+                        "weaponUrl": weapon.find_all("td")[0]
+                        .find("a")["href"]
+                        .replace("/wiki/", "", 1),
+                        "imageUrl": re.sub(
+                            "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                            "",
+                            weapon.find("img")["src"],
+                        )
+                        + "?format=original",
+                        "重量": [
+                            ""
+                            if weaponInformations["Weight"] == ""
+                            else weaponInformations["Weight"].get_text()
+                        ][0],
+                        "サイズ": [
+                            ""
+                            if weaponInformations["Grid size"] == ""
+                            else weaponInformations["Grid size"].get_text()
+                        ][0],
+                        "販売元": [
+                            ""
+                            if weaponInformations["Sold by"] == ""
+                            else weaponInformations["Sold by"].get_text()
+                        ][0],
+                        "soldByUrl": [
+                            ""
+                            if weaponInformations["Sold by"] == ""
+                            else weaponInformations["Sold by"]
+                            .find("a")["href"]
+                            .replace("/wiki/", "", 1)
+                        ][0],
+                        "リコイル": {
+                            "垂直反動": str(
+                                weaponInformations["Recoil %"]
+                                .contents[0]
+                                .replace(" ", "")
+                                .split(":")[1]
+                            ),
+                            "水平反動": str(
+                                weaponInformations["Recoil %"]
+                                .contents[2]
+                                .replace(" ", "")
+                                .split(":")[1]
+                            ),
+                        },
+                        "有効射程": weaponInformations["Effective distance"].get_text(),
+                        "口径": weapon.find_all("td")[1].find("a")["title"],
+                        "cartridgeUrl": weapon.find_all("td")[1]
+                        .find("a")["href"]
+                        .replace("/wiki/", "", 1),
+                        "発射機構": [
+                            firingmode.replace("\n", "").replace("\xa0", " ")
+                            for firingmode in weapon.find_all("td")[2].contents
+                            if firingmode != soup.hr and firingmode != soup.br
+                        ],
+                        "連射速度": weapon.find_all("td")[3].get_text().replace("\n", ""),
+                        "使用可能弾薬": [
+                            acceptedAmmunition
+                            for acceptedAmmunition in weaponInformations[
+                                "Accepted ammunition"
+                            ]
+                            .get_text()
+                            .split("\n")
+                            if acceptedAmmunition != ""
+                        ],
+                        "詳細": weapon.find_all("td")[4].get_text(),
+                    }
+                )
+        elif category in stationaryCategory:
+            for weapon in weapons.find("tbody").find_all("tr")[1:]:
+                weaponInformations = GetWeaponInformations(weapon)
+                weaponsData[category].append(
+                    {
+                        "名前": weapon.find_all("td")[0].find("a")["title"],
+                        "weaponUrl": weapon.find_all("td")[0]
+                        .find("a")["href"]
+                        .replace("/wiki/", "", 1),
+                        "imageUrl": re.sub(
+                            "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                            "",
+                            weapon.find("img")["src"],
+                        )
+                        + "?format=original",
+                        "重量": [
+                            ""
+                            if weaponInformations["Weight"] == ""
+                            else weaponInformations["Weight"].get_text()
+                        ][0],
+                        "サイズ": [
+                            ""
+                            if weaponInformations["Grid size"] == ""
+                            else weaponInformations["Grid size"].get_text()
+                        ][0],
+                        "販売元": [
+                            ""
+                            if weaponInformations["Sold by"] == ""
+                            else weaponInformations["Sold by"].get_text()
+                        ][0],
+                        "soldByUrl": [
+                            ""
+                            if weaponInformations["Sold by"] == ""
+                            else weaponInformations["Sold by"]
+                            .find("a")["href"]
+                            .replace("/wiki/", "", 1)
+                        ][0],
+                        "口径": weapon.find_all("td")[1].find("a")["title"],
+                        "cartridgeUrl": weapon.find_all("td")[1]
+                        .find("a")["href"]
+                        .replace("/wiki/", "", 1),
+                        "発射機構": [
+                            firingmode.replace("\n", "").replace("\xa0", " ")
+                            for firingmode in weapon.find_all("td")[2].contents
+                            if firingmode != soup.hr and firingmode != soup.br
+                        ],
+                        "使用可能弾薬": [
+                            acceptedAmmunition
+                            for acceptedAmmunition in weaponInformations[
+                                "Accepted ammunition"
+                            ]
+                            .get_text()
+                            .split("\n")
+                            if acceptedAmmunition != ""
+                        ],
+                    }
+                )
+        elif category in meleeCategory:
+            for weapon in weapons.find("tbody").find_all("tr")[1:]:
+                weaponInformations = GetWeaponInformations(weapon)
+                weaponsData[category].append(
+                    {
+                        "名前": weapon.find_all("td")[0].find("a")["title"],
+                        "weaponUrl": weapon.find_all("td")[0]
+                        .find("a")["href"]
+                        .replace("/wiki/", "", 1),
+                        "imageUrl": re.sub(
+                            "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                            "",
+                            weapon.find("img")["src"],
+                        )
+                        + "?format=original",
+                        "重量": [
+                            ""
+                            if weaponInformations["Weight"] == ""
+                            else weaponInformations["Weight"].get_text()
+                        ][0],
+                        "サイズ": [
+                            ""
+                            if weaponInformations["Grid size"] == ""
+                            else weaponInformations["Grid size"].get_text()
+                        ][0],
+                        "販売元": [
+                            ""
+                            if weaponInformations["Sold by"] == ""
+                            else weaponInformations["Sold by"].get_text()
+                        ][0],
+                        "soldByUrl": [
+                            ""
+                            if weaponInformations["Sold by"] == ""
+                            else weaponInformations["Sold by"]
+                            .find("a")["href"]
+                            .replace("/wiki/", "", 1)
+                        ][0],
+                        "斬撃ダメージ": weapon.find_all("td")[1]
+                        .get_text()
+                        .replace("\n", "",),
+                        "斬撃距離": weapon.find_all("td")[2].get_text().replace("\n", "",),
+                        "刺突ダメージ": weapon.find_all("td")[3]
+                        .get_text()
+                        .replace("\n", "",),
+                        "刺突距離": weapon.find_all("td")[4].get_text().replace("\n", "",),
+                        "詳細": weapon.find_all("td")[5].get_text().replace("\n", "",),
+                    }
+                )
+
+        elif category in throwableCategoryOne:
+            for weapon in weapons.find("tbody").find_all("tr")[1:]:
+                weaponInformations = GetWeaponInformations(weapon)
+                weaponsData[category].append(
+                    {
+                        "名前": weapon.find_all("td")[0].find("a")["title"],
+                        "weaponUrl": weapon.find_all("td")[0]
+                        .find("a")["href"]
+                        .replace("/wiki/", "", 1),
+                        "imageUrl": re.sub(
+                            "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                            "",
+                            weapon.find("img")["src"],
+                        )
+                        + "?format=original",
+                        "重量": [
+                            ""
+                            if weaponInformations["Weight"] == ""
+                            else weaponInformations["Weight"].get_text()
+                        ][0],
+                        "サイズ": [
+                            ""
+                            if weaponInformations["Grid size"] == ""
+                            else weaponInformations["Grid size"].get_text()
+                        ][0],
+                        "販売元": [
+                            ""
+                            if weaponInformations["Sold by"] == ""
+                            else weaponInformations["Sold by"].get_text()
+                        ][0],
+                        "soldByUrl": [
+                            ""
+                            if weaponInformations["Sold by"] == ""
+                            else weaponInformations["Sold by"]
+                            .find("a")["href"]
+                            .replace("/wiki/", "", 1)
+                        ][0],
+                        "信管作動時間(s)": weapon.find_all("td")[1].get_text(),
+                        "加害範囲": weapon.find_all("td")[2].get_text(),
+                        "1破片当たりの最大ダメージ": weapon.find_all("td")[3].get_text(),
+                        "破片数": weapon.find_all("td")[4].get_text(),
+                        "詳細": weapon.find_all("td")[5].get_text(),
+                    }
+                )
+
+        elif category in throwableCategoryTwo:
+            for weapon in weapons.find("tbody").find_all("tr")[1:]:
+                weaponInformations = GetWeaponInformations(weapon)
+                weaponsData[category].append(
+                    {
+                        "名前": weapon.find_all("td")[0].find("a")["title"],
+                        "weaponUrl": weapon.find_all("td")[0]
+                        .find("a")["href"]
+                        .replace("/wiki/", "", 1),
+                        "imageUrl": re.sub(
+                            "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                            "",
+                            weapon.find("img")["src"],
+                        )
+                        + "?format=original",
+                        "重量": [
+                            ""
+                            if weaponInformations["Weight"] == ""
+                            else weaponInformations["Weight"].get_text()
+                        ][0],
+                        "サイズ": [
+                            ""
+                            if weaponInformations["Grid size"] == ""
+                            else weaponInformations["Grid size"].get_text()
+                        ][0],
+                        "販売元": [
+                            ""
+                            if weaponInformations["Sold by"] == ""
+                            else weaponInformations["Sold by"].get_text()
+                        ][0],
+                        "soldByUrl": [
+                            ""
+                            if weaponInformations["Sold by"] == ""
+                            else weaponInformations["Sold by"]
+                            .find("a")["href"]
+                            .replace("/wiki/", "", 1)
+                        ][0],
+                        "信管作動時間(s)": weapon.find_all("td")[1].get_text(),
+                        "詳細": weapon.find_all("td")[2].get_text(),
+                    }
+                )
+
+    weaponsName = [
+        weapon["名前"] for weaponData in weaponsData.values() for weapon in weaponData
+    ]
+    return weaponsName, weaponsData
+
+
+def GetWeaponInformations(weapon):
+    res = rq.get(
+        f"{enWikiUrl}{weapon.find_all('td')[0].find('a')['href'].replace('/wiki/', '', 1)}"
+    )
+    soup = BeautifulSoup(res.text, "lxml")
+    weaponInformations = {}
+    weaponInformations = {
+        label.get_text().replace("\xa0", " "): contents
+        for weaponInformation in soup.find_all("table", {"class": "va-infobox-group"})
+        for label, contents in zip(
+            weaponInformation.find_all("td", {"class": "va-infobox-label"}),
+            weaponInformation.find_all("td", {"class": "va-infobox-content"}),
+        )
+    }
+    if "Weight" not in weaponInformations:
+        weaponInformations["Weight"] = ""
+    if "Sold by" not in weaponInformations:
+        weaponInformations["Sold by"] = ""
+    if "Grid size" not in weaponInformations:
+        weaponInformations["Grid size"] = ""
+    return weaponInformations
+
+
+"""
 def GetweaponData():
     res = rq.get(f"{jaWikiUrl}武器一覧")
-    soup = BeautifulSoup(res.text, "lxml", from_encoding="utf-8").find(
+    soup = BeautifulSoup(res.text, "lxml").find(
         "div", {"class": "container-wrapper"}
     )
     exclusion = ["", "開発進行中", "企画中", "コメント", "削除済み"]
@@ -1051,16 +1507,14 @@ def GetweaponData():
         for value in values
     }
     return weaponsName, weaponsData, colName
-
+"""
 
 # マップ画像取得
 def GetMapImage(mapName):
     url = "https://escapefromtarkov.fandom.com/wiki/"
     mapImages = {}
     res = rq.get(f"{url}{mapName}")
-    soup = BeautifulSoup(res.text, "lxml", from_encoding="utf-8").find(
-        "div", {"class": "mw-parser-output"}
-    )
+    soup = BeautifulSoup(res.text, "lxml").find("div", {"class": "mw-parser-output"})
     # Map情報以外のimgタグを除去
     for s in soup.find_all("table"):
         s.decompose()
