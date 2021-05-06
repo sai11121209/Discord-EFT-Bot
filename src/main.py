@@ -246,61 +246,64 @@ commandList = {
 }
 # 上に追記していくこと
 patchNotes = {
-    "2021/05/06 18:00": [
+    "2.0:2021/05/06 18:00": [
         "武器一覧表示、各武器詳細表示コマンド __`WEAPON`__ __`武器名`__ の各種データを海外Wikiから取得する様に変更されました。",
         "武器一覧表示、各武器詳細表示、マップ一覧表示、ボス一覧表示コマンドのレスポンス最適化。",
         "ボイスチャンネル使用中のユーザがテキストチャンネルに書き込むとボイスチャンネル参加ユーザを自動メンションする様になりました。",
     ],
-    "2021/04/22 22:10": [
+    "1.11:2021/04/22 22:10": [
         "武器抽選コマンド __`RANDOMWEAPON`__ 追加に伴いマップ抽選コマンド ~~__`RANDOM`__~~ から __`RANDOMMAP`__ に変更されました。",
         "ボス一覧表示コマンド __`BOSS`__ を追加しました。",
     ],
-    "2021/04/20 18:35": [
+    "1.10.3:2021/04/20 18:35": [
         "マップ抽選コマンド __`RANDOM`__ で発生していたデータ型キャスト不具合の修正を行いました。",
         "タイムゾーン未指定による更新日時が正常に表示されていなかった問題の修正。",
     ],
-    "2021/04/06 19:13": ["弾薬性能表示コマンド　__`AMMO`__ の挙動が変更されました。"],
-    "2021/04/06 03:20": [
+    "1.10.2:2021/04/06 19:13": ["弾薬性能表示コマンド　__`AMMO`__ の挙動が変更されました。"],
+    "1.10.1:2021/04/06 03:20": [
         "機能改善に伴いタスク一覧表示コマンドが　~~__`TASK`__~~  から ディーラー一覧表示コマンドの __`DEALER`__ に統合されました。"
     ],
-    "2021/04/02 12:00": ["アーマの早見表表示コマンド __`ARMOR`__ が仮実装されました。"],
-    "2021/03/30 01:35": [
+    "1.10:2021/04/02 12:00": ["アーマの早見表表示コマンド __`ARMOR`__ が仮実装されました。"],
+    "1.9.1:2021/03/30 01:35": [
         "マップ一覧表示コマンド __`MAP`__ の挙動を大幅に改良しました。",
         "類似コマンドが存在し、かつ類似コマンドが1つの場合該当コマンドを実行するようになるようになりました。",
         "使用可能コマンド一覧表示コマンド __`HELP`__ を見やすいように表示方法改善しました。",
     ],
-    "2021/03/23 18:00": [
+    "1.9:2021/03/23 18:00": [
         "各マップ情報表示コマンドの挙動を大幅に改良しました。",
         "海外公式wiki表示コマンド __`ENWIKI`__ 追加に伴い日本EFTWiki表示コマンドの呼び出しコマンドが 　~~__`WIKITOP`__~~ から __`JAWIKI`__ に変更されました。",
     ],
-    "2021/03/22 23:00": ["内部処理エラーによる __`WEAPON`__ コマンドの修正"],
-    "2021/03/19": [
+    "1.8.1:2021/03/22 23:00": ["内部処理エラーによる __`WEAPON`__ コマンドの修正"],
+    "1.8:2021/03/19": [
         "ビットコイン価格表示コマンド __`BTC`__ を追加しました。",
         "メンテナンス関連のアナウンスがあった場合、テキストチャンネル __`escape-from-tarkov`__ に通知を送るようにしました。",
     ],
-    "2021/03/17": ["現在時刻表示コマンド __`NOW`__ を追加しました。"],
-    "2021/03/15": ["フリーマーケット情報表示コマンド __`MARKET`__ を追加しました。"],
-    "2021/03/14": ["ボイスチャンネル開始、終了時の通知挙動の修正をしました。 ※最終修正"],
-    "2021/03/11": ["ボイスチャンネル開始、終了時の通知挙動の修正をしました。"],
-    "2021/03/09": ["BOTがボイスチャンネル開始時に通知をしてくれるようになりました。"],
-    "2021/03/06": ["BOTが公式アナウンスを自動的に翻訳してくれるようになりました。"],
-    "2021/03/04": ["BOTがよりフレンドリーな返答をするようになりました。"],
-    "2021/02/25": ["早見表表示コマンドに2件早見表を追加しました。"],
-    "2021/02/23": [f"最初の文字が __`{prefix}`__ 以外の文字の場合コマンドとして認識しないように修正。"],
-    "2021/02/10": ["タスク一覧表示コマンド __`TASK`__ を追加しました。", "弾薬性能表示コマンド __`AMMO`__ を追加しました。"],
-    "2021/02/08": ["一部コマンドのレスポンス内容の変更を行いました。"],
-    "2021/02/05": ["一部コマンドを除いたレスポンスの向上"],
-    "2021/02/04": [
+    "1.7:2021/03/17": ["現在時刻表示コマンド __`NOW`__ を追加しました。"],
+    "1.6:2021/03/15": ["フリーマーケット情報表示コマンド __`MARKET`__ を追加しました。"],
+    "1.5.2:2021/03/14": ["ボイスチャンネル開始、終了時の通知挙動の修正をしました。 ※最終修正"],
+    "1.5.1:2021/03/11": ["ボイスチャンネル開始、終了時の通知挙動の修正をしました。"],
+    "1.5:2021/03/09": ["BOTがボイスチャンネル開始時に通知をしてくれるようになりました。"],
+    "1.4:2021/03/06": ["BOTが公式アナウンスを自動的に翻訳してくれるようになりました。"],
+    "1.3.2.1:2021/03/04": ["BOTがよりフレンドリーな返答をするようになりました。"],
+    "1.3.2:2021/02/25": ["早見表表示コマンドに2件早見表を追加しました。"],
+    "1.3.1:2021/02/23": [f"最初の文字が __`{prefix}`__ 以外の文字の場合コマンドとして認識しないように修正。"],
+    "1.3:2021/02/10": [
+        "タスク一覧表示コマンド __`TASK`__ を追加しました。",
+        "弾薬性能表示コマンド __`AMMO`__ を追加しました。",
+    ],
+    "1.2.2:2021/02/08": ["一部コマンドのレスポンス内容の変更を行いました。"],
+    "1.2.1:2021/02/05": ["一部コマンドを除いたレスポンスの向上"],
+    "1.2:2021/02/04": [
         "入力されたコマンドに近いコマンドを表示するヒント機能を追加しました。",
         "各武器名を入力することで入力された武器の詳細情報のみにアクセスできるようになりました。",
         "BOTのソースコードにアクセスできるコマンド __`SOURCE`__ を追加しました。",
     ],
-    "2021/02/02": [
+    "1.1:2021/02/02": [
         "更新履歴表示コマンド __`PATCH`__ を追加しました。",
         "武器一覧表示コマンドの挙動を大幅に変更しました。",
         "早見表表示コマンドに料金表を追加しました。",
     ],
-    "2021/01/30": ["早見表表示コマンド __`CHART`__ を追加しました。", "早見表コマンドにアイテム早見表を追加しました。"],
+    "1.0:2021/01/30": ["早見表表示コマンド __`CHART`__ を追加しました。", "早見表コマンドにアイテム早見表を追加しました。"],
 }
 
 
@@ -366,9 +369,11 @@ async def on_message(message):
     # メッセージ送信者がBotだった場合は無視する
     if not len(message.content):
         return 0
-
-    if message.guild.get_role(voiceChatRole) in message.author.roles:
-        await message.channel.send(f"<@&{voiceChatRole}>")
+    try:
+        if message.guild.get_role(voiceChatRole) in message.author.roles:
+            await message.channel.send(f"<@&{voiceChatRole}>")
+    except:
+        pass
 
     if message.author.bot and LOCAL_HOST == False:
         # 本番テキストチャンネル
@@ -548,7 +553,8 @@ async def on_message(message):
                 color=0x2ECC69,
                 timestamp=datetime.datetime.utcfromtimestamp(
                     dt.strptime(
-                        list(patchNotes.keys())[0] + "+09:00", "%Y/%m/%d %H:%M%z"
+                        list(patchNotes.keys())[0].split(":", 1)[1] + "+09:00",
+                        "%Y/%m/%d %H:%M%z",
                     ).timestamp()
                 ),
             )
@@ -601,7 +607,8 @@ async def on_message(message):
                 title="更新履歴一覧",
                 timestamp=datetime.datetime.utcfromtimestamp(
                     dt.strptime(
-                        list(patchNotes.keys())[0] + "+09:00", "%Y/%m/%d %H:%M%z"
+                        list(patchNotes.keys())[0].split(":", 1)[1] + "+09:00",
+                        "%Y/%m/%d %H:%M%z",
                     ).timestamp()
                 ),
             )
@@ -609,14 +616,16 @@ async def on_message(message):
                 text = ""
                 for N, value in enumerate(values):
                     text += f"{N+1}. {value}\n"
-                embed.add_field(name=index, value=text, inline=False)
+                embed.add_field(
+                    name=f"version: {index.split(':', 1)[0]}", value=text, inline=False
+                )
             # embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
             embed.set_author(
                 name="EFT(Escape from Tarkov) Wiki Bot",
                 url="https://github.com/sai11121209",
                 # icon_url=client.get_user(279995095124803595).avatar_url,
             )
-            embed.set_footer(text=f"最終更新")
+            embed.set_footer(text=f"EFT Wiki Bot最終更新")
             await message.channel.send(embed=embed)
             return 0
 
@@ -896,7 +905,9 @@ async def on_message(message):
                         value=f"[海外Wikiリンク]({enWikiUrl}{value['weaponUrl']})",
                         inline=False,
                     )
-                embed.set_footer(text=f"Escape from Tarkov 海外Wiki 最終更新")
+                embed.set_footer(
+                    text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
+                )
                 embeds.append(embed)
             for embed in embeds:
                 print(len(embed))
@@ -1018,7 +1029,7 @@ async def on_message(message):
                 description=infoStr,
                 timestamp=updateTimestamp,
             )
-            embed.set_footer(text=f"Escape from Tarkov 海外Wiki 最終更新")
+            embed.set_footer(text=f"Source: The Official Escape from Tarkov Wiki 最終更新")
             embed.set_image(url=weaponData["imageUrl"])
             await message.channel.send(embed=embed)
             return 0
@@ -1030,6 +1041,7 @@ async def on_message(message):
                 color=0x2ECC69,
             )
             weapon = random.choice(weaponsName)
+            await message.channel.send(embed=embed)
             await message.channel.send(f"/{weapon}")
             return 0
 
@@ -1057,13 +1069,23 @@ async def on_message(message):
             await message.channel.send(text)
             return 0
     elif "@everyone BOTの更新をしました!" == message.content:
-        embed = discord.Embed(title="更新履歴一覧")
+        embed = discord.Embed(
+            title="更新履歴一覧",
+            timestamp=datetime.datetime.utcfromtimestamp(
+                dt.strptime(
+                    list(patchNotes.keys())[0].split(":", 1)[1] + "+09:00",
+                    "%Y/%m/%d %H:%M%z",
+                ).timestamp()
+            ),
+        )
         for index, values in patchNotes.items():
             text = ""
             for N, value in enumerate(values):
                 text += f"{N+1}. {value}\n"
-            embed.add_field(name=index, value=text, inline=False)
-        embed.set_footer(text=f"最終更新: {list(patchNotes.keys())[0]}")
+            embed.add_field(
+                name=f"version: {index.split(':', 1)[0]}", value=text, inline=False
+            )
+        embed.set_footer(text=f"EFT Wiki Bot 最終更新")
         await message.channel.send(embed=embed)
 
 
