@@ -246,6 +246,10 @@ commandList = {
 }
 # 上に追記していくこと
 patchNotes = {
+    "2.0.1:2021/05/07 17:00": [
+        "notification-general において発言を行うと自動全体メンションをする様になりました。",
+        "機能改善会議(メンテナンス)中にbotに話しかけると怒る様になりました。",
+    ],
     "2.0:2021/05/06 18:00": [
         "武器一覧表示、各武器詳細表示コマンド __`WEAPON`__ __`武器名`__ の各種データを海外Wikiから取得する様に変更されました。",
         "武器一覧表示、各武器詳細表示、マップ一覧表示、ボス一覧表示コマンドのレスポンス最適化。",
@@ -331,7 +335,7 @@ async def on_ready():
         )
 
 
-# メッセージ受信時に動作する処理
+# ボイスチャット参加時に動作する処理
 @client.event
 async def on_voice_state_update(member, before, after):
     # 本番テキストチャンネル
@@ -366,6 +370,7 @@ async def on_voice_state_update(member, before, after):
 @client.event
 async def on_message(message):
     global developMode
+    notificationGneralChannelId = 839769626585333761
     # メッセージ送信者がBotだった場合は無視する
     if not len(message.content):
         return 0
@@ -374,6 +379,9 @@ async def on_message(message):
             await message.channel.send(f"<@&{voiceChatRole}>")
     except:
         pass
+    if not message.author.bot:
+        if message.channel.id == notificationGneralChannelId:
+            await message.channel.send(f"<@&{820310764652462130}>")
 
     if message.author.bot and LOCAL_HOST == False:
         # 本番テキストチャンネル
@@ -419,8 +427,11 @@ async def on_message(message):
                 )
             await message.channel.send(text)
             return 0
+    if developMode and message.author.id != 279995095124803595:
+        await message.channel.send("メンテ会議しとるねん。話しかけんといて。")
+        return 0
 
-    if prefix == message.content[0] and developMode == False:
+    if prefix == message.content[0]:
         if LOCAL_HOST:
             embed = discord.Embed(
                 title="現在開発環境での処理内容が表示されており、実装の際に採用されない可能性がある機能、表示等が含まれている可能性があります。",
