@@ -369,7 +369,7 @@ async def on_voice_state_update(member, before, after):
 # メッセージ受信時に動作する処理
 @client.event
 async def on_message(message):
-    global developMode
+    global developMode, enrageCounter
     notificationGneralChannelId = 839769626585333761
     enrageCounter = 0
     # メッセージ送信者がBotだった場合は無視する
@@ -422,6 +422,7 @@ async def on_message(message):
                 await client.change_presence(
                     activity=discord.Activity(name="機能改善会議(メンテナンス中)", type=5)
                 )
+                enrageCounter = 0
             else:
                 await client.change_presence(
                     activity=discord.Game(name="Escape from Tarkov", type=1)
@@ -432,13 +433,14 @@ async def on_message(message):
         developMode
         and message.author.id != 279995095124803595
         and not message.author.bot
+        and prefix == message.content[0]
     ):
-        if enrageCounter <= 5:
+        if enrageCounter < 5:
             await message.channel.send("メンテ会議しとるねん。話しかけんといて。")
-        elif enrageCounter > 5:
-            await message.channel.send("キレそう。。")
+        elif enrageCounter < 10:
+            await message.channel.send("やめて。キレそうです。")
         else:
-            await message.channel.send("。")
+            await message.channel.send("やめて。呼ばないで。")
         enrageCounter += 1
         return 0
 
