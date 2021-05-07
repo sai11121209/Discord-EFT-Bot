@@ -371,6 +371,7 @@ async def on_voice_state_update(member, before, after):
 async def on_message(message):
     global developMode
     notificationGneralChannelId = 839769626585333761
+    enrageCounter = 0
     # メッセージ送信者がBotだった場合は無視する
     if not len(message.content):
         return 0
@@ -427,8 +428,18 @@ async def on_message(message):
                 )
             await message.channel.send(text)
             return 0
-    if developMode and message.author.id != 279995095124803595:
-        await message.channel.send("メンテ会議しとるねん。話しかけんといて。")
+    if (
+        developMode
+        and message.author.id != 279995095124803595
+        and not message.author.bot
+    ):
+        if enrageCounter <= 5:
+            await message.channel.send("メンテ会議しとるねん。話しかけんといて。")
+        elif enrageCounter > 5:
+            await message.channel.send("キレそう。。")
+        else:
+            await message.channel.send("。")
+        enrageCounter += 1
         return 0
 
     if prefix == message.content[0]:
