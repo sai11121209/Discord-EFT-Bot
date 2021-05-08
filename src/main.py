@@ -382,14 +382,14 @@ async def on_message(message):
     if not len(message.content):
         return 0
     try:
-        if message.guild.get_role(voiceChatRole) in message.author.roles:
-            await message.channel.send(f"<@&{voiceChatRole}>")
+        if message.guild.get_role(voiceChatRole) in message.author.roles and message.channel.id != notificationGneralChannelId:
+            await message.channel.send(f"<@&{voiceChatRole}> ")
     except:
         pass
     if not message.author.bot:
         if message.channel.id == notificationGneralChannelId:
             await message.channel.send(
-                f"<@&{notificationGneralChannelId}> {message.content}"
+                f"<@&820310764652462130> {message.content} by {message.author.name}"
             )
             return 0
 
@@ -453,7 +453,7 @@ async def on_message(message):
         enrageCounter += 1
         return 0
 
-    if prefix == message.content[0]:
+    if prefix == message.content[0] and not developMode:
         if LOCAL_HOST:
             embed = discord.Embed(
                 title="現在開発環境での処理内容が表示されており、実装の際に採用されない可能性がある機能、表示等が含まれている可能性があります。",
