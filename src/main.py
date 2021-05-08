@@ -840,7 +840,7 @@ async def on_message(message):
                 embed = discord.Embed(
                     title=f"({n+1}/{len(ammoImages)}){text}",
                     color=0x808080,
-                    url=f"https://tarkov-tools.com/ammo/",
+                    url=f"https://eft.monster/",
                 )
                 embed.set_image(url=url)
                 embed.set_author(
@@ -849,10 +849,6 @@ async def on_message(message):
                 )
                 embed.set_footer(
                     text="提供元: https://twitter.com/bojotaro_tarkov/status/1368569066928046080?s=20"
-                )
-                embed.add_field(
-                    name="Tarkov-Tools",
-                    value="> [Tarkov-Tools携帯リモート操作リンク](https://tarkov-tools.com/control/)",
                 )
                 await message.channel.send(embed=embed)
             return 0
