@@ -232,13 +232,14 @@ commandList = {
     "各武器詳細表示": [],
     "弾薬性能表示": ["AMMO"],
     "フリーマーケット情報表示": ["MARKET"],
-    "各アイテムのフリーマーケット価格表示": [],
+    "TarkovTools情報表示": ["TARKOVTOOLS"],
+    "各アイテムフリーマーケット価格表示": [],
     "ディーラー一覧表示": ["DEALER"],
     "ボス一覧表示": ["BOSS"],
     "マップ抽選": ["RANDOMMAP"],
     "武器抽選": ["RANDOMWEAPON"],
     "早見表表示": ["CHART"],
-    "アーマの早見表表示": ["ARMOR"],
+    "アーマ早見表表示": ["ARMOR"],
     "更新履歴表示": ["PATCH"],
     "現在時刻表示": ["NOW"],
     "ビットコイン価格表示": ["BTC"],
@@ -246,6 +247,12 @@ commandList = {
 }
 # 上に追記していくこと
 patchNotes = {
+    "2.1:2021/05/08 17:00": [
+        "自動全体メンションに本文を含む様に変更されました。",
+        "TarkovTools情報表示コマンド __`TARKOVTOOLS`__ を追加しました。",
+        "以前から仕様変更予定にあった早見表表示、アーマ早見表表示コマンド __`CHART`__ __`ARMOR`__ の正式実装を行いました。",
+        "早見表表示、アーマ早見表表示コマンド __`CHART`__ __`ARMOR`__ の正式実装、又TarkovTools情報表示コマンド __`TARKOVTOOLS`__ 追加に伴い弾薬性能表示コマンド __`AMMO`__の仕様が一部変更されました。",
+    ],
     "2.0.1:2021/05/07 17:00": [
         "notification-general において発言を行うと自動全体メンションをする様になりました。",
         "機能改善会議(メンテナンス)中にbotに話しかけると怒る様になりました。",
@@ -371,7 +378,6 @@ async def on_voice_state_update(member, before, after):
 async def on_message(message):
     global developMode, enrageCounter
     notificationGneralChannelId = 839769626585333761
-    enrageCounter = 0
     # メッセージ送信者がBotだった場合は無視する
     if not len(message.content):
         return 0
@@ -382,7 +388,10 @@ async def on_message(message):
         pass
     if not message.author.bot:
         if message.channel.id == notificationGneralChannelId:
-            await message.channel.send(f"<@&{820310764652462130}>")
+            await message.channel.send(
+                f"<@&{notificationGneralChannelId}> {message.content}"
+            )
+            return 0
 
     if message.author.bot and LOCAL_HOST == False:
         # 本番テキストチャンネル
@@ -436,7 +445,7 @@ async def on_message(message):
         and prefix == message.content[0]
     ):
         if enrageCounter < 5:
-            await message.channel.send("メンテ会議しとるねん。話しかけんといて。")
+            await message.channel.send("機能改善会議しとるねん。話しかけんといて。")
         elif enrageCounter < 10:
             await message.channel.send("やめて。キレそうです。")
         else:
@@ -585,7 +594,7 @@ async def on_message(message):
             for key, values in commandList.items():
                 if key == "各武器詳細表示":
                     text = "```/{武器名}```"
-                elif key == "各アイテムのフリーマーケット価格表示":
+                elif key == "各アイテムフリーマーケット価格表示":
                     text = "```!p {アイテム名}```"
                 elif key == "各マップ情報表示":
                     text = "```/{マップ名}```"
@@ -606,24 +615,87 @@ async def on_message(message):
             return 0
 
         elif message.content.upper() == f"{prefix}CHART":
-            embed = discord.Embed(title="この機能は今後仕様変更されます。", color=0xFF0000)
-            text = "https://cdn.discordapp.com/attachments/803425039864561675/804873530335690802/image0.jpg\n"
-            text += "https://cdn.discordapp.com/attachments/803425039864561675/804873530637811772/image1.jpg\n"
-            text += "https://cdn.discordapp.com/attachments/616231205032951831/805997840140599366/image0.jpg\n"
-            text += "https://cdn.discordapp.com/attachments/808820772536582154/814055787479564318/image0.webp\n"
-            text += "https://media.discordapp.net/attachments/808820772536582154/814055787898077215/image1.webp"
-            await message.channel.send(embed=embed)
-            await message.channel.send(text)
+            text = "その他早見表"
+            chartImages = [
+                "https://cdn.discordapp.com/attachments/803425039864561675/804873530335690802/image0.jpg",
+                "https://cdn.discordapp.com/attachments/803425039864561675/804873530637811772/image1.jpg",
+                "https://cdn.discordapp.com/attachments/616231205032951831/805997840140599366/image0.jpg",
+                "https://cdn.discordapp.com/attachments/808820772536582154/814055787479564318/image0.webp",
+                "https://media.discordapp.net/attachments/808820772536582154/814055787898077215/image1.webp",
+            ]
+            authorList = [
+                {
+                    "author": {
+                        "name": "Twitter: Rushy_ve_",
+                        "url": "https://twitter.com/Rushy_ve_",
+                    },
+                    "link": "https://twitter.com/Rushy_ve_/status/1231153891808440321?s=20",
+                },
+                {
+                    "author": {
+                        "name": "Twitter: Rushy_ve_",
+                        "url": "https://twitter.com/Rushy_ve_",
+                    },
+                    "link": "https://twitter.com/Rushy_ve_/status/1231153891808440321?s=20",
+                },
+                {
+                    "author": {
+                        "name": "Reddit: CALLSIGN-ASTRO",
+                        "url": "https://www.reddit.com/user/CALLSIGN-ASTRO/",
+                    },
+                    "link": "https://www.reddit.com/r/EscapefromTarkov/comments/eu0pmi/i_tried_to_make_quick_barter_items_price_list_but/?utm_source=share&utm_medium=web2x",
+                },
+                {
+                    "author": {
+                        "name": "Reddit: MarcoQuarko",
+                        "url": "https://www.reddit.com/user/MarcoQuarko/",
+                    },
+                    "link": "https://www.reddit.com/r/EscapefromTarkov/comments/8een3x/all_quest_items_on_one_page_not_my_work_credits/",
+                },
+                {
+                    "author": {
+                        "name": "Tarkov Tools",
+                        "url": "https://tarkov-tools.com/",
+                    },
+                    "link": "https://tarkov-tools.com/loot-tier/",
+                },
+            ]
+            for n, (url, author) in enumerate(zip(chartImages, authorList)):
+                embed = discord.Embed(
+                    title=f"({n+1}/{len(chartImages)}){text}",
+                    color=0x808080,
+                    url=author["link"],
+                )
+                embed.set_image(url=url)
+                embed.set_author(
+                    name=author["author"]["name"], url=author["author"]["url"],
+                )
+                embed.set_footer(text=f"提供元: {author['link']}")
+                await message.channel.send(embed=embed)
             return 0
 
         elif message.content.upper() == f"{prefix}ARMOR":
-            embed = discord.Embed(title="この機能は今後仕様変更されます。", color=0xFF0000)
-            text = "https://cdn.discordapp.com/attachments/806055934211653632/826790299619426354/image3.jpg\n"
-            text += "https://cdn.discordapp.com/attachments/806055934211653632/826790298649624586/image0.jpg\n"
-            text += "https://cdn.discordapp.com/attachments/806055934211653632/826790298918453268/image1.jpg\n"
-            text += "https://cdn.discordapp.com/attachments/806055934211653632/826790299299872798/image2.jpg"
-            await message.channel.send(embed=embed)
-            await message.channel.send(text)
+            text = "アーマー早見表"
+            armorImages = [
+                "https://cdn.discordapp.com/attachments/806055934211653632/826790299619426354/image3.jpg",
+                "https://cdn.discordapp.com/attachments/806055934211653632/826790298649624586/image0.jpg",
+                "https://cdn.discordapp.com/attachments/806055934211653632/826790298918453268/image1.jpg",
+                "https://cdn.discordapp.com/attachments/806055934211653632/826790299299872798/image2.jpg",
+            ]
+            for n, url in enumerate(armorImages):
+                embed = discord.Embed(
+                    title=f"({n+1}/{len(armorImages)}){text}",
+                    color=0x808080,
+                    url=f"{enWikiUrl}Armor_vests",
+                )
+                embed.set_image(url=url)
+                embed.set_author(
+                    name="Twitter: @N7th_WF", url="https://twitter.com/N7th_WF",
+                )
+                embed.set_footer(
+                    text="提供元: https://twitter.com/N7th_WF/status/1376825476598013957?s=20"
+                )
+                await message.channel.send(embed=embed)
             return 0
 
         elif message.content.upper() == f"{prefix}PATCH":
@@ -759,20 +831,30 @@ async def on_message(message):
             return 0
 
         elif message.content.upper() == f"{prefix}AMMO":
-            embed = discord.Embed(
-                title="(1/2)弾薬早見表", url="https://eft.monster/", color=0x808080
-            )
-            embed.set_image(
-                url="https://cdn.discordapp.com/attachments/806055934211653632/828931828101546024/image0.jpg"
-            )
-            await message.channel.send(embed=embed)
-            embed = discord.Embed(
-                title="(2/2)弾薬早見表", url="https://eft.monster/", color=0x808080
-            )
-            embed.set_image(
-                url="https://cdn.discordapp.com/attachments/806055934211653632/828931828353073172/image1.jpg"
-            )
-            await message.channel.send(embed=embed)
+            text = "弾薬早見表"
+            ammoImages = [
+                "https://cdn.discordapp.com/attachments/806055934211653632/828931828101546024/image0.jpg",
+                "https://cdn.discordapp.com/attachments/806055934211653632/828931828353073172/image1.jpg",
+            ]
+            for n, url in enumerate(ammoImages):
+                embed = discord.Embed(
+                    title=f"({n+1}/{len(ammoImages)}){text}",
+                    color=0x808080,
+                    url=f"https://tarkov-tools.com/ammo/",
+                )
+                embed.set_image(url=url)
+                embed.set_author(
+                    name="Twitter: bojotaro_tarkov",
+                    url="https://twitter.com/bojotaro_tarkov",
+                )
+                embed.set_footer(
+                    text="提供元: https://twitter.com/bojotaro_tarkov/status/1368569066928046080?s=20"
+                )
+                embed.add_field(
+                    name="Tarkov-Tools",
+                    value="> [Tarkov-Tools携帯リモート操作リンク](https://tarkov-tools.com/control/)",
+                )
+                await message.channel.send(embed=embed)
             return 0
 
         elif message.content.upper() == f"{prefix}MARKET":
@@ -782,6 +864,21 @@ async def on_message(message):
                 url="https://tarkov-market.com/",
                 description=text,
                 color=0x2ECC69,
+            )
+            await message.channel.send(embed=embed)
+            return 0
+
+        elif message.content.upper() == f"{prefix}TARKOVTOOLS":
+            text = "Visualization of all ammo types in Escape from Tarkov, along with maps and other great tools"
+            embed = discord.Embed(
+                title="Tarkov Tools",
+                url="https://tarkov-tools.com/",
+                description=text,
+                color=0x2ECC69,
+            )
+            embed.add_field(
+                name="Tarkov-Tools",
+                value="> [Tarkov-Tools携帯リモート操作リンク](https://tarkov-tools.com/control/)",
             )
             await message.channel.send(embed=embed)
             return 0
@@ -1032,9 +1129,9 @@ async def on_message(message):
                     if res["code"] == 200:
                         text = res["text"]
                     infoStr += f"\n**{colName}**:"
-                    infoStr += f"\n```{weaponData[colName]}"
-                    infoStr += f"\n{text}"
-                    infoStr += "\nGoogle翻訳```"
+                    infoStr += f"\n> {weaponData[colName]}"
+                    infoStr += f"\n> {text}"
+                    infoStr += "> Google翻訳"
                 elif colName == "使用可能弾薬":
                     infoStr += f"\n**{colName.capitalize()}**:"
                     for ammunition in weaponData[colName]:
