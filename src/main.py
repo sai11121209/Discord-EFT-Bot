@@ -412,7 +412,7 @@ async def on_message(message):
             gasUrl = f"https://script.google.com/macros/s/AKfycbxvCS-29LVgrm9-cSynGl19QUIB7jTpzuvFqflus_P0BJtXX80ahLazltfm2rbMGVVs/exec?text={text}&source={source}&target={Target}"
             res = rq.get(gasUrl).json()
             if res["code"] == 200:
-                text = "多分英語わからんやろ... 翻訳したるわ。感謝しな\n\n"
+                text = "<@&820310764652462130> 多分英語わからんやろ... 翻訳したるわ。感謝しな\n\n"
                 text += res["text"]
                 await message.channel.send(text)
             else:
