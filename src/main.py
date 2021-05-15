@@ -247,6 +247,7 @@ commandList = {
 }
 # 上に追記していくこと
 patchNotes = {
+    "2.2:2021/05/15 18:00": ["出会いを目的としたフレンド募集を含む投稿を行った場合警告が送られる様になりました。",],
     "2.1:2021/05/08 17:00": [
         "自動全体メンションに本文を含む様に変更されました。",
         "TarkovTools情報表示コマンド __`TARKOVTOOLS`__ を追加しました。",
@@ -333,6 +334,10 @@ async def remove_role(member):
 async def on_ready():
     # 起動したらターミナルにログイン通知が表示される
     print("読み込み開始")
+    if LOCAL_HOST == False:
+        await client.change_presence(
+            activity=discord.Activity(name="起動中です。しばらくお待ちください", type=5)
+        )
     global traderNames, bossNames, weaponsName, weaponsData, updateTimestamp
     traderNames, bossNames, weaponsName, weaponsData, updateTimestamp = Initialize()
     print("ログインしました")
@@ -382,7 +387,10 @@ async def on_message(message):
     if not len(message.content):
         return 0
     try:
-        if message.guild.get_role(voiceChatRole) in message.author.roles and message.channel.id != notificationGneralChannelId:
+        if (
+            message.guild.get_role(voiceChatRole) in message.author.roles
+            and message.channel.id != notificationGneralChannelId
+        ):
             await message.channel.send(f"<@&{voiceChatRole}> ")
     except:
         pass
@@ -419,14 +427,22 @@ async def on_message(message):
                 pass
             if "period" in message.content:
                 channel = client.get_channel(803425039864561675)
-                text = "@everyone 重要なお知らせかもしれないからこっちにも貼っとくで\n"
+                text = "<@&820310764652462130> 重要なお知らせかもしれないからこっちにも貼っとくで\n"
                 text += message.content
                 await channel.send(f"{text}{message.content}")
+
+    if message.author.bot == False and LOCAL_HOST == False:
+        if re.search(r"出会い|繋がりたい|美女|美男|可愛い|募集|フレンド|", message.content):
+            text = f"本discordサーバでは**出会い**を目的とした**フレンド募集**を含む投稿を全面的に禁止しています。\n\n 以下の文章が違反している可能性があります。\n\n **以下違反文** \n ```{message.content}```"
+            embed = discord.Embed(title="警告!!", description=text, color=0xFF0000,)
+
+            await message.channel.send(f"{message.author.mention}")
+            await message.channel.send(embed=embed)
 
     if prefix == message.content[0] and LOCAL_HOST == False:
         if message.content.upper() == f"{prefix}DEVELOP":
             developMode = not developMode
-            text = f"開発モード: {developMode}に切り替わりました"
+            text = f"開発モード: {developMode}"
             if developMode:
                 await client.change_presence(
                     activity=discord.Activity(name="機能改善会議(メンテナンス中)", type=5)
