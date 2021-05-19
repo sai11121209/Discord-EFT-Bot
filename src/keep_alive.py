@@ -16,7 +16,3 @@ def run():
 def keep_alive():
     server = Thread(target=run)
     server.start()
-
-
-if __name__ == "__main__":
-    pass

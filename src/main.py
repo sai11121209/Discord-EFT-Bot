@@ -432,7 +432,7 @@ async def on_message(message):
                 await channel.send(f"{text}{message.content}")
 
     if message.author.bot == False and LOCAL_HOST == False:
-        if re.search(r"出会い|繋がりたい|美女|美男|可愛い|募集|フレンド|", message.content):
+        if re.search(r"出会い|繋がりたい|美女|美男|可愛い|募集|フレンド", message.content):
             text = f"本discordサーバでは**出会い**を目的とした**フレンド募集**を含む投稿を全面的に禁止しています。\n\n 以下の文章が違反している可能性があります。\n\n **以下違反文** \n ```{message.content}```"
             embed = discord.Embed(title="警告!!", description=text, color=0xFF0000,)
 
