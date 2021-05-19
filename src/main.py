@@ -3,6 +3,7 @@ import os
 import re
 from typing import Text
 import pytz
+import time
 import discord
 import random
 import difflib
@@ -10,6 +11,8 @@ import itertools
 import pandas as pd
 import requests as rq
 import datetime
+import schedule
+from threading import Thread
 from matplotlib import pyplot as plt
 from datetime import datetime as dt
 from dateutil.relativedelta import relativedelta
@@ -318,6 +321,15 @@ patchNotes = {
     "1.0:2021/01/30": ["早見表表示コマンド __`CHART`__ を追加しました。", "早見表コマンドにアイテム早見表を追加しました。"],
 }
 
+#Always OnのためUTC15:00(日本時刻00:00)にwikiデータ更新スケジュール
+def TimeInitialize():
+    while True:
+        schedule.run_pending()
+        time.sleep(60)
+
+def UpdateInitialize():
+    global traderNames, bossNames, weaponsName, weaponsData, updateTimestamp
+    traderNames, bossNames, weaponsName, weaponsData, updateTimestamp = Initialize()
 
 async def add_role(member):
     role = member.guild.get_role(voiceChatRole)
@@ -340,6 +352,9 @@ async def on_ready():
         )
     global traderNames, bossNames, weaponsName, weaponsData, updateTimestamp
     traderNames, bossNames, weaponsName, weaponsData, updateTimestamp = Initialize()
+    schedule.every().day.at("15:00").do(UpdateInitialize)
+    timeInitialize = Thread(target=TimeInitialize)
+    timeInitialize.start()
     print("ログインしました")
     if LOCAL_HOST == False:
         await client.change_presence(
