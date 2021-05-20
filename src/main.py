@@ -250,6 +250,7 @@ commandList = {
 }
 # 上に追記していくこと
 patchNotes = {
+    "2.2.1:2021/05/20 14:00": ["各武器詳細表示コマンド __`武器名`__ の仕様を変更しました。"],
     "2.2:2021/05/15 18:00": ["出会いを目的としたフレンド募集を含む投稿を行った場合警告が送られる様になりました。",],
     "2.1:2021/05/08 17:00": [
         "自動全体メンションに本文を含む様に変更されました。",
@@ -321,15 +322,17 @@ patchNotes = {
     "1.0:2021/01/30": ["早見表表示コマンド __`CHART`__ を追加しました。", "早見表コマンドにアイテム早見表を追加しました。"],
 }
 
-#Always OnのためUTC15:00(日本時刻00:00)にwikiデータ更新スケジュール
+# Always OnのためUTC15:00(日本時刻00:00)にwikiデータ更新スケジュール
 def TimeInitialize():
     while True:
         schedule.run_pending()
         time.sleep(60)
 
+
 def UpdateInitialize():
     global traderNames, bossNames, weaponsName, weaponsData, updateTimestamp
     traderNames, bossNames, weaponsName, weaponsData, updateTimestamp = Initialize()
+
 
 async def add_role(member):
     role = member.guild.get_role(voiceChatRole)
@@ -1162,7 +1165,7 @@ async def on_message(message):
                 elif colName == "使用可能弾薬":
                     infoStr += f"\n**{colName.capitalize()}**:"
                     for ammunition in weaponData[colName]:
-                        infoStr += f"\n・__{ammunition}__"
+                        infoStr += f"\n・__[{ammunition}]({enWikiUrl}{ammunition.replace(' ','_')})__"
                 elif colName == "リコイル":
                     infoStr += f"\n**{colName.capitalize()}**:"
                     for key, value in weaponData[colName].items():
