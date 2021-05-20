@@ -44,6 +44,19 @@ enWikiUrl = "https://escapefromtarkov.fandom.com/wiki/"
 sendTemplatetext = "EFT(Escape from Tarkov) Wiki "
 voiceChatRole = 839773477095211018
 receivedtext = None
+hints = {}
+emojiList = [
+    "1️⃣",
+    "2️⃣",
+    "3️⃣",
+    "4️⃣",
+    "5️⃣",
+    "6️⃣",
+    "7️⃣",
+    "8️⃣",
+    "9️⃣",
+    "🔟",
+]
 mapList = {
     "FACTORY": {
         "overview": "ここ第16科学工場の施設はTerraグループに違法に使用されていた。\n契約戦争の間、プラント施設は、Tarkovの工場地区の支配をめぐりUSECとBEARとの間で多くの戦いの場となった。\n混乱の後、プラント施設は避難民やSCAV、その他の勢力、USECとBEARが残した物資を含む避難所と変わった。",
@@ -250,6 +263,7 @@ commandList = {
 }
 # 上に追記していくこと
 patchNotes = {
+    "2.3:2021/05/20 19:00": ["コマンド不一致時に表示されるヒントコマンドをリアクション選択から実行できる様になりました。"],
     "2.2.1:2021/05/20 14:00": ["各武器詳細表示コマンド __`武器名`__ の仕様を変更しました。"],
     "2.2:2021/05/15 18:00": ["出会いを目的としたフレンド募集を含む投稿を行った場合警告が送られる様になりました。",],
     "2.1:2021/05/08 17:00": [
@@ -394,6 +408,13 @@ async def on_voice_state_update(member, before, after):
     elif before.channel and after.channel == None:
         await channel.send(f"@everyone {user} がボイスチャンネル {before.channel} を退出しました。")
         await remove_role(member)
+
+
+# リアクション反応時発火
+@client.event
+async def on_reaction_add(reaction, user):
+    if not user.bot:
+        await reaction.message.channel.send(f"/{hints[reaction.emoji]}")
 
 
 # メッセージ受信時に動作する処理
@@ -1104,17 +1125,6 @@ async def on_message(message):
             return 0
         """
 
-        commandList["各武器詳細表示"] = [weaponName.upper() for weaponName in weaponsName]
-        # コマンドの予測変換
-        hints = {
-            command
-            for command in list(itertools.chain.from_iterable(commandList.values()))
-            if difflib.SequenceMatcher(
-                None, message.content.upper(), prefix + command
-            ).ratio()
-            >= 0.65
-        }
-
         if message.content.upper().split("/")[1] in [
             weaponName.upper() for weaponName in weaponsName
         ]:
@@ -1196,22 +1206,43 @@ async def on_message(message):
             await message.channel.send(f"/{weapon}")
             return 0
 
-        elif len(hints) > 0:
+        commandList["各武器詳細表示"] = [weaponName.upper() for weaponName in weaponsName]
+        # コマンドの予測変換
+        global hints
+        hints = {
+            emojiList[n]: hint
+            for n, hint in enumerate(
+                [
+                    command
+                    for command in list(
+                        itertools.chain.from_iterable(commandList.values())
+                    )
+                    if difflib.SequenceMatcher(
+                        None, message.content.upper(), prefix + command
+                    ).ratio()
+                    >= 0.65
+                ][:10]
+            )
+        }
+
+        if len(hints) > 0:
             text = ""
             embed = discord.Embed(
                 title="Hint", description="もしかして以下のコマンドじゃね?", color=0xFF0000
             )
             n = 0
             comand = None
-            for n, hint in enumerate(hints):
+            for emoji, hint in hints.items():
                 comand = hint
-                embed.add_field(name=f"{n+1}", value=f"__`{prefix}{hint}`__")
-            if n == 0:
+                embed.add_field(name=emoji, value=f"__`{prefix}{hint}`__")
+            if len(hints) == 1:
                 text = f"{prefix}{comand}"
-                await message.channel.send(text)
+                helpEmbed = await message.channel.send(text)
             else:
                 embed.set_footer(text="これ以外に使えるコマンドは /help で確認できるよ!")
-                await message.channel.send(embed=embed)
+                helpEmbed = await message.channel.send(embed=embed)
+            for emoji in hints.keys():
+                await helpEmbed.add_reaction(emoji)
             return 0
 
         else:
