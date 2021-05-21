@@ -362,16 +362,6 @@ async def remove_role(member):
 @client.event
 async def on_ready():
     # 起動したらターミナルにログイン通知が表示される
-    print("読み込み開始")
-    if LOCAL_HOST == False:
-        await client.change_presence(
-            activity=discord.Activity(name="起動中です。しばらくお待ちください", type=5)
-        )
-    global traderNames, bossNames, weaponsName, weaponsData, updateTimestamp
-    traderNames, bossNames, weaponsName, weaponsData, updateTimestamp = Initialize()
-    schedule.every().day.at("15:00").do(UpdateInitialize)
-    timeInitialize = Thread(target=TimeInitialize)
-    timeInitialize.start()
     print("ログインしました")
     if LOCAL_HOST == False:
         await client.change_presence(
@@ -1745,6 +1735,13 @@ def GetMapImage(mapName):
                 + "&format=original"
             )
     return mapImages
+
+
+print("読み込み開始")
+traderNames, bossNames, weaponsName, weaponsData, updateTimestamp = Initialize()
+schedule.every().day.at("15:00").do(UpdateInitialize)
+timeInitialize = Thread(target=TimeInitialize)
+timeInitialize.start()
 
 
 # Botの起動とDiscordサーバーへの接続
