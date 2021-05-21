@@ -1227,12 +1227,12 @@ async def on_message(message):
                 embed.add_field(name=emoji, value=f"__`{prefix}{hint}`__")
             if len(hints) == 1:
                 text = f"{prefix}{comand}"
-                helpEmbed = await message.channel.send(text)
+                await message.channel.send(text)
             else:
                 embed.set_footer(text="これ以外に使えるコマンドは /help で確認できるよ!")
                 helpEmbed = await message.channel.send(embed=embed)
-            for emoji in hints.keys():
-                await helpEmbed.add_reaction(emoji)
+                for emoji in hints.keys():
+                    await helpEmbed.add_reaction(emoji)
             return 0
 
         else:
