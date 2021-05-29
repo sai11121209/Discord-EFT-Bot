@@ -1739,9 +1739,9 @@ def GetMapImage(mapName):
 
 print("読み込み開始")
 traderNames, bossNames, weaponsName, weaponsData, updateTimestamp = Initialize()
-schedule.every().day.at("15:00").do(UpdateInitialize)
-timeInitialize = Thread(target=TimeInitialize)
-timeInitialize.start()
+#schedule.every().day.at("15:00").do(UpdateInitialize)
+#timeInitialize = Thread(target=TimeInitialize)
+#timeInitialize.start()
 
 
 # Botの起動とDiscordサーバーへの接続
