@@ -2,6 +2,8 @@
 import os
 import re
 from typing import Text
+from discord import embeds
+import time
 import pytz
 import discord
 import requests as rq
@@ -14,6 +16,8 @@ from bs4 import BeautifulSoup
 from discord.ext import commands
 import traceback  # エラー表示のためにインポート
 
+
+start = time.time()
 
 try:
     from local_settings import *
@@ -345,9 +349,11 @@ commandList = {
 }
 # 上に追記していくこと
 patchNotes = {
-    "3.0α2:2021/05/31 19:00": ["コマンド補完性能向上を含めた各種不具合の修正。"],
-    "3.0α1:2021/05/30 02:00": [
-        "Discord Botフレームワーク環境への移行準備完了。現在試験的に新環境でプログラムを実行中です。動作が不安定になる可能性があります。"
+    "3.0α3:2021/06/01 04:30": [
+        "Discord Botフレームワーク環境への移行準備完了。現在試験的に新環境でプログラムを実行中です。",
+        "例外処理発生時エラーログを出力するようになりました。",
+        "コマンド補完性能向上を含めた各種不具合の修正。",
+        "動作が不安定になる可能性があります。",
     ],
     "2.3:2021/05/20 19:00": ["コマンド不一致時に表示されるヒントコマンドをリアクション選択から実行できる様になりました。"],
     "2.2.1:2021/05/20 14:00": ["各武器詳細表示コマンド __`武器名`__ の仕様を変更しました。"],
@@ -462,6 +468,7 @@ class EFTBot(commands.Bot):
         self.updateTimestamp = updateTimestamp
         self.hits = {}
         self.enrageCounter = 0
+        self.saiId = 279995095124803595
         self.remove_command("help")
         for cog in INITIAL_EXTENSIONS:
             try:
@@ -472,12 +479,33 @@ class EFTBot(commands.Bot):
     # 起動時発火
     @client.event
     async def on_ready(self):
+        # exception-log チャンネル
+        channel = self.get_channel(848999028658405406)
         # 起動したらターミナルにログイン通知が表示される
         print("ログインしました")
         if LOCAL_HOST == False:
             await self.change_presence(
                 activity=discord.Game(name="Escape from Tarkov", type=1)
             )
+            elapsed_time = time.time() - start
+            startTime = dt.now(pytz.timezone("Asia/Tokyo"))
+            embed = discord.Embed(
+                title=f" StartingLog ({startTime.strftime('%Y%m%d%H%M%S')})",
+                color=0xFF0000,
+                timestamp=datetime.datetime.utcfromtimestamp(
+                    dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
+                ),
+            )
+            embed.add_field(
+                name="StartupTime",
+                value=f"```{startTime.strftime('%Y/%m/%d %H:%M:%S')}```",
+                inline=False,
+            )
+            embed.add_field(
+                name="TimeRequired", value=f"```{elapsed_time}```", inline=False
+            )
+            embed.set_footer(text=f"{self.user.name}")
+            await channel.send(embed=embed)
 
     # 役職追加時発火
     @client.event
@@ -538,7 +566,7 @@ class EFTBot(commands.Bot):
 
     @client.event
     async def on_command_error(self, ctx, error):
-        if isinstance(error, commands.CommandError):
+        if isinstance(error, commands.CommandNotFound):
             hitCommands = []
             for command in self.all_commands:
                 hitCommands.append(self.all_commands[command].name)
@@ -567,8 +595,6 @@ class EFTBot(commands.Bot):
                 embed = discord.Embed(
                     title="Hint", description="もしかして以下のコマンドじゃね?", color=0xFF0000
                 )
-                n = 0
-                comand = None
                 fixHints = self.hints
                 for emoji, hint in self.hints.items():
                     if hint in [map.lower() for map in self.mapList]:
@@ -597,6 +623,48 @@ class EFTBot(commands.Bot):
                 text = f"入力されたコマンド {ctx.message.content} は見つからなかったよ...ごめんね。\n"
                 text += "これ以外に使えるコマンドは /help で確認できるよ!"
                 await ctx.send(text)
+        elif isinstance(error, commands.MissingRole):
+            pass
+        else:
+            # exception-log チャンネル
+            channel = self.get_channel(846977129211101206)
+            errorTime = dt.now(pytz.timezone("Asia/Tokyo"))
+            embed = discord.Embed(
+                title=f"ErrorLog ({errorTime.strftime('%Y%m%d%H%M%S')})",
+                description=f"ご迷惑をおかけしております。コマンド実行中において例外処理が発生しました。\nこのエラーログは sai11121209 に送信されています。 {ctx.author.mention} バグを発見してくれてありがとう!",
+                color=0xFF0000,
+                timestamp=datetime.datetime.utcfromtimestamp(
+                    dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
+                ),
+            )
+            embed.add_field(
+                name="Time",
+                value=f"```{errorTime.strftime('%Y/%m/%d %H:%M:%S')}```",
+                inline=False,
+            )
+            embed.add_field(
+                name="ServerId", value=f"```{ctx.guild.id}```", inline=False
+            )
+            embed.add_field(
+                name="ServerName", value=f"```{ctx.guild.name}```", inline=False
+            )
+            embed.add_field(
+                name="ChannelId", value=f"```{ctx.channel.id}```", inline=False
+            )
+            embed.add_field(
+                name="ChannelName", value=f"```{ctx.channel.name}```", inline=False
+            )
+            embed.add_field(name="UserId", value=f"```{ctx.author.id}```", inline=False)
+            embed.add_field(
+                name="UserName", value=f"```{ctx.author.name}```", inline=False
+            )
+            embed.add_field(
+                name="ErrorCommand", value=f"```{ctx.message.content}```", inline=False
+            )
+            embed.add_field(name="ErrorDetails", value=f"```{error}```", inline=False)
+            embed.set_footer(text=f"{ctx.me.name}")
+            await channel.send(embed=embed)
+            await ctx.send(embed=embed)
 
     @client.event
     async def on_command(self, ctx):
@@ -705,7 +773,8 @@ class EFTBot(commands.Bot):
             embed.set_footer(text=f"EFT Wiki Bot 最終更新")
             await message.channel.send(embed=embed)
 
-        await bot.process_commands(message)
+        if not self.developMode:
+            await bot.process_commands(message)
 
 
 def Initialize():

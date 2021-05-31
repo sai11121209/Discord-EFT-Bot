@@ -15,7 +15,6 @@ class Help(commands.Cog):
     @commands.command(description="使用可能コマンド表示")
     async def help(self, ctx):
         async with ctx.typing():
-            print("A")
             try:
                 embed = discord.Embed(
                     title="EFT(Escape from Tarkov) Wiki Bot使用可能コマンド一覧だよ!",

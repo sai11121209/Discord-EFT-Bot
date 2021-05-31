@@ -9,22 +9,23 @@ class Develop(commands.Cog):
         self.bot = bot
 
     # コマンドの作成。コマンドはcommandデコレータで必ず修飾する。
-    @commands.command(description="開発用")
+    @commands.command(description="開発用(実行権限制限あり)")
+    @commands.has_role(848998133882159174)
     async def develop(self, ctx):
         async with ctx.typing():
-            if self.bot.LOCAL_HOST == False:
-                self.bot.developMode = not self.bot.developMode
-                text = f"開発モード: {self.bot.developMode}"
-                if self.bot.developMode:
-                    await self.bot.change_presence(
-                        activity=discord.Activity(name="機能改善会議(メンテナンス中)", type=5)
-                    )
-                    self.bot.enrageCounter = 0
-                else:
-                    await self.bot.change_presence(
-                        activity=discord.Game(name="Escape from Tarkov", type=1)
-                    )
-                await ctx.send(text)
+            # if self.bot.LOCAL_HOST == False:
+            self.bot.developMode = not self.bot.developMode
+            text = f"開発モード: {self.bot.developMode}"
+            if self.bot.developMode:
+                await self.bot.change_presence(
+                    activity=discord.Activity(name="機能改善会議(メンテナンス中)", type=5)
+                )
+                self.bot.enrageCounter = 0
+            else:
+                await self.bot.change_presence(
+                    activity=discord.Game(name="Escape from Tarkov", type=1)
+                )
+            await ctx.send(text)
 
 
 # Bot本体側からコグを読み込む際に呼び出される関数。

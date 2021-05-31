@@ -14,7 +14,7 @@ class Random(commands.Cog):
         async with ctx.typing():
             embed = discord.Embed(
                 title="迷ったときのEFTマップ抽選",
-                description=f"{ctx.author.name}が赴くマップは...",
+                description=f"{ctx.author.mention}が赴くマップは...",
                 color=0x2ECC69,
             )
             map = r.choice(list(self.bot.mapList)).lower()
@@ -27,7 +27,7 @@ class Random(commands.Cog):
         async with ctx.typing():
             embed = discord.Embed(
                 title="迷ったときのEFT武器抽選",
-                description=f"{ctx.author.name}が使用する武器は...",
+                description=f"{ctx.author.mention}が使用する武器は...",
                 color=0x2ECC69,
             )
             weapon = r.choice(self.bot.weaponsName)
