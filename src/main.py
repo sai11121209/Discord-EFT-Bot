@@ -462,7 +462,6 @@ class EFTBot(commands.Bot):
         self.hits = {}
         self.enrageCounter = 0
         self.remove_command("help")
-
         for cog in INITIAL_EXTENSIONS:
             try:
                 self.load_extension(cog)
@@ -475,7 +474,7 @@ class EFTBot(commands.Bot):
         # 起動したらターミナルにログイン通知が表示される
         print("ログインしました")
         if LOCAL_HOST == False:
-            await client.change_presence(
+            await self.change_presence(
                 activity=discord.Game(name="Escape from Tarkov", type=1)
             )
 
@@ -560,6 +559,8 @@ class EFTBot(commands.Bot):
                     ][:10]
                 )
             }
+            if ctx.message.content.lower().split("/")[1] in self.hints.values():
+                self.hints = {"1️⃣": ctx.message.content.lower().split("/")[1]}
             if len(self.hints) > 0:
                 text = ""
                 embed = discord.Embed(
@@ -580,13 +581,12 @@ class EFTBot(commands.Bot):
                     )
                 self.hints = fixHints
                 if len(self.hints) == 1:
-                    try:
-                        if len(comand.split(" ")) == 2:
-                            await self.all_commands[comand.split(" ")[0]](
-                                ctx, comand.split(" ")[1]
-                            )
-                    except:
-                        await self.all_commands[comand](ctx)
+                    if len(self.hints["1️⃣"].split(" ")) == 2:
+                        await self.all_commands[self.hints["1️⃣"].split(" ")[0]](
+                            ctx, self.hints["1️⃣"].split(" ")[1]
+                        )
+                    else:
+                        await self.all_commands[self.hints["1️⃣"]](ctx)
                 else:
                     embed.set_footer(text="これ以外に使えるコマンドは /help で確認できるよ!")
                     helpEmbed = await ctx.send(embed=embed)
@@ -624,7 +624,7 @@ class EFTBot(commands.Bot):
         if not message.author.bot:
             if message.channel.id == notificationGneralChannelId:
                 await message.channel.send(
-                    f"<@&820310764652462130> {message.content} by {message.author.name}"
+                    f"@everyone {message.content} by {message.author.name}"
                 )
                 return 0
 
@@ -647,16 +647,16 @@ class EFTBot(commands.Bot):
                 gasUrl = f"https://script.google.com/macros/s/AKfycbxvCS-29LVgrm9-cSynGl19QUIB7jTpzuvFqflus_P0BJtXX80ahLazltfm2rbMGVVs/exec?text={text}&source={source}&target={Target}"
                 res = rq.get(gasUrl).json()
                 if res["code"] == 200:
-                    text = "<@&820310764652462130> 多分英語わからんやろ... 翻訳したるわ。感謝しな\n\n"
+                    text = "@everyone 多分英語わからんやろ... 翻訳したるわ。感謝しな\n\n"
                     text += res["text"]
                     await message.channel.send(text)
                 else:
                     pass
                 if "period" in message.content:
                     channel = client.get_channel(803425039864561675)
-                    text = "<@&820310764652462130> 重要なお知らせかもしれないからこっちにも貼っとくで\n"
+                    text = "@everyone 重要なお知らせかもしれないからこっちにも貼っとくで\n"
                     text += message.content
-                    await channel.send(f"{text}{message.content}")
+                    await message.channel.send(f"{text}{message.content}")
 
         if message.author.bot == False and self.LOCAL_HOST == False:
             if re.search(r"出会い|繋がりたい|美女|美男|可愛い|募集|フレンド", message.content):
