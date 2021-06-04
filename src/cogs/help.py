@@ -55,6 +55,25 @@ class Help(commands.Cog):
             except:
                 traceback.print_exc()
 
+    @commands.command()
+    async def hello(self, ctx):
+        await ctx.send("どうしました?")
+        ans = await self.bot.wait_for("message")
+        print(ans)
+
+    @commands.command()
+    async def report(self, ctx):
+        await ctx.send("game_idを教えてください")
+        game_id = await self.bot.wait_for("message")
+        await ctx.send("勝利チームのチームIDととったラウンド数を教えてください")
+        win_data = await self.bot.wait_for("message")
+        win_id, win_round = win_data.content.split(" ")
+        await ctx.send("敗北チームのチームIDととったラウンド数を教えてください")
+        lose_data = await self.bot.wait_for("message")
+        lose_id, lose_round = lose_data.content.split(" ")
+
+        print(win_id, win_round, lose_id, lose_round)
+
 
 # Bot本体側からコグを読み込む際に呼び出される関数。
 def setup(bot):

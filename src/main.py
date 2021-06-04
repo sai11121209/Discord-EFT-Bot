@@ -347,15 +347,20 @@ commandList = {
     "ビットコイン価格表示": ["BTC"],
     "ソースコード表示": ["SOURCE"],
 }
+notificationInformation = {
+    "3.0": ["Botの大幅動作改善", "コマンド実行結果消去ボタン", "全データの動的取得", "例外処理発生時のエラーログ出力"]
+}
 # 上に追記していくこと
 patchNotes = {
-    "3.0α3:2021/06/01 04:30": [
+    "3.0α4:2021/06/05 06:00": [
+        "マップ関連情報をBot起動時に動的取得するようになりました。",
+        "未実装マップもマップ一覧表示コマンド __`MAP`__ で表示されるようになりました",
         "Discord Botフレームワーク環境への移行準備完了。現在試験的に新環境でプログラムを実行中です。",
         "例外処理発生時エラーログを出力するようになりました。",
-        "コマンド補完性能向上を含めた各種不具合の修正。",
-        "動作が不安定になる可能性があります。",
+        "コマンド補完性能向上。",
+        "各種不具合の修正。" "動作が不安定になる可能性があります。",
     ],
-    "2.3:2021/05/20 19:00": ["コマンド不一致時に表示されるヒントコマンドをリアクション選択から実行できる様になりました。"],
+    "2.3:2021/05/20 19:00": ["コマンド不一致時に表示されるヒントコマンドをリアクション選択から実行できるようになりました。"],
     "2.2.1:2021/05/20 14:00": ["各武器詳細表示コマンド __`武器名`__ の仕様を変更しました。"],
     "2.2:2021/05/15 18:00": [
         "出会いを目的としたフレンド募集を含む投稿を行った場合警告が送られる様になりました。",
@@ -441,9 +446,10 @@ class EFTBot(commands.Bot):
         jaWikiUrl,
         enWikiUrl,
         emojiList,
-        mapList,
+        mapData,
         traderList,
         bossList,
+        notificationInformation,
         patchNotes,
         traderNames,
         bossNames,
@@ -457,9 +463,10 @@ class EFTBot(commands.Bot):
         self.jaWikiUrl = jaWikiUrl
         self.enWikiUrl = enWikiUrl
         self.emojiList = emojiList
-        self.mapList = mapList
+        self.mapData = mapData
         self.traderList = traderList
         self.bossList = bossList
+        self.notificationInformation = notificationInformation
         self.patchNotes = patchNotes
         self.traderNames = traderNames
         self.bossNames = bossNames
@@ -552,7 +559,7 @@ class EFTBot(commands.Bot):
     # リアクション反応時発火
     @client.event
     async def on_reaction_add(self, reaction, user):
-        if not user.bot:
+        if not user.bot and not self.developMode:
             try:
                 if len(self.hints[reaction.emoji].split(" ")) == 2:
                     await self.all_commands[self.hints[reaction.emoji].split(" ")[0]](
@@ -570,7 +577,7 @@ class EFTBot(commands.Bot):
             hitCommands = []
             for command in self.all_commands:
                 hitCommands.append(self.all_commands[command].name)
-            hitCommands += [map.lower() for map in self.mapList]
+            hitCommands += [map.lower() for map in self.mapData]
             hitCommands += [weaponName.lower() for weaponName in self.weaponsName]
             # コマンドの予測変換
             self.hints = {
@@ -597,7 +604,7 @@ class EFTBot(commands.Bot):
                 )
                 fixHints = self.hints
                 for emoji, hint in self.hints.items():
-                    if hint in [map.lower() for map in self.mapList]:
+                    if hint in [map.lower() for map in self.mapData]:
                         fixHints[emoji] = f"map {hint}"
                     elif hint in [
                         weaponName.lower() for weaponName in self.weaponsName
@@ -664,7 +671,8 @@ class EFTBot(commands.Bot):
             embed.add_field(name="ErrorDetails", value=f"```{error}```", inline=False)
             embed.set_footer(text=f"{ctx.me.name}")
             await channel.send(embed=embed)
-            await ctx.send(embed=embed)
+            if self.LOCAL_HOST == False:
+                await ctx.send(embed=embed)
 
     @client.event
     async def on_command(self, ctx):
@@ -755,37 +763,146 @@ class EFTBot(commands.Bot):
             self.enrageCounter += 1
 
         elif "@everyone BOTの更新をしました!" == message.content:
-            embed = discord.Embed(
-                title="更新履歴一覧",
-                timestamp=datetime.datetime.utcfromtimestamp(
-                    dt.strptime(
-                        list(patchNotes.keys())[0].split(":", 1)[1] + "+09:00",
-                        "%Y/%m/%d %H:%M%z",
-                    ).timestamp()
-                ),
-            )
-            for index, values in self.patchNotes.items():
-                text = ""
-                for N, value in enumerate(values):
-                    text += f"{N+1}. {value}\n"
-                embed.add_field(
-                    name=f"version: {index.split(':', 1)[0]}", value=text, inline=False
-                )
-            embed.set_footer(text=f"EFT Wiki Bot 最終更新")
-            await message.channel.send(embed=embed)
+            await self.all_commands["patch"](message.channel)
 
         if not self.developMode:
             await bot.process_commands(message)
 
 
 def Initialize():
+    mapLists = GetMapList()
+    mapData = GetMapData(mapLists)
     traderNames = GetTraderName()
     bossNames = GetBossName()
     weaponsName, weaponsData = GetWeaponsData()
     updateTimestamp = datetime.datetime.utcfromtimestamp(
         dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
     )
-    return traderNames, bossNames, weaponsName, weaponsData, updateTimestamp
+    return mapData, traderNames, bossNames, weaponsName, weaponsData, updateTimestamp
+
+
+def GetMapList():
+    res = rq.get(f"{enWikiUrl}Map_of_Tarkov")
+    soup = BeautifulSoup(res.text, "lxml")
+    mapList = {}
+    columnData = []
+    for i, mapDatas in enumerate(soup.find("tbody").find_all("tr")):
+        if i != 0:
+            mapName = (
+                mapDatas.find_all("th")[1].find("a")["title"].upper().replace(" ", "")
+            )
+            mapList[mapName] = {}
+        for j, mapData in enumerate(mapDatas.find_all(["th", "td"])):
+            if i == 0:
+                # 列名取得
+                columnData.append(mapData.get_text().replace("\n", ""))
+            else:
+                if columnData[j] == "Banner":
+                    mapList[mapName].update(
+                        {
+                            columnData[j]: re.sub(
+                                "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                                "",
+                                mapData.find("img")["src"],
+                            )
+                            + "?format=original"
+                        }
+                    )
+
+                elif columnData[j] == "Name":
+                    mapList[mapName].update(
+                        {
+                            columnData[j]: mapData.get_text().replace("\n", ""),
+                            "MapUrl": mapData.find("a")["href"].replace(
+                                "/wiki/", "", 1
+                            ),
+                        }
+                    )
+                else:
+                    if mapData.find("hr"):
+                        mapData.contents = [
+                            map
+                            for map in mapData
+                            if map != mapData.find("hr") and map != "\n"
+                        ]
+                        if columnData[j] == "Duration" or columnData[j] == "Players":
+                            tempData = {}
+                            for map in mapData.contents:
+                                key, value = (
+                                    map.replace(" ", "")
+                                    .replace("minutes", "")
+                                    .split(":")
+                                )
+                                tempData.update({key: value.replace("\n", "")})
+                            mapList[mapName].update({columnData[j]: tempData})
+
+                        elif columnData[j] == "Enemies":
+                            tempData = []
+                            for map in mapData.contents:
+                                tempData.append(map.get_text().replace(" ", ""))
+                            mapList[mapName].update({columnData[j]: tempData})
+                    else:
+                        if columnData[j] == "Enemies":
+                            mapList[mapName].update(
+                                {
+                                    columnData[j]: [
+                                        mapData.get_text()
+                                        .replace(" ", "")
+                                        .replace("\n", "")
+                                    ]
+                                }
+                            )
+                        else:
+                            mapList[mapName].update(
+                                {
+                                    columnData[j]: mapData.get_text()
+                                    .replace("\n", "")
+                                    .replace("minutes", "")
+                                }
+                            )
+
+    return mapList
+
+
+def GetMapData(mapLists):
+    mapData = {}
+    for key, value in mapLists.items():
+        mapData[key] = value
+        res = rq.get(f"{enWikiUrl}{value['MapUrl']}")
+        soup = BeautifulSoup(res.text, "lxml").find(
+            "div", {"class": "mw-parser-output"}
+        )
+        for s in soup.find_all("table"):
+            s.decompose()
+
+        try:
+            soup.find("center").decompose()
+            soup.find("div", {"class": "thumb"}).decompose()
+        except:
+            pass
+        # Map情報の全imgタグを取得
+        images = soup.find_all("img")
+        mapData[key]["Images"] = {}
+        for image in images:
+            if (
+                # customs: "FullScreenMapIcon.png"
+                image["alt"] != "FullScreenMapIcon.png"
+                # interchange: "The Power Switch"
+                and image["alt"] != "The Power Switch"
+                # laboratory: "TheLab-Insurance-Messages-01.PNG"
+                and image["alt"] != "TheLab-Insurance-Messages-01.PNG"
+                and image["alt"] != ""
+            ):
+                # 参照画像サイズを800px -> オリジナル画像サイズに変換
+                mapData[key]["Images"].update(
+                    {
+                        image["alt"]: re.sub(
+                            "scale-to-width-down/[0-9]*\?cb=[0-9]*", "", image["src"]
+                        )
+                        + "?format=original"
+                    }
+                )
+    return mapData
 
 
 def GetTraderName():
@@ -1203,7 +1320,14 @@ def GetWeaponInformations(weapon):
 
 
 if __name__ == "__main__":
-    traderNames, bossNames, weaponsName, weaponsData, updateTimestamp = Initialize()
+    (
+        mapData,
+        traderNames,
+        bossNames,
+        weaponsName,
+        weaponsData,
+        updateTimestamp,
+    ) = Initialize()
     bot = EFTBot(
         command_prefix="/",
         case_insensitive=True,
@@ -1212,9 +1336,10 @@ if __name__ == "__main__":
         jaWikiUrl=jaWikiUrl,
         enWikiUrl=enWikiUrl,
         emojiList=emojiList,
-        mapList=mapList,
+        mapData=mapData,
         traderList=traderList,
         bossList=bossList,
+        notificationInformation=notificationInformation,
         patchNotes=patchNotes,
         traderNames=traderNames,
         bossNames=bossNames,

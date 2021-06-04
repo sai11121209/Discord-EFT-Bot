@@ -18,6 +18,33 @@ class Other(commands.Cog):
     @commands.command(description="パッチノート表示")
     async def patch(self, ctx):
         async with ctx.typing():
+            if self.bot.notificationInformation:
+                embed = discord.Embed(
+                    title="近日大規模なアップデートが行われる予定です。",
+                    description="近日行われるアップデートでは以下の機能が変更又は追加される予定です。\n※アップデートに伴い現在テストバージョンでの処理となっているため**一部又は全体の動作が不安定**になる恐れがあります。",
+                    color=0xFF0000,
+                    timestamp=datetime.datetime.utcfromtimestamp(
+                        dt.strptime(
+                            list(self.bot.patchNotes.keys())[0].split(":", 1)[1]
+                            + "+09:00",
+                            "%Y/%m/%d %H:%M%z",
+                        ).timestamp()
+                    ),
+                )
+                text = ""
+                for index, values in self.bot.notificationInformation.items():
+                    for N, value in enumerate(values):
+                        text += f"{N+1}. {value}\n"
+                embed.add_field(
+                    name=f"version: {index.split(':', 1)[0]}", value=text, inline=False
+                )
+                embed.set_author(
+                    name="EFT(Escape from Tarkov) Wiki Bot",
+                    url="https://github.com/sai11121209",
+                    # icon_url=client.get_user(279995095124803595).avatar_url,
+                )
+                embed.set_footer(text=f"EFT Wiki Bot最終更新")
+                await ctx.send(embed=embed)
             embed = discord.Embed(
                 title="更新履歴一覧",
                 timestamp=datetime.datetime.utcfromtimestamp(
