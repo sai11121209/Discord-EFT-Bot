@@ -721,11 +721,12 @@ class EFTBot(commands.Bot):
                     await message.channel.send(text)
                 else:
                     pass
-                if "period" in message.content:
-                    channel = client.get_channel(803425039864561675)
+                if "MSK" in message.content:
+                    channel = self.get_channel(839769626585333761)
                     text = "@everyone 重要なお知らせかもしれないからこっちにも貼っとくで\n"
-                    text += message.content
-                    await message.channel.send(f"{text}{message.content}")
+                    text += f"{message.content}\n\n"
+                    text += f"多分英語わからんやろ... 翻訳したるわ。感謝しな\n\n{res['text']}"
+                    await channel.send(f"{text}{message.content}")
 
         if message.author.bot == False and self.LOCAL_HOST == False:
             if re.search(r"出会い|繋がりたい|美女|美男|可愛い|募集|フレンド", message.content):
