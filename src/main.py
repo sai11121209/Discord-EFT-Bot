@@ -352,7 +352,8 @@ notificationInformation = {
 }
 # 上に追記していくこと
 patchNotes = {
-    "3.0α4:2021/06/05 06:00": [
+    "3.0α5:2021/06/05 13:00": [
+        "ボイスチャット入退室通知が入室時のみ通知されるように変更されました。",
         "マップ関連情報をBot起動時に動的取得するようになりました。",
         "未実装マップもマップ一覧表示コマンド __`MAP`__ で表示されるようになりました",
         "Discord Botフレームワーク環境への移行準備完了。現在試験的に新環境でプログラムを実行中です。",
@@ -553,7 +554,7 @@ class EFTBot(commands.Bot):
                 f"@everyone {user} がボイスチャンネル {before.channel} からボイスチャンネル {after.channel} に移動しました。"
             )
         elif before.channel and after.channel == None:
-            await channel.send(f"@everyone {user} がボイスチャンネル {before.channel} を退出しました。")
+            # await channel.send(f"@everyone {user} がボイスチャンネル {before.channel} を退出しました。")
             await self.remove_role(member)
 
     # リアクション反応時発火
