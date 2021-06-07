@@ -13,6 +13,9 @@ class Map(commands.Cog):
     # コマンドの作成。コマンドはcommandデコレータで必ず修飾する。
     @commands.command(description="マップ一覧表示")
     async def map(self, ctx, *arg):
+        releaseText = ""
+        releasedColor = 0x2ECC69
+        unreleasedColor = 0xFF0000
         async with ctx.typing():
             if len(arg) == 1:
                 if arg[0].upper() in self.bot.mapData:
@@ -38,10 +41,10 @@ class Map(commands.Cog):
                             res = rq.get(gasUrl).json()
                             if res["code"] == 200:
                                 tranceText = res["text"]
-                            featuresText = f"\n**特徴**:"
-                            featuresText += f"\n> {value}"
-                            featuresText += f"\n> {tranceText}"
-                            featuresText += "\n> Google翻訳"
+                                featuresText = f"\n**特徴**:"
+                                featuresText += f"\n> {value}"
+                                featuresText += f"\n\n> {tranceText}"
+                                featuresText += "\n> Google翻訳"
                         elif key == "Duration":
                             desText += f"**時間制限**: "
                             try:
@@ -70,9 +73,16 @@ class Map(commands.Cog):
                                 else:
                                     desText += f"__[{v}]({self.bot.enWikiUrl}{v})__ "
                             desText += "\n"
+                        elif key == "Release State":
+                            if value == "Released":
+                                color = releasedColor
+                            else:
+                                releaseText = "**未実装マップ**\n\n"
+                                color = unreleasedColor
                     embed = discord.Embed(
                         title=text,
-                        description=desText + featuresText,
+                        description=releaseText + desText + featuresText,
+                        color=color,
                         url=f"{self.bot.enWikiUrl}{self.bot.mapData[arg[0].upper()]['MapUrl']}",
                         timestamp=self.bot.updateTimestamp,
                     )
@@ -87,6 +97,7 @@ class Map(commands.Cog):
                         embed = discord.Embed(
                             title=f"({n}/{len(mapData)}){text}",
                             description=f"[{key}]({value})",
+                            color=color,
                             url=f"{self.bot.enWikiUrl}{self.bot.mapData[arg[0].upper()]['MapUrl']}",
                             timestamp=self.bot.updateTimestamp,
                         )
@@ -145,7 +156,7 @@ class Map(commands.Cog):
                             text += "\n"
                     text += f"**詳細情報**: __[JA]({self.bot.jaWikiUrl}{map})__ / __[EN]({self.bot.enWikiUrl}{self.bot.mapData[map]['MapUrl']})__\n"
                     if values["Release State"] == "Released":
-                        embed.add_field(name=map, value=text)
+                        embed.add_field(name=values["Name"].upper(), value=text)
                     else:
                         embed.add_field(name=map, value=f"~~{text}~~")
                 embed.set_thumbnail(

@@ -348,11 +348,12 @@ commandList = {
     "ソースコード表示": ["SOURCE"],
 }
 notificationInformation = {
-    "3.0": ["Botの大幅動作改善", "コマンド実行結果消去ボタン", "全データの動的取得", "例外処理発生時のエラーログ出力"]
+    "3.0": ["Botの安定性、動作大幅改善", "コマンド実行結果消去ボタン", "全データの動的取得", "例外処理発生時のエラーログ出力"]
 }
 # 上に追記していくこと
 patchNotes = {
-    "3.0α5:2021/06/05 13:00": [
+    "3.0α6:2021/06/05 13:00": [
+        "ヘルプコマンド __`help`__ を呼び出した後コマンドを入力し正常に呼び出された場合helpコマンドの出力が消去されるようになりました。"
         "ボイスチャット入退室通知が入室時のみ通知されるように変更されました。",
         "マップ関連情報をBot起動時に動的取得するようになりました。",
         "未実装マップもマップ一覧表示コマンド __`MAP`__ で表示されるようになりました",
@@ -617,11 +618,12 @@ class EFTBot(commands.Bot):
                 self.hints = fixHints
                 if len(self.hints) == 1:
                     if len(self.hints["1️⃣"].split(" ")) == 2:
-                        await self.all_commands[self.hints["1️⃣"].split(" ")[0]](
-                            ctx, self.hints["1️⃣"].split(" ")[1]
+                        await ctx.invoke(
+                            self.get_command(self.hints["1️⃣"].split(" ")[0]),
+                            self.hints["1️⃣"].split(" ")[1],
                         )
                     else:
-                        await self.all_commands[self.hints["1️⃣"]](ctx)
+                        await ctx.invoke(self.get_command(self.hints["1️⃣"]))
                 else:
                     embed.set_footer(text="これ以外に使えるコマンドは /help で確認できるよ!")
                     helpEmbed = await ctx.send(embed=embed)
@@ -684,6 +686,16 @@ class EFTBot(commands.Bot):
                     color=0xFF0000,
                 )
                 await ctx.send(embed=embed)
+
+    async def on_command_completion(self, ctx):
+        if not self.developMode:
+            if self.LOCAL_HOST:
+                embed = discord.Embed(
+                    title="現在開発環境での処理内容が表示されており、実装の際に採用されない可能性がある機能、表示等が含まれている可能性があります。",
+                    color=0xFF0000,
+                )
+                await ctx.send(embed=embed)
+                await self.helpEmbed.delete()
 
     @client.event
     async def on_message(self, message):
