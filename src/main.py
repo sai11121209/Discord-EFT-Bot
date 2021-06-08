@@ -353,7 +353,7 @@ notificationInformation = {
 # 上に追記していくこと
 patchNotes = {
     "3.0α6:2021/06/05 13:00": [
-        "ヘルプコマンド __`help`__ を呼び出した後コマンドを入力し正常に呼び出された場合helpコマンドの出力が消去されるようになりました。"
+        "ヘルプコマンド __`HELP`__ を呼び出した後コマンドを入力し正常に呼び出された場合helpコマンドの出力が消去されるようになりました。",
         "ボイスチャット入退室通知が入室時のみ通知されるように変更されました。",
         "マップ関連情報をBot起動時に動的取得するようになりました。",
         "未実装マップもマップ一覧表示コマンド __`MAP`__ で表示されるようになりました",
@@ -562,13 +562,12 @@ class EFTBot(commands.Bot):
     @client.event
     async def on_reaction_add(self, reaction, user):
         if not user.bot and not self.developMode:
-            try:
-                if len(self.hints[reaction.emoji].split(" ")) == 2:
-                    await self.all_commands[self.hints[reaction.emoji].split(" ")[0]](
-                        reaction.message.channel,
-                        self.hints[reaction.emoji].split(" ")[1],
-                    )
-            except:
+            if len(self.hints[reaction.emoji].split(" ")) == 2:
+                await self.all_commands[self.hints[reaction.emoji].split(" ")[0]](
+                    reaction.message.channel,
+                    self.hints[reaction.emoji].split(" ")[1],
+                )
+            else:
                 await self.all_commands[self.hints[reaction.emoji]](
                     reaction.message.channel
                 )
