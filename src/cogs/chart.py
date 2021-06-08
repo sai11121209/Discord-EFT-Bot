@@ -43,7 +43,8 @@ class Chart(commands.Cog):
                     url=author["author"]["url"],
                 )
                 embed.set_footer(text=f"提供元: {author['link']}")
-                await ctx.send(embed=embed)
+                sendMessage = await ctx.send(embed=embed)
+                await sendMessage.add_reaction("❌")
 
     @commands.command(name="itemvalue", description="アイテム価格早見表")
     async def itemvalue(self, ctx):
@@ -80,21 +81,30 @@ class Chart(commands.Cog):
                     url=author["author"]["url"],
                 )
                 embed.set_footer(text=f"提供元: {author['link']}")
-            await ctx.send(embed=embed)
+                sendMessage = await ctx.send(embed=embed)
+                await sendMessage.add_reaction("❌")
 
     @commands.command(name="taskitem", description="タスク使用アイテム早見表")
     async def taskitem(self, ctx):
         async with ctx.typing():
             taskItemImages = [
-                "https://cdn.discordapp.com/attachments/808820772536582154/814055787479564318/image0.webp",
+                "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/1/19/QuestItemRequirements.png/revision/latest?cb=20210212192637&format=original",
+                "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/f/f8/QuestItemsInRaid.png/revision/latest?cb=20210212192627&format=original",
             ]
             authorList = [
                 {
                     "author": {
-                        "name": "Reddit: MarcoQuarko",
-                        "url": "https://www.reddit.com/user/MarcoQuarko/",
+                        "name": "Official Escape from Tarkov Wiki",
+                        "url": "https://escapefromtarkov.fandom.com/wiki/Quests",
                     },
-                    "link": "https://www.reddit.com/r/EscapefromTarkov/comments/8een3x/all_quest_items_on_one_page_not_my_work_credits/",
+                    "link": "https://escapefromtarkov.fandom.com/wiki/Quests",
+                },
+                {
+                    "author": {
+                        "name": "Official Escape from Tarkov Wiki",
+                        "url": "https://escapefromtarkov.fandom.com/wiki/Quests",
+                    },
+                    "link": "https://escapefromtarkov.fandom.com/wiki/Quests",
                 },
             ]
             for n, (url, author) in enumerate(zip(taskItemImages, authorList)):
@@ -109,7 +119,8 @@ class Chart(commands.Cog):
                     url=author["author"]["url"],
                 )
                 embed.set_footer(text=f"提供元: {author['link']}")
-                await ctx.send(embed=embed)
+                sendMessage = await ctx.send(embed=embed)
+                await sendMessage.add_reaction("❌")
 
     @commands.command(name="armor", description="アーマー早見表")
     async def armor(self, ctx):
@@ -134,7 +145,8 @@ class Chart(commands.Cog):
                 embed.set_footer(
                     text="提供元: https://twitter.com/N7th_WF/status/1376825476598013957?s=20"
                 )
-                await ctx.send(embed=embed)
+                sendMessage = await ctx.send(embed=embed)
+                await sendMessage.add_reaction("❌")
 
 
 # Bot本体側からコグを読み込む際に呼び出される関数。

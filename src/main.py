@@ -352,7 +352,9 @@ notificationInformation = {
 }
 # 上に追記していくこと
 patchNotes = {
-    "3.0α6:2021/06/05 13:00": [
+    "3.0α7:2021/06/05 13:00": [
+        "全コマンドにおいて __`❌`__ リアクションが付与されクリックすることで表示されている実行結果が消去できるようになしました。",
+        "タスク使用アイテム早見表コマンド __`TASKITEM`__ で表示される画像が0.12.9.10532時点のものに更新されました。",
         "ヘルプコマンド __`HELP`__ を呼び出した後コマンドを入力し正常に呼び出された場合helpコマンドの出力が消去されるようになりました。",
         "ボイスチャット入退室通知が入室時のみ通知されるように変更されました。",
         "マップ関連情報をBot起動時に動的取得するようになりました。",
@@ -360,7 +362,8 @@ patchNotes = {
         "Discord Botフレームワーク環境への移行準備完了。現在試験的に新環境でプログラムを実行中です。",
         "例外処理発生時エラーログを出力するようになりました。",
         "コマンド補完性能向上。",
-        "各種不具合の修正。" "動作が不安定になる可能性があります。",
+        "各種不具合の修正。",
+        "動作が不安定になる可能性があります。",
     ],
     "2.3:2021/05/20 19:00": ["コマンド不一致時に表示されるヒントコマンドをリアクション選択から実行できるようになりました。"],
     "2.2.1:2021/05/20 14:00": ["各武器詳細表示コマンド __`武器名`__ の仕様を変更しました。"],
@@ -479,6 +482,7 @@ class EFTBot(commands.Bot):
         self.enrageCounter = 0
         self.saiId = 279995095124803595
         self.remove_command("help")
+        self.helpEmbed = None
         for cog in INITIAL_EXTENSIONS:
             try:
                 self.load_extension(cog)
@@ -562,15 +566,28 @@ class EFTBot(commands.Bot):
     @client.event
     async def on_reaction_add(self, reaction, user):
         if not user.bot and not self.developMode:
-            if len(self.hints[reaction.emoji].split(" ")) == 2:
-                await self.all_commands[self.hints[reaction.emoji].split(" ")[0]](
-                    reaction.message.channel,
-                    self.hints[reaction.emoji].split(" ")[1],
-                )
-            else:
-                await self.all_commands[self.hints[reaction.emoji]](
-                    reaction.message.channel
-                )
+            try:
+                if len(self.hints[reaction.emoji].split(" ")) == 2:
+                    await self.all_commands[self.hints[reaction.emoji].split(" ")[0]](
+                        reaction.message.channel,
+                        self.hints[reaction.emoji].split(" ")[1],
+                    )
+                else:
+                    await self.all_commands[self.hints[reaction.emoji]](
+                        reaction.message.channel
+                    )
+            except:
+                pass
+
+    @client.event
+    async def on_raw_reaction_add(self, payload):
+        user = await self.fetch_user(payload.user_id)
+        if not user.bot:
+            channel = await self.fetch_channel(payload.channel_id)
+            message = await channel.fetch_message(payload.message_id)
+            if not self.developMode:
+                if payload.emoji.name == "❌":
+                    await message.delete()
 
     @client.event
     async def on_command_error(self, ctx, error):
@@ -674,7 +691,8 @@ class EFTBot(commands.Bot):
             embed.set_footer(text=f"{ctx.me.name}")
             await channel.send(embed=embed)
             if self.LOCAL_HOST == False:
-                await ctx.send(embed=embed)
+                sendMessage = await ctx.send(embed=embed)
+                await sendMessage.add_reaction("❌")
 
     @client.event
     async def on_command(self, ctx):
@@ -687,14 +705,8 @@ class EFTBot(commands.Bot):
                 await ctx.send(embed=embed)
 
     async def on_command_completion(self, ctx):
-        if not self.developMode:
-            if self.LOCAL_HOST:
-                embed = discord.Embed(
-                    title="現在開発環境での処理内容が表示されており、実装の際に採用されない可能性がある機能、表示等が含まれている可能性があります。",
-                    color=0xFF0000,
-                )
-                await ctx.send(embed=embed)
-                await self.helpEmbed.delete()
+        if self.helpEmbed:
+            await self.helpEmbed.delete()
 
     @client.event
     async def on_message(self, message):

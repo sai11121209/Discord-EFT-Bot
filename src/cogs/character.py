@@ -55,7 +55,8 @@ class Character(commands.Cog):
             embed.set_footer(
                 text="トレーダー名をクリックすることで各トレーダータスクの詳細情報にアクセスできるよー。",
             )
-            await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed)
+            await sendMessage.add_reaction("❌")
 
     @commands.command(description="ボス一覧表示")
     async def boss(self, ctx):
@@ -106,7 +107,8 @@ class Character(commands.Cog):
             embed.set_footer(
                 text="ボス名をクリックすることで各ボスの詳細情報にアクセスできるよー。",
             )
-            await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed)
+            await sendMessage.add_reaction("❌")
 
 
 # Bot本体側からコグを読み込む際に呼び出される関数。

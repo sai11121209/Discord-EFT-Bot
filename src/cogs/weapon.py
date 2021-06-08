@@ -31,7 +31,8 @@ class Weapon(commands.Cog):
                 embed.set_footer(
                     text="提供元: https://twitter.com/bojotaro_tarkov/status/1368569066928046080?s=20"
                 )
-                await ctx.send(embed=embed)
+                sendMessage = await ctx.send(embed=embed)
+                await sendMessage.add_reaction("❌")
 
     @commands.command(description="武器一覧表示")
     async def weapon(self, ctx, *arg):
@@ -104,7 +105,8 @@ class Weapon(commands.Cog):
                         text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
                     )
                     embed.set_image(url=weaponData["imageUrl"])
-                    await ctx.send(embed=embed)
+                    sendMessage = await ctx.send(embed=embed)
+                    await sendMessage.add_reaction("❌")
             else:
                 await self.on_command_error(self, ctx, commands.CommandNotFound)
 
@@ -133,7 +135,8 @@ class Weapon(commands.Cog):
                     )
                     embeds.append(embed)
                 for embed in embeds:
-                    await ctx.send(embed=embed)
+                    sendMessage = await ctx.send(embed=embed)
+                    await sendMessage.add_reaction("❌")
 
 
 # Bot本体側からコグを読み込む際に呼び出される関数。

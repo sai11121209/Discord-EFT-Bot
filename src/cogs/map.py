@@ -90,7 +90,8 @@ class Map(commands.Cog):
                     embed.set_footer(
                         text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
                     )
-                    await ctx.send(embed=embed)
+                    sendMessage = await ctx.send(embed=embed)
+                    await sendMessage.add_reaction("❌")
                     mapData = self.bot.mapData[arg[0].upper()]["Images"]
                     n = 1
                     for key, value in mapData.items():
@@ -105,7 +106,8 @@ class Map(commands.Cog):
                         embed.set_footer(
                             text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
                         )
-                        await ctx.send(embed=embed)
+                        sendMessage = await ctx.send(embed=embed)
+                        await sendMessage.add_reaction("❌")
                         n += 1
                 else:
                     await self.on_command_error(self, ctx, commands.CommandNotFound)
@@ -165,7 +167,8 @@ class Map(commands.Cog):
                 embed.set_footer(
                     text=f"{self.bot.command_prefix}マップ名で各マップの地形情報を表示できるよー。 例: {self.bot.command_prefix}reserve \n Source: The Official Escape from Tarkov Wiki 最終更新"
                 )
-                await ctx.send(embed=embed)
+                sendMessage = await ctx.send(embed=embed)
+                await sendMessage.add_reaction("❌")
 
 
 # マップ画像取得

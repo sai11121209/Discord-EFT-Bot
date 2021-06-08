@@ -25,7 +25,8 @@ class Develop(commands.Cog):
                     await self.bot.change_presence(
                         activity=discord.Game(name="Escape from Tarkov", type=1)
                     )
-                await ctx.send(text)
+                sendMessage = await ctx.send(text)
+                await sendMessage.add_reaction("❌")
 
 
 # Bot本体側からコグを読み込む際に呼び出される関数。

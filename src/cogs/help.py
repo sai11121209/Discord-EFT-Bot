@@ -51,6 +51,7 @@ class Help(commands.Cog):
             )
             embed.set_footer(text="EFT Wiki Bot最終更新")
             self.bot.helpEmbed = await ctx.send(embed=embed)
+            await self.bot.helpEmbed.add_reaction("❌")
 
 
 # Bot本体側からコグを読み込む際に呼び出される関数。

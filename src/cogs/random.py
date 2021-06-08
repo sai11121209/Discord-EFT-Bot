@@ -19,7 +19,8 @@ class Random(commands.Cog):
             )
             map = r.choice(list(self.bot.mapList)).lower()
             embed.add_field(name="MAP", value=map, inline=False)
-            await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed)
+            await sendMessage.add_reaction("❌")
             await self.bot.all_commands["map"](ctx, map)
 
     @commands.command(description="武器抽選")
@@ -32,7 +33,8 @@ class Random(commands.Cog):
             )
             weapon = r.choice(self.bot.weaponsName)
             embed.add_field(name="WEAPON", value=weapon, inline=False)
-            await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed)
+            await sendMessage.add_reaction("❌")
             await self.bot.all_commands["weapon"](ctx, weapon)
 
 

@@ -44,7 +44,8 @@ class Other(commands.Cog):
                     # icon_url=client.get_user(279995095124803595).avatar_url,
                 )
                 embed.set_footer(text=f"EFT Wiki Bot最終更新")
-                await ctx.send(embed=embed)
+                sendMessage = await ctx.send(embed=embed)
+                await sendMessage.add_reaction("❌")
             embed = discord.Embed(
                 title="更新履歴一覧",
                 timestamp=datetime.datetime.utcfromtimestamp(
@@ -68,7 +69,8 @@ class Other(commands.Cog):
                 # icon_url=client.get_user(279995095124803595).avatar_url,
             )
             embed.set_footer(text=f"EFT Wiki Bot最終更新")
-            await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed)
+            await sendMessage.add_reaction("❌")
 
     @commands.command(description="現在時刻表示")
     async def now(self, ctx):
@@ -105,7 +107,8 @@ class Other(commands.Cog):
                 inline=False,
             )
             embed.set_footer(text="夏時間は3月の第2日曜日午前2時から11月の第1日曜日午前2時まで。")
-            await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed)
+            await sendMessage.add_reaction("❌")
 
     @commands.command(description="ビットコイン価格表示")
     async def btc(self, ctx):
@@ -155,7 +158,8 @@ class Other(commands.Cog):
                 name="最安値", value="{:,}".format(summaryJpy["price"]["low"]) + " 円"
             )
             embed.set_footer(text="Cryptowat Market REST APIを使用しております。取得日時")
-            await ctx.send(embed=embed, file=file)
+            sendMessage = await ctx.send(embed=embed, file=file)
+            await sendMessage.add_reaction("❌")
 
             BtcRubData = rq.get(
                 f"https://api.cryptowat.ch/markets/cexio/btcrub/ohlc?periods=1800&after={int(timestamp)}"
@@ -196,7 +200,8 @@ class Other(commands.Cog):
                 name="最安値", value="{:,}".format(summaryJpy["price"]["low"]) + " RUB"
             )
             embed.set_footer(text="Cryptowat Market REST APIを使用しております。取得日時")
-            await ctx.send(embed=embed, file=file)
+            sendMessage = await ctx.send(embed=embed, file=file)
+            await sendMessage.add_reaction("❌")
 
 
 # Bot本体側からコグを読み込む際に呼び出される関数。

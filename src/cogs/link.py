@@ -21,7 +21,8 @@ class Link(commands.Cog):
             embed.set_thumbnail(
                 url="https://www.escapefromtarkov.com/themes/eft/images/eft_logo_promo.jpg"
             )
-            await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed)
+            await sendMessage.add_reaction("❌")
 
     @commands.command(description="日本EFTWikiサイト表示")
     async def jawiki(self, ctx):
@@ -36,7 +37,8 @@ class Link(commands.Cog):
             embed.set_thumbnail(
                 url="https://www.escapefromtarkov.com/themes/eft/images/eft_logo_promo.jpg"
             )
-            await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed)
+            await sendMessage.add_reaction("❌")
 
     @commands.command(description="海外EFTWikiサイト表示")
     async def enwiki(self, ctx):
@@ -51,7 +53,8 @@ class Link(commands.Cog):
             embed.set_thumbnail(
                 url="https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/b/bc/Wiki.png/revision/latest/scale-to-width-down/200?cb=20200612143203"
             )
-            await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed)
+            await sendMessage.add_reaction("❌")
 
     @commands.command(description="フリーマーケット情報表示")
     async def market(self, ctx):
@@ -63,7 +66,8 @@ class Link(commands.Cog):
                 description=text,
                 color=0x2ECC69,
             )
-            await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed)
+            await sendMessage.add_reaction("❌")
 
     @commands.command(description="TarkovTools情報表示")
     async def tarkovtools(self, ctx):
@@ -79,7 +83,8 @@ class Link(commands.Cog):
                 name="Tarkov-Tools",
                 value="> [Tarkov-Tools携帯リモート操作リンク](https://tarkov-tools.com/control/)",
             )
-            await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed)
+            await sendMessage.add_reaction("❌")
 
     @commands.command(description="ソースコード表示")
     async def source(self, ctx):
@@ -94,7 +99,8 @@ class Link(commands.Cog):
             embed.set_thumbnail(
                 url="https://avatars.githubusercontent.com/u/55883274?s=400&v=4"
             )
-            await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed)
+            await sendMessage.add_reaction("❌")
 
 
 # Bot本体側からコグを読み込む際に呼び出される関数。
