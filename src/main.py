@@ -352,10 +352,13 @@ notificationInformation = {
 }
 # 上に追記していくこと
 patchNotes = {
-    "3.0β1:2021/06/09 01:00": [
-        "全コマンドにおいて __`❌`__ リアクションが付与されクリックすることで表示されている実行結果が消去できるようになしました。",
+    "3.0β2:2021/06/15 14:00": [
+        "Discord Botフレームワーク環境への移行準に伴い各マップ情報表示コマンド ~~__`マップ名`__~~ から __`MAP マップ名`__ に変更されました。",
+        "Discord Botフレームワーク環境への移行準に伴い各武器詳細表示コマンド ~~__`武器名`__~~ から __`WEAPON 武器名`__ に変更されました。",
+        "ヘルプコマンド __`HELP`__ が呼び出された際にヘルプコマンドが消去されてしまう不具合を修正しました。",
+        "全コマンドにおいて __`❌`__ リアクションが付与されクリックすることで表示されている実行結果が消去できるようになりました。",
         "タスク使用アイテム早見表コマンド __`TASKITEM`__ で表示される画像が0.12.9.10532時点のものに更新されました。",
-        "ヘルプコマンド __`HELP`__ を呼び出した後コマンドを入力し正常に呼び出された場合helpコマンドの出力が消去されるようになりました。",
+        "ヘルプコマンド __`HELP`__ を呼び出した後コマンドを入力し正常に呼び出された場合HELPコマンドの出力が消去されるようになりました。",
         "ボイスチャット入退室通知が入室時のみ通知されるように変更されました。",
         "マップ関連情報をBot起動時に動的取得するようになりました。",
         "未実装マップもマップ一覧表示コマンド __`MAP`__ で表示されるようになりました",
@@ -363,7 +366,6 @@ patchNotes = {
         "例外処理発生時エラーログを出力するようになりました。",
         "コマンド補完性能向上。",
         "各種不具合の修正。",
-        "動作が不安定になる可能性があります。",
     ],
     "2.3:2021/05/20 19:00": ["コマンド不一致時に表示されるヒントコマンドをリアクション選択から実行できるようになりました。"],
     "2.2.1:2021/05/20 14:00": ["各武器詳細表示コマンド __`武器名`__ の仕様を変更しました。"],
@@ -647,7 +649,7 @@ class EFTBot(commands.Bot):
                         await helpEmbed.add_reaction(emoji)
             else:
                 text = f"入力されたコマンド {ctx.message.content} は見つからなかったよ...ごめんね。\n"
-                text += "これ以外に使えるコマンドは /help で確認できるよ!"
+                text += f"これ以外に使えるコマンドは {self.command_prefix}help で確認できるよ!"
                 await ctx.send(text)
         elif isinstance(error, commands.MissingRole):
             pass
@@ -705,8 +707,9 @@ class EFTBot(commands.Bot):
                 await ctx.send(embed=embed)
 
     async def on_command_completion(self, ctx):
-        if self.helpEmbed:
+        if ctx.message.content != f"{self.command_prefix}help" and self.helpEmbed:
             await self.helpEmbed.delete()
+            self.helpEmbed = None
 
     @client.event
     async def on_message(self, message):
