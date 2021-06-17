@@ -352,7 +352,8 @@ notificationInformation = {
 }
 # 上に追記していくこと
 patchNotes = {
-    "3.0β2:2021/06/15 14:00": [
+    "3.0β3:2021/06/18 10:00": [
+        "各マップ情報表示コマンド __`MAP マップ名`__ 各武器詳細表示コマンド __`WEAPON 武器名`__ を入力した際に発生していたエラー20210617212538を修正しました。",
         "Discord Botフレームワーク環境への移行準に伴い各マップ情報表示コマンド ~~__`マップ名`__~~ から __`MAP マップ名`__ に変更されました。",
         "Discord Botフレームワーク環境への移行準に伴い各武器詳細表示コマンド ~~__`武器名`__~~ から __`WEAPON 武器名`__ に変更されました。",
         "ヘルプコマンド __`HELP`__ が呼び出された際にヘルプコマンドが消去されてしまう不具合を修正しました。",
@@ -594,11 +595,14 @@ class EFTBot(commands.Bot):
     @client.event
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
+            fixText = ""
             hitCommands = []
             for command in self.all_commands:
                 hitCommands.append(self.all_commands[command].name)
             hitCommands += [map.lower() for map in self.mapData]
             hitCommands += [weaponName.lower() for weaponName in self.weaponsName]
+            if len(error.args[0].split(" ")) == 1:
+                fixText = error.args[0]
             # コマンドの予測変換
             self.hints = {
                 self.emojiList[n]: hint
@@ -608,7 +612,7 @@ class EFTBot(commands.Bot):
                         for command in hitCommands
                         if difflib.SequenceMatcher(
                             None,
-                            ctx.message.content.lower(),
+                            ctx.message.content.replace(fixText, "").lower(),
                             self.command_prefix + command,
                         ).ratio()
                         >= 0.65
@@ -794,6 +798,8 @@ class EFTBot(commands.Bot):
 
         if not self.developMode:
             await bot.process_commands(message)
+        if message.content == "develop":
+            await bot.invoke(self.get_command("develop"))
 
 
 def Initialize():

@@ -110,7 +110,9 @@ class Map(commands.Cog):
                         await sendMessage.add_reaction("❌")
                         n += 1
                 else:
-                    await self.on_command_error(self, ctx, commands.CommandNotFound)
+                    await self.bot.on_command_error(
+                        ctx, commands.CommandNotFound("map")
+                    )
             else:
                 embed = discord.Embed(
                     title="マップ",

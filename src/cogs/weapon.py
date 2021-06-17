@@ -37,9 +37,7 @@ class Weapon(commands.Cog):
     @commands.command(description="武器一覧表示")
     async def weapon(self, ctx, *arg):
         if len(arg) == 1:
-            if arg[0].upper() in [
-                weaponName.upper() for weaponName in self.bot.weaponsName
-            ]:
+            if arg[0].upper() in self.bot.weaponsName:
                 async with ctx.typing():
                     infoStr = ""
                     fixtext = arg[0].upper().replace(" ", "")
@@ -108,7 +106,7 @@ class Weapon(commands.Cog):
                     sendMessage = await ctx.send(embed=embed)
                     await sendMessage.add_reaction("❌")
             else:
-                await self.on_command_error(self, ctx, commands.CommandNotFound)
+                await self.bot.on_command_error(ctx, commands.CommandNotFound("weapon"))
 
         else:
             async with ctx.typing():
