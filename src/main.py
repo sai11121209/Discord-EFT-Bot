@@ -352,7 +352,9 @@ notificationInformation = {
 }
 # 上に追記していくこと
 patchNotes = {
-    "3.0β3:2021/06/18 10:00": [
+    "3.0β4:2021/06/19 14:30": [
+        "__`notification-general`__ において発言した際の全体メンションの処理が変更されました。",
+        "ボイスチャンネル使用中のユーザがテキストを書き込んだ際の処理が変更されました。",
         "各マップ情報表示コマンド __`MAP マップ名`__ 各武器詳細表示コマンド __`WEAPON 武器名`__ を入力した際に発生していたエラー20210617212538を修正しました。",
         "Discord Botフレームワーク環境への移行準に伴い各マップ情報表示コマンド ~~__`マップ名`__~~ から __`MAP マップ名`__ に変更されました。",
         "Discord Botフレームワーク環境への移行準に伴い各武器詳細表示コマンド ~~__`武器名`__~~ から __`WEAPON 武器名`__ に変更されました。",
@@ -380,7 +382,7 @@ patchNotes = {
         "早見表表示、アーマ早見表表示コマンド __`CHART`__ __`ARMOR`__ の正式実装、又TarkovTools情報表示コマンド __`TARKOVTOOLS`__ 追加に伴い弾薬性能表示コマンド __`AMMO`__の仕様が一部変更されました。",
     ],
     "2.0.1:2021/05/07 17:00": [
-        "notification-general において発言を行うと自動全体メンションをする様になりました。",
+        "__`notification-general`__ において発言を行うと自動全体メンションをする様になりました。",
         "機能改善会議(メンテナンス)中にbotに話しかけると怒る様になりました。",
     ],
     "2.0:2021/05/06 18:00": [
@@ -726,11 +728,15 @@ class EFTBot(commands.Bot):
                 message.guild.get_role(voiceChatRole) in message.author.roles
                 and message.channel.id != notificationGneralChannelId
             ):
-                await message.channel.send(f"<@&{voiceChatRole}> ")
+                await message.delete()
+                await message.channel.send(
+                    f"<@&{voiceChatRole}> {message.content} by {message.author.name}"
+                )
         except:
             pass
         if not message.author.bot:
             if message.channel.id == notificationGneralChannelId:
+                await message.delete()
                 await message.channel.send(
                     f"@everyone {message.content} by {message.author.name}"
                 )
@@ -795,11 +801,10 @@ class EFTBot(commands.Bot):
 
         elif "@everyone BOTの更新をしました!" == message.content:
             await self.all_commands["patch"](message.channel)
-
         if not self.developMode:
             await bot.process_commands(message)
-        if message.content == "develop":
-            await bot.invoke(self.get_command("develop"))
+        elif message.content == f"{self.command_prefix}develop":
+            await bot.process_commands(message)
 
 
 def Initialize():
