@@ -37,6 +37,9 @@ class Help(commands.Cog):
                 elif self.bot.all_commands[command].name == "map":
                     text = f"```{self.bot.command_prefix}{self.bot.all_commands[command].name}```"
                     text += "```/map {マップ名}```"
+                elif self.bot.all_commands[command].name == "task":
+                    text = f"```{self.bot.command_prefix}{self.bot.all_commands[command].name}```"
+                    text += "```/task {タスク名}```"
                 else:
                     text = f"```{self.bot.command_prefix}{self.bot.all_commands[command].name}```"
                 embed.add_field(

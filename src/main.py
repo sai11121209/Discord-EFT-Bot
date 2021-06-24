@@ -39,6 +39,7 @@ INITIAL_EXTENSIONS = [
     "cogs.link",
     "cogs.map",
     "cogs.character",
+    "cogs.task",
     "cogs.weapon",
     "cogs.chart",
     "cogs.other",
@@ -124,8 +125,17 @@ traderList = {
         "fullname": "Pavel Yegorovich Romanenko",
         "location": "Town",
         "origin": "ロシア連邦",
-        "wares": ["武器", "弾薬", "手榴弾", "弾倉", "武器MOD",],
-        "services": ["保険", "修理",],
+        "wares": [
+            "武器",
+            "弾薬",
+            "手榴弾",
+            "弾倉",
+            "武器MOD",
+        ],
+        "services": [
+            "保険",
+            "修理",
+        ],
         "currencies": ["Roubles (₽)"],
     },
     "Therapist": {
@@ -133,63 +143,128 @@ traderList = {
         "fullname": "Elvira Khabibullina",
         "location": "Streets of Tarkov",
         "origin": "ロシア連邦",
-        "wares": ["医療品", "地図", "食料品", "コンテナ",],
-        "services": ["保険",],
-        "currencies": ["Roubles (₽)", "Euros (€)",],
+        "wares": [
+            "医療品",
+            "地図",
+            "食料品",
+            "コンテナ",
+        ],
+        "services": [
+            "保険",
+        ],
+        "currencies": [
+            "Roubles (₽)",
+            "Euros (€)",
+        ],
     },
     "Fence": {
         "stampid": 828552627989512204,
         "fullname": "Real name unknown",
         "location": "A network of outlets all over Tarkov and its outskirts",
         "origin": "ロシア連邦",
-        "wares": ["売られたもの全て",],
+        "wares": [
+            "売られたもの全て",
+        ],
         "services": [],
-        "currencies": ["Roubles (₽)",],
+        "currencies": [
+            "Roubles (₽)",
+        ],
     },
     "Skier": {
         "stampid": 828552629436416010,
         "fullname": "Alexander Fyodorovich Kiselyov",
         "location": "Customs",
         "origin": "ロシア連邦",
-        "wares": ["武器", "弾薬", "武器MOD", "コンテナ", "ユーロ",],
-        "services": ["修理",],
-        "currencies": ["Roubles (₽)", "Dollars ($)", "Euros (€)",],
+        "wares": [
+            "武器",
+            "弾薬",
+            "武器MOD",
+            "コンテナ",
+            "ユーロ",
+        ],
+        "services": [
+            "修理",
+        ],
+        "currencies": [
+            "Roubles (₽)",
+            "Dollars ($)",
+            "Euros (€)",
+        ],
     },
     "Peacekeeper": {
         "stampid": 828552628682096710,
         "fullname": "Tadeusz Pilsudski",
         "location": "Terminal",
         "origin": "ポーランド共和国",
-        "wares": ["欧米・NATOの武器", "弾薬", "手榴弾", "弾倉", "武器MOD", "USドル",],
+        "wares": [
+            "欧米・NATOの武器",
+            "弾薬",
+            "手榴弾",
+            "弾倉",
+            "武器MOD",
+            "USドル",
+        ],
         "services": [],
-        "currencies": ["Dollars ($)",],
+        "currencies": [
+            "Dollars ($)",
+        ],
     },
     "Mechanic": {
         "stampid": 828552628887093328,
         "fullname": "Sergey Arsenyevich Samoylov",
         "location": "Factory",
         "origin": "不明",
-        "wares": ["欧米・NATOの武器", "グロック17/18", "弾薬", "弾倉", "武器MOD",],
-        "services": ["修理",],
-        "currencies": ["Roubles (₽)", "Euros (€)", "Bitcoin (₿)",],
+        "wares": [
+            "欧米・NATOの武器",
+            "グロック17/18",
+            "弾薬",
+            "弾倉",
+            "武器MOD",
+        ],
+        "services": [
+            "修理",
+        ],
+        "currencies": [
+            "Roubles (₽)",
+            "Euros (€)",
+            "Bitcoin (₿)",
+        ],
     },
     "Ragman": {
         "stampid": 828552630120349716,
         "fullname": "Abramyan Arshavir Sarkisivich",
         "location": "Interchange",
         "origin": "不明",
-        "wares": ["衣類", "アーマー", "バックパック", "タクティカリグ", "ギア",],
-        "services": ["戦闘服",],
-        "currencies": ["Roubles (₽)",],
+        "wares": [
+            "衣類",
+            "アーマー",
+            "バックパック",
+            "タクティカリグ",
+            "ギア",
+        ],
+        "services": [
+            "戦闘服",
+        ],
+        "currencies": [
+            "Roubles (₽)",
+        ],
     },
     "Jaeger": {
         "stampid": 828552628396621855,
         "fullname": "Kharitonov Ivan Egorovich",
         "location": "Woods",
         "origin": "不明",
-        "wares": ["ソビエト連邦の武器", "弾薬", "弾倉", "武器MOD", "隠れ家素材",],
+        "wares": [
+            "ソビエト連邦の武器",
+            "弾薬",
+            "弾倉",
+            "武器MOD",
+            "隠れ家素材",
+        ],
         "services": [],
-        "currencies": ["Roubles (₽)",],
+        "currencies": [
+            "Roubles (₽)",
+        ],
     },
 }
 
@@ -218,7 +293,9 @@ bossList = {
         "stampid": 834774058724753418,
         "location": ["Reserve"],
         "pawnchance": {"Reserve": 43},
-        "drops": ["ASh-12 12.7x55 assault rifle",],
+        "drops": [
+            "ASh-12 12.7x55 assault rifle",
+        ],
         "followers": "6",
     },
     "Shturman": {
@@ -276,7 +353,8 @@ notificationInformation = {
 }
 # 上に追記していくこと
 patchNotes = {
-    "3.0β5:2021/06/23 21:30": [
+    "3.0β6:2021/06/25 05:30": [
+        "タスク一覧コマンド __`TASK`__ とタスク詳細表示コマンド __`TASK {タスク名}`__ の2コマンドが追加されました。",
         "本サーバに送信されたメッセージに対して __`❌`__ リアクションが付与すると誰でもメッセージを消去できてしまう脆弱性の修正を行いました。",
         "__`notification-general`__ において発言した際の全体メンションの処理が変更されました。",
         "ボイスチャンネル使用中のユーザがテキストを書き込んだ際の処理が変更されました。",
@@ -285,6 +363,8 @@ patchNotes = {
         "Discord Botフレームワーク環境への移行準に伴い各武器詳細表示コマンド ~~__`武器名`__~~ から __`WEAPON 武器名`__ に変更されました。",
         "ヘルプコマンド __`HELP`__ が呼び出された際にヘルプコマンドが消去されてしまう不具合を修正しました。",
         "全コマンドにおいて __`❌`__ リアクションが付与されクリックすることで表示されている実行結果が消去できるようになりました。",
+    ],
+    "3.0α7:2021/06/08 20:35": [
         "タスク使用アイテム早見表コマンド __`TASKITEM`__ で表示される画像が0.12.9.10532時点のものに更新されました。",
         "ヘルプコマンド __`HELP`__ を呼び出した後コマンドを入力し正常に呼び出された場合HELPコマンドの出力が消去されるようになりました。",
         "ボイスチャット入退室通知が入室時のみ通知されるように変更されました。",
@@ -297,7 +377,9 @@ patchNotes = {
     ],
     "2.3:2021/05/20 19:00": ["コマンド不一致時に表示されるヒントコマンドをリアクション選択から実行できるようになりました。"],
     "2.2.1:2021/05/20 14:00": ["各武器詳細表示コマンド __`武器名`__ の仕様を変更しました。"],
-    "2.2:2021/05/15 18:00": ["出会いを目的としたフレンド募集を含む投稿を行った場合警告が送られる様になりました。",],
+    "2.2:2021/05/15 18:00": [
+        "出会いを目的としたフレンド募集を含む投稿を行った場合警告が送られる様になりました。",
+    ],
     "2.1:2021/05/08 17:00": [
         "自動全体メンションに本文を含む様に変更されました。",
         "TarkovTools情報表示コマンド __`TARKOVTOOLS`__ を追加しました。",
@@ -388,6 +470,8 @@ class EFTBot(commands.Bot):
         bossNames,
         weaponsName,
         weaponsData,
+        taskName,
+        taskData,
         updateTimestamp,
     ):
         super().__init__(command_prefix, case_insensitive=case_insensitive)
@@ -405,6 +489,8 @@ class EFTBot(commands.Bot):
         self.bossNames = bossNames
         self.weaponsName = weaponsName
         self.weaponsData = weaponsData
+        self.taskName = taskName
+        self.taskData = taskData
         self.updateTimestamp = updateTimestamp
         self.hits = {}
         self.enrageCounter = 0
@@ -526,6 +612,7 @@ class EFTBot(commands.Bot):
                 hitCommands.append(self.all_commands[command].name)
             hitCommands += [map.lower() for map in self.mapData]
             hitCommands += [weaponName.lower() for weaponName in self.weaponsName]
+            hitCommands += [taskName.lower() for taskName in self.taskName]
             if len(error.args[0].split(" ")) == 1:
                 fixText = error.args[0]
             # コマンドの予測変換
@@ -559,6 +646,8 @@ class EFTBot(commands.Bot):
                         weaponName.lower() for weaponName in self.weaponsName
                     ]:
                         fixHints[emoji] = f"weapon {hint}"
+                    elif hint in [task.lower() for task in self.taskName]:
+                        fixHints[emoji] = f"task {hint}"
                     embed.add_field(
                         name=emoji, value=f"__`{prefix}{fixHints[emoji]}`__"
                     )
@@ -699,7 +788,11 @@ class EFTBot(commands.Bot):
         if message.author.bot == False and self.LOCAL_HOST == False:
             if re.search(r"出会い|繋がりたい|美女|美男|可愛い|募集|フレンド", message.content):
                 text = f"本discordサーバでは**出会い**を目的とした**フレンド募集**を含む投稿を全面的に禁止しています。\n\n 以下の文章が違反している可能性があります。\n\n **以下違反文** \n ```{message.content}```"
-                embed = discord.Embed(title="警告!!", description=text, color=0xFF0000,)
+                embed = discord.Embed(
+                    title="警告!!",
+                    description=text,
+                    color=0xFF0000,
+                )
 
                 await message.channel.send(f"{message.author.mention}")
                 await message.channel.send(embed=embed)
@@ -732,10 +825,20 @@ def Initialize():
     traderNames = GetTraderName()
     bossNames = GetBossName()
     weaponsName, weaponsData = GetWeaponsData()
+    taskName, taskData = GetTaskData()
     updateTimestamp = datetime.datetime.utcfromtimestamp(
         dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
     )
-    return mapData, traderNames, bossNames, weaponsName, weaponsData, updateTimestamp
+    return (
+        mapData,
+        traderNames,
+        bossNames,
+        weaponsName,
+        weaponsData,
+        taskName,
+        taskData,
+        updateTimestamp,
+    )
 
 
 def GetMapList():
@@ -1129,13 +1232,34 @@ def GetWeaponsData():
                         ][0],
                         "斬撃ダメージ": weapon.find_all("td")[1]
                         .get_text()
-                        .replace("\n", "",),
-                        "斬撃距離": weapon.find_all("td")[2].get_text().replace("\n", "",),
+                        .replace(
+                            "\n",
+                            "",
+                        ),
+                        "斬撃距離": weapon.find_all("td")[2]
+                        .get_text()
+                        .replace(
+                            "\n",
+                            "",
+                        ),
                         "刺突ダメージ": weapon.find_all("td")[3]
                         .get_text()
-                        .replace("\n", "",),
-                        "刺突距離": weapon.find_all("td")[4].get_text().replace("\n", "",),
-                        "詳細": weapon.find_all("td")[5].get_text().replace("\n", "",),
+                        .replace(
+                            "\n",
+                            "",
+                        ),
+                        "刺突距離": weapon.find_all("td")[4]
+                        .get_text()
+                        .replace(
+                            "\n",
+                            "",
+                        ),
+                        "詳細": weapon.find_all("td")[5]
+                        .get_text()
+                        .replace(
+                            "\n",
+                            "",
+                        ),
                     }
                 )
 
@@ -1229,6 +1353,7 @@ def GetWeaponsData():
     weaponsName = [
         weapon["名前"] for weaponData in weaponsData.values() for weapon in weaponData
     ]
+
     return weaponsName, weaponsData
 
 
@@ -1252,7 +1377,118 @@ def GetWeaponInformations(weapon):
         weaponInformations["Sold by"] = ""
     if "Grid size" not in weaponInformations:
         weaponInformations["Grid size"] = ""
+
     return weaponInformations
+
+
+def GetTaskData():
+    res = rq.get(f"{enWikiUrl}Quests")
+    soup = BeautifulSoup(res.text, "lxml")
+    taskData = {}
+    for tasks in soup.find_all("table", {"class": "wikitable"}):
+        dealerName = tasks.find_all("a")[0].text.replace("\n", "")
+        taskData[dealerName] = {
+            "dealerName": tasks.find_all("a")[0].text.replace("\n", ""),
+            "dealerUrl": tasks.find_all("th")[0]
+            .find("a")["href"]
+            .replace("/wiki/", "", 1),
+            "tasks": [],
+        }
+        res = rq.get(f"{enWikiUrl}{taskData[dealerName]['dealerUrl']}")
+        soup = BeautifulSoup(res.text, "lxml").find(
+            "div", {"class": "mw-parser-output"}
+        )
+        dealerThumbnail = (
+            re.sub(
+                "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                "",
+                soup.find("td", {"class": "va-infobox-mainimage-image"}).find("img")[
+                    "src"
+                ],
+            )
+            + "?format=original"
+        )
+        for task in tasks.find_all("tr")[2:]:
+            taskDict = {
+                "questName": task.find_all("th")[0].text.replace("\n", ""),
+                "questUrl": task.find_all("th")[0]
+                .find("a")["href"]
+                .replace("/wiki/", "", 1),
+                "dealerName": dealerName,
+                "dealerUrl": tasks.find_all("th")[0]
+                .find("a")["href"]
+                .replace("/wiki/", "", 1),
+                "dealerThumbnail": dealerThumbnail,
+                "type": task.find_all("th")[1].text.replace("\n", ""),
+                "objectives": [
+                    {
+                        "text": objective.text.replace("\n", ""),
+                        "linkText": {
+                            linkText.text.replace("\n", ""): linkText["href"].replace(
+                                "/wiki/", "", 1
+                            )
+                            for linkText in objective.find_all("a")
+                        },
+                    }
+                    for objective in task.find_all("td")[0].find_all("li")
+                ],
+                "rewards": [
+                    {
+                        "text": reward.text.replace("\n", ""),
+                        "linkText": {
+                            linkText.text.replace("\n", ""): linkText["href"].replace(
+                                "/wiki/", "", 1
+                            )
+                            for linkText in reward.find_all("a")
+                        },
+                    }
+                    for reward in task.find_all("td")[1].find_all("li")
+                ],
+            }
+            res = rq.get(f"{enWikiUrl}{taskDict['questUrl']}")
+            soup = BeautifulSoup(res.text, "lxml").find(
+                "div", {"class": "mw-parser-output"}
+            )
+            taskImage = {}
+            for image in soup.find_all("li", {"class": "gallerybox"}):
+                try:
+                    taskImage = {
+                        image.find("div", {"class": "gallerytext"}).p.text: re.sub(
+                            "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                            "",
+                            image.find("img")["src"],
+                        )
+                        + "?format=original"
+                    }
+                except:
+                    taskImage = {
+                        "N/A": re.sub(
+                            "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                            "",
+                            image.find("img")["src"],
+                        )
+                        + "?format=original"
+                    }
+            taskDict.update(
+                {
+                    "taskThumbnail": re.sub(
+                        "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                        "",
+                        soup.find("td", {"class": "va-infobox-mainimage-image"}).find(
+                            "img"
+                        )["src"],
+                    )
+                    + "?format=original",
+                    "taskImage": taskImage,
+                }
+            )
+            taskData[dealerName]["tasks"].append(taskDict)
+        taskName = [
+            task["questName"].replace(" ", "").upper()
+            for tasks in taskData.values()
+            for task in tasks["tasks"]
+        ]
+    return taskName, taskData
 
 
 if __name__ == "__main__":
@@ -1262,6 +1498,8 @@ if __name__ == "__main__":
         bossNames,
         weaponsName,
         weaponsData,
+        taskName,
+        taskData,
         updateTimestamp,
     ) = Initialize()
     bot = EFTBot(
@@ -1281,6 +1519,8 @@ if __name__ == "__main__":
         bossNames=bossNames,
         weaponsName=weaponsName,
         weaponsData=weaponsData,
+        taskName=taskName,
+        taskData=taskData,
         updateTimestamp=updateTimestamp,
     )  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
     bot.run(TOKEN)  # Botのトークン

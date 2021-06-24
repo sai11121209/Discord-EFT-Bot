@@ -36,9 +36,9 @@ class Weapon(commands.Cog):
 
     @commands.command(description="武器一覧表示")
     async def weapon(self, ctx, *arg):
-        if len(arg) == 1:
-            if arg[0].upper() in self.bot.weaponsName:
-                async with ctx.typing():
+        async with ctx.typing():
+            if len(arg) == 1:
+                if arg[0].upper() in self.bot.weaponsName:
                     infoStr = ""
                     fixtext = arg[0].upper().replace(" ", "")
                     weaponData = [
@@ -105,11 +105,12 @@ class Weapon(commands.Cog):
                     embed.set_image(url=weaponData["imageUrl"])
                     sendMessage = await ctx.send(embed=embed)
                     await sendMessage.add_reaction("❌")
-            else:
-                await self.bot.on_command_error(ctx, commands.CommandNotFound("weapon"))
+                else:
+                    await self.bot.on_command_error(
+                        ctx, commands.CommandNotFound("weapon")
+                    )
 
-        else:
-            async with ctx.typing():
+            else:
                 embeds = []
                 for n, (index, values) in enumerate(self.bot.weaponsData.items()):
                     embed = discord.Embed(
