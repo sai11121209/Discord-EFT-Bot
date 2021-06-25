@@ -353,8 +353,9 @@ notificationInformation = {
 }
 # 上に追記していくこと
 patchNotes = {
-    "3.0β6:2021/06/25 05:30": [
-        "タスク一覧コマンド __`TASK`__ とタスク詳細表示コマンド __`TASK {タスク名}`__ の2コマンドが追加されました。",
+    "3.0β7:2021/06/25 17:30": [
+        "タスク詳細表示コマンド __`TASK {タスク名}`__ を正式実装しました。",
+        "タスク一覧コマンド __`TASK`__ とタスク詳細表示コマンド __`TASK {タスク名}`__ の2コマンドが仮追加されました。",
         "本サーバに送信されたメッセージに対して __`❌`__ リアクションが付与すると誰でもメッセージを消去できてしまう脆弱性の修正を行いました。",
         "__`notification-general`__ において発言した際の全体メンションの処理が変更されました。",
         "ボイスチャンネル使用中のユーザがテキストを書き込んだ際の処理が変更されました。",
@@ -1449,26 +1450,32 @@ def GetTaskData():
             soup = BeautifulSoup(res.text, "lxml").find(
                 "div", {"class": "mw-parser-output"}
             )
-            taskImage = {}
-            for image in soup.find_all("li", {"class": "gallerybox"}):
+            taskImages = {}
+            for n, image in enumerate(soup.find_all("li", {"class": "gallerybox"})):
                 try:
-                    taskImage = {
-                        image.find("div", {"class": "gallerytext"}).p.text: re.sub(
-                            "scale-to-width-down/[0-9]*\?cb=[0-9]*",
-                            "",
-                            image.find("img")["src"],
-                        )
-                        + "?format=original"
-                    }
+                    taskImages.update(
+                        {
+                            image.find("div", {"class": "gallerytext"}).p.text.replace(
+                                "\n", ""
+                            ): re.sub(
+                                "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                                "",
+                                image.find("img")["src"],
+                            )
+                            + "?format=original"
+                        }
+                    )
                 except:
-                    taskImage = {
-                        "N/A": re.sub(
-                            "scale-to-width-down/[0-9]*\?cb=[0-9]*",
-                            "",
-                            image.find("img")["src"],
-                        )
-                        + "?format=original"
-                    }
+                    taskImages.update(
+                        {
+                            f"N/A{n}": re.sub(
+                                "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                                "",
+                                image.find("img")["src"],
+                            )
+                            + "?format=original"
+                        }
+                    )
             taskDict.update(
                 {
                     "taskThumbnail": re.sub(
@@ -1479,7 +1486,7 @@ def GetTaskData():
                         )["src"],
                     )
                     + "?format=original",
-                    "taskImage": taskImage,
+                    "taskImage": taskImages,
                 }
             )
             taskData[dealerName]["tasks"].append(taskDict)

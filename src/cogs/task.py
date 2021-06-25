@@ -21,14 +21,15 @@ class Task(commands.Cog):
                         for value in values["tasks"]
                         if value["questName"].upper().replace(" ", "") == fixtext
                     ][0]
-                    for colName in taskData.keys():
+                    taskImageEmbeds = []
+                    for colName, values in taskData.items():
                         if colName == "dealerName":
                             infoStr += f"**ディーラー**: __[{taskData[colName]}]({self.bot.enWikiUrl}{taskData['dealerUrl']})__"
                         elif colName == "type":
                             infoStr += f"\n**タイプ**: __{taskData[colName]}__"
                         elif colName == "objectives":
                             infoStr += f"\n**目的**:"
-                            for objective in taskData[colName]:
+                            for objective in values:
                                 hyperText = objective["text"]
                                 for text, link in objective["linkText"].items():
                                     hyperText = hyperText.replace(
@@ -38,7 +39,7 @@ class Task(commands.Cog):
                                 infoStr += f"\n・__{hyperText}__"
                         elif colName == "rewards":
                             infoStr += f"\n**報酬**:"
-                            for reward in taskData[colName]:
+                            for reward in values:
                                 hyperText = reward["text"]
                                 for text, link in reward["linkText"].items():
                                     hyperText = hyperText.replace(
@@ -46,6 +47,20 @@ class Task(commands.Cog):
                                         f"[{text}]({self.bot.enWikiUrl}{link})",
                                     )
                                 infoStr += f"\n・__{hyperText}__"
+                        elif colName == "taskImage":
+                            for n, (imageName, imageUrl) in enumerate(values.items()):
+                                embed = discord.Embed(
+                                    title=taskData["questName"],
+                                    url=f"{self.bot.enWikiUrl}{taskData['questUrl']}",
+                                    description=f"{imageName} ({n+1}/{len(values)})",
+                                    timestamp=self.bot.updateTimestamp,
+                                )
+                                embed.set_footer(
+                                    text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
+                                )
+                                embed.set_thumbnail(url=taskData["taskThumbnail"])
+                                embed.set_image(url=imageUrl)
+                                taskImageEmbeds.append(embed)
                     embed = discord.Embed(
                         title=taskData["questName"],
                         url=f"{self.bot.enWikiUrl}{taskData['questUrl']}",
@@ -59,6 +74,9 @@ class Task(commands.Cog):
                     embed.set_image(url=taskData["taskThumbnail"])
                     sendMessage = await ctx.send(embed=embed)
                     await sendMessage.add_reaction("❌")
+                    for embed in taskImageEmbeds:
+                        sendMessage = await ctx.send(embed=embed)
+                        await sendMessage.add_reaction("❌")
                 else:
                     await self.bot.on_command_error(
                         ctx, commands.CommandNotFound("weapon")
