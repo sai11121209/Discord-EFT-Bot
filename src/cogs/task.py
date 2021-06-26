@@ -50,9 +50,11 @@ class Task(commands.Cog):
                         elif colName == "taskImage":
                             for n, (imageName, imageUrl) in enumerate(values.items()):
                                 embed = discord.Embed(
-                                    title=taskData["questName"],
+                                    title=taskData["questName"](
+                                        {n + 1} / {len(values)}
+                                    ),
                                     url=f"{self.bot.enWikiUrl}{taskData['questUrl']}",
-                                    description=f"{imageName} ({n+1}/{len(values)})",
+                                    description=f"{imageName}",
                                     timestamp=self.bot.updateTimestamp,
                                 )
                                 embed.set_footer(

@@ -61,8 +61,21 @@ class Link(commands.Cog):
         async with ctx.typing():
             text = "Actual prices, online monitoring, hideout, charts, price history"
             embed = discord.Embed(
-                title="Tarkov Market",
+                title="Tarkov Market フリーマーケット情報",
                 url="https://tarkov-market.com/",
+                description=text,
+                color=0x2ECC69,
+            )
+            sendMessage = await ctx.send(embed=embed)
+            await sendMessage.add_reaction("❌")
+
+    @commands.command(description="ロードアウト作成")
+    async def market(self, ctx):
+        async with ctx.typing():
+            text = "Actual prices, online monitoring, hideout, charts, price history"
+            embed = discord.Embed(
+                title="Tarkov Market ロードアウト作成",
+                url="https://tarkov-market.com/loadouts/weapon",
                 description=text,
                 color=0x2ECC69,
             )

@@ -122,6 +122,36 @@ class Chart(commands.Cog):
                 sendMessage = await ctx.send(embed=embed)
                 await sendMessage.add_reaction("❌")
 
+    @commands.command(name="tasktree", description="タスクツリー早見表")
+    async def taskitem(self, ctx):
+        async with ctx.typing():
+            taskItemImages = [
+                "https://cdn.discordapp.com/attachments/806055934211653632/858391797121810442/image0.jpg",
+            ]
+            authorList = [
+                {
+                    "author": {
+                        "name": "Twitter: @morimoukorigori",
+                        "url": "https://twitter.com/morimoukorigori",
+                    },
+                    "link": "https://twitter.com/morimoukorigori/status/1357008341940064256",
+                },
+            ]
+            for n, (url, author) in enumerate(zip(taskItemImages, authorList)):
+                embed = discord.Embed(
+                    title=f"({n+1}/{len(taskItemImages)})タスクツリー早見表",
+                    color=0x808080,
+                    url=author["link"],
+                )
+                embed.set_image(url=url)
+                embed.set_author(
+                    name=author["author"]["name"],
+                    url=author["author"]["url"],
+                )
+                embed.set_footer(text=f"提供元: {author['link']}")
+                sendMessage = await ctx.send(embed=embed)
+                await sendMessage.add_reaction("❌")
+
     @commands.command(name="armor", description="アーマー早見表")
     async def armor(self, ctx):
         async with ctx.typing():
