@@ -70,7 +70,7 @@ class Link(commands.Cog):
             await sendMessage.add_reaction("❌")
 
     @commands.command(description="ロードアウト作成")
-    async def market(self, ctx):
+    async def loadouts(self, ctx):
         async with ctx.typing():
             text = "Actual prices, online monitoring, hideout, charts, price history"
             embed = discord.Embed(
