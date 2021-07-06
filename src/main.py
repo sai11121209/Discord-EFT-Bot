@@ -1127,7 +1127,9 @@ def GetWeaponsData():
                                 for firingmode in weapon.find_all("td")[2].contents
                                 if firingmode != soup.hr and firingmode != soup.br
                             ],
-                            "連射速度": weapon.find_all("td")[3].get_text().replace("\n", ""),
+                            "連射速度": weapon.find_all("td")[3]
+                            .get_text()
+                            .replace("\n", ""),
                             "使用可能弾薬": [
                                 acceptedAmmunition
                                 for acceptedAmmunition in weaponInformations[
@@ -1442,9 +1444,9 @@ def GetTaskData():
                         {
                             "text": objective.text.replace("\n", ""),
                             "linkText": {
-                                linkText.text.replace("\n", ""): linkText["href"].replace(
-                                    "/wiki/", "", 1
-                                )
+                                linkText.text.replace("\n", ""): linkText[
+                                    "href"
+                                ].replace("/wiki/", "", 1)
                                 for linkText in objective.find_all("a")
                             },
                         }
@@ -1454,9 +1456,9 @@ def GetTaskData():
                         {
                             "text": reward.text.replace("\n", ""),
                             "linkText": {
-                                linkText.text.replace("\n", ""): linkText["href"].replace(
-                                    "/wiki/", "", 1
-                                )
+                                linkText.text.replace("\n", ""): linkText[
+                                    "href"
+                                ].replace("/wiki/", "", 1)
                                 for linkText in reward.find_all("a")
                             },
                         }
@@ -1472,9 +1474,9 @@ def GetTaskData():
                     try:
                         taskImages.update(
                             {
-                                image.find("div", {"class": "gallerytext"}).p.text.replace(
-                                    "\n", ""
-                                ): re.sub(
+                                image.find(
+                                    "div", {"class": "gallerytext"}
+                                ).p.text.replace("\n", ""): re.sub(
                                     "scale-to-width-down/[0-9]*\?cb=[0-9]*",
                                     "",
                                     image.find("img")["src"],
@@ -1485,7 +1487,7 @@ def GetTaskData():
                     except:
                         taskImages.update(
                             {
-                                f"N/A{n}": re.sub(
+                                f"None{n}": re.sub(
                                     "scale-to-width-down/[0-9]*\?cb=[0-9]*",
                                     "",
                                     image.find("img")["src"],
@@ -1498,12 +1500,44 @@ def GetTaskData():
                         "taskThumbnail": re.sub(
                             "scale-to-width-down/[0-9]*\?cb=[0-9]*",
                             "",
-                            soup.find("td", {"class": "va-infobox-mainimage-image"}).find(
-                                "img"
-                            )["src"],
+                            soup.find(
+                                "td", {"class": "va-infobox-mainimage-image"}
+                            ).find("img")["src"],
                         )
                         + "?format=original",
                         "taskImage": taskImages,
+                        "location": [
+                            {
+                                "text": location.text,
+                                "linkText": location["href"].replace("/wiki/", "", 1),
+                            }
+                            for location in soup.find_all(
+                                "td", {"class": "va-infobox-content"}
+                            )[1].find_all("a")
+                        ],
+                        "reqKappa": soup.find_all(
+                            "td", {"class": "va-infobox-content"}
+                        )[3].font.text,
+                        "previousQuest": [
+                            {
+                                "text": PreviousQuest.text,
+                                "linkText": PreviousQuest["href"].replace(
+                                    "/wiki/", "", 1
+                                ),
+                            }
+                            for PreviousQuest in soup.find_all(
+                                "td", {"class": "va-infobox-content"}
+                            )[4].find_all("a")
+                        ],
+                        "nextQuest": [
+                            {
+                                "text": nextQuest.text,
+                                "linkText": nextQuest["href"].replace("/wiki/", "", 1),
+                            }
+                            for nextQuest in soup.find_all(
+                                "td", {"class": "va-infobox-content"}
+                            )[5].find_all("a")
+                        ],
                     }
                 )
                 taskData[dealerName]["tasks"].append(taskDict)

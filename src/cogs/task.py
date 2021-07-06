@@ -47,6 +47,63 @@ class Task(commands.Cog):
                                         f"[{text}]({self.bot.enWikiUrl}{link})",
                                     )
                                 infoStr += f"\n・__{hyperText}__"
+                        elif colName == "location":
+                            infoStr += f"\n**場所**:"
+                            if len(taskData[colName]) == 0:
+                                infoStr += f" __-__"
+                            elif len(taskData[colName]) == 1:
+                                hyperText = taskData[colName][0]["text"]
+                                hyperText = hyperText.replace(
+                                    f"{taskData[colName][0]['text']}",
+                                    f"[{taskData[colName][0]['text']}]({self.bot.enWikiUrl}{taskData[colName][0]['linkText']})",
+                                )
+                                infoStr += f" __{hyperText}__"
+                            else:
+                                for location in taskData[colName]:
+                                    hyperText = location["text"]
+                                    hyperText = hyperText.replace(
+                                        f"{location['text']}",
+                                        f"[{location['text']}]({self.bot.enWikiUrl}{location['linkText']})",
+                                    )
+                                    infoStr += f"\n・__{hyperText}__"
+                        elif colName == "previousQuest":
+                            infoStr += f"\n**事前タスク**:"
+                            if len(taskData[colName]) == 0:
+                                infoStr += f" __-__"
+                            elif len(taskData[colName]) == 1:
+                                hyperText = taskData[colName][0]["text"]
+                                hyperText = hyperText.replace(
+                                    f"{taskData[colName][0]['text']}",
+                                    f"[{taskData[colName][0]['text']}]({self.bot.enWikiUrl}{taskData[colName][0]['linkText']})",
+                                )
+                                infoStr += f" __{hyperText}__"
+                            else:
+                                for previousQuest in taskData[colName]:
+                                    hyperText = previousQuest["text"]
+                                    hyperText = hyperText.replace(
+                                        f"{previousQuest['text']}",
+                                        f"[{previousQuest['text']}]({self.bot.enWikiUrl}{previousQuest['linkText']})",
+                                    )
+                                    infoStr += f"\n・__{hyperText}__"
+                        elif colName == "nextQuest":
+                            infoStr += f"\n**事後タスク**:"
+                            if len(taskData[colName]) == 0:
+                                infoStr += f" __-__"
+                            elif len(taskData[colName]) == 1:
+                                hyperText = taskData[colName][0]["text"]
+                                hyperText = hyperText.replace(
+                                    f"{taskData[colName][0]['text']}",
+                                    f"[{taskData[colName][0]['text']}]({self.bot.enWikiUrl}{taskData[colName][0]['linkText']})",
+                                )
+                                infoStr += f" __{hyperText}__"
+                            else:
+                                for nextQuest in taskData[colName]:
+                                    hyperText = nextQuest["text"]
+                                    hyperText = hyperText.replace(
+                                        f"{nextQuest['text']}",
+                                        f"[{nextQuest['text']}]({self.bot.enWikiUrl}{nextQuest['linkText']})",
+                                    )
+                                    infoStr += f"\n・__{hyperText}__"
                         elif colName == "taskImage":
                             for n, (imageName, imageUrl) in enumerate(values.items()):
                                 embed = discord.Embed(
