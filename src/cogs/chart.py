@@ -123,7 +123,7 @@ class Chart(commands.Cog):
                 await sendMessage.add_reaction("❌")
 
     @commands.command(name="tasktree", description="タスクツリー早見表")
-    async def taskitem(self, ctx):
+    async def tasktree(self, ctx):
         async with ctx.typing():
             taskItemImages = [
                 "https://cdn.discordapp.com/attachments/806055934211653632/858391797121810442/image0.jpg",

@@ -50,9 +50,7 @@ class Task(commands.Cog):
                         elif colName == "taskImage":
                             for n, (imageName, imageUrl) in enumerate(values.items()):
                                 embed = discord.Embed(
-                                    title=taskData["questName"](
-                                        {n + 1} / {len(values)}
-                                    ),
+                                    title=f"({n + 1}/{len(values)}){taskData['questName']}",
                                     url=f"{self.bot.enWikiUrl}{taskData['questUrl']}",
                                     description=f"{imageName}",
                                     timestamp=self.bot.updateTimestamp,
