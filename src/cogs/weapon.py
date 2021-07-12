@@ -38,9 +38,13 @@ class Weapon(commands.Cog):
     async def weapon(self, ctx, *arg):
         async with ctx.typing():
             if len(arg) == 1:
-                if arg[0].upper() in self.bot.weaponsName:
+                if type(arg[0]) == str:
+                    argText = arg[0]
+                else:
+                    argText = " ".join(arg[0])
+                if argText.upper() in self.bot.weaponsName:
                     infoStr = ""
-                    fixtext = arg[0].upper().replace(" ", "")
+                    fixtext = argText.upper().replace(" ", "")
                     weaponData = [
                         value
                         for values in self.bot.weaponsData.values()
