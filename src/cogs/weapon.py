@@ -39,10 +39,10 @@ class Weapon(commands.Cog):
         async with ctx.typing():
             if len(arg) == 1:
                 if type(arg[0]) == str:
-                    argText = arg[0]
+                    argText = arg[0].upper()
                 else:
-                    argText = " ".join(arg[0])
-                if argText.upper() in self.bot.weaponsName:
+                    argText = " ".join(arg[0].upper())
+                if argText in self.bot.weaponsName:
                     infoStr = ""
                     fixtext = argText.upper().replace(" ", "")
                     weaponData = [
