@@ -3,3 +3,4 @@ local_settings.py
 local_settings.cpython-38.pyc
 btc_jpy.png
 btc_rub.png
+*.pyc
