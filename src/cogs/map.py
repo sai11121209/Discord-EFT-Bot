@@ -18,13 +18,13 @@ class Map(commands.Cog):
         unreleasedColor = 0xFF0000
         async with ctx.typing():
             if len(arg) == 1:
-                if arg[0].upper() in self.bot.mapData:
-                    receivedtext = arg[0].upper()
+                if arg[0][0].upper() in self.bot.mapData:
+                    receivedtext = arg[0][0].upper()
                     text = f"{receivedtext} MAP INFORMATION\n"
                     # LABORATORYのみ海外公式wikiのURLがThe_Labとなるため例外
-                    self.bot.mapData[arg[0].upper()]
+                    self.bot.mapData[arg[0][0].upper()]
                     desText = ""
-                    for key, value in self.bot.mapData[arg[0].upper()].items():
+                    for key, value in self.bot.mapData[arg[0][0].upper()].items():
                         if key == "Banner":
                             pass
                         elif key == "Name":
@@ -83,23 +83,23 @@ class Map(commands.Cog):
                         title=text,
                         description=releaseText + desText + featuresText,
                         color=color,
-                        url=f"{self.bot.enWikiUrl}{self.bot.mapData[arg[0].upper()]['MapUrl']}",
+                        url=f"{self.bot.enWikiUrl}{self.bot.mapData[arg[0][0].upper()]['MapUrl']}",
                         timestamp=self.bot.updateTimestamp,
                     )
-                    embed.set_image(url=self.bot.mapData[arg[0].upper()]["Banner"])
+                    embed.set_image(url=self.bot.mapData[arg[0][0].upper()]["Banner"])
                     embed.set_footer(
                         text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
                     )
                     sendMessage = await ctx.send(embed=embed)
                     await sendMessage.add_reaction("❌")
-                    mapData = self.bot.mapData[arg[0].upper()]["Images"]
+                    mapData = self.bot.mapData[arg[0][0].upper()]["Images"]
                     n = 1
                     for key, value in mapData.items():
                         embed = discord.Embed(
                             title=f"({n}/{len(mapData)}){text}",
                             description=f"[{key}]({value})",
                             color=color,
-                            url=f"{self.bot.enWikiUrl}{self.bot.mapData[arg[0].upper()]['MapUrl']}",
+                            url=f"{self.bot.enWikiUrl}{self.bot.mapData[arg[0][0].upper()]['MapUrl']}",
                             timestamp=self.bot.updateTimestamp,
                         )
                         embed.set_image(url=value)
