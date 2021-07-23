@@ -1,4 +1,5 @@
 import discord
+import itertools
 from discord.ext import commands
 
 
@@ -12,6 +13,7 @@ class Task(commands.Cog):
     async def task(self, ctx, *arg):
         async with ctx.typing():
             if len(arg) != 0:
+                arg = list(itertools.chain.from_iterable(arg))
                 if "".join(str(x) for x in arg).upper() in self.bot.taskName:
                     infoStr = ""
                     fixtext = "".join(str(x) for x in arg).upper().replace(" ", "")

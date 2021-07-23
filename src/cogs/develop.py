@@ -18,12 +18,14 @@ class Develop(commands.Cog):
                 text = f"開発モード: {self.bot.developMode}"
                 if self.bot.developMode:
                     await self.bot.change_presence(
-                        activity=discord.Activity(name="機能改善会議(メンテナンス中)", type=5)
+                        status=discord.Status.dnd,
+                        activity=discord.Activity(name="機能改善会議(メンテナンス中)", type=5),
                     )
                     self.bot.enrageCounter = 0
                 else:
                     await self.bot.change_presence(
-                        activity=discord.Game(name="Escape from Tarkov", type=1)
+                        status=discord.Status.online,
+                        activity=discord.Game(name="Escape from Tarkov", type=1),
                     )
                 sendMessage = await ctx.send(text)
                 await sendMessage.add_reaction("❌")

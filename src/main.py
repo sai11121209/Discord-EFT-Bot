@@ -275,9 +275,16 @@ commandList = {
 notificationInformation = {}
 # 上に追記していくこと
 patchNotes = {
+    "3.0.1:2021/07/24 01:00": [
+        "各武器詳細表示コマンド __`WEAPON 武器名`__ を入力した際に発生していたエラー20210654072607を修正しました。WOLTERFEN#6329ありがとうございます。",
+        "海外公式wikiのサイト更新に伴う仕様変更によりマップ、タスク、武器情報にアクセスできなかった問題を修正しました。",
+        "各武器詳細表示コマンド __`WEAPON 武器名`__  、タスク詳細表示コマンド __`TASK {タスク名}`__ コマンドの補完処理における不具合を修正しました。",
+        "ボイスチャット参加中(ボイスチャンネル参加者ロール付与中)に特定メッセージに対して返信を行なった際に返信先のユーザを自動的にメンションする様になりました。",
+        "各種細かい不具合、動作改善。",
+    ],
     "3.0:2021/07/12 23:30": [
-        "コマンド呼び出し時の不具合を修正しました。"
-        "タスク詳細表示コマンド __`TASK {タスク名}`__ の動作を一部変更しました。"
+        "コマンド呼び出し時の不具合を修正しました。",
+        "タスク詳細表示コマンド __`TASK {タスク名}`__ の動作を一部変更しました。",
         "タスクツリー早見表コマンド __`TASKTREE`__ を追加しました。",
         "武器のロードアウトを組むことができるURLを呼び出すロードアウト作成コマンド __`LOADOUTS`__ を追加しました。",
         "タスク詳細表示コマンド __`TASK {タスク名}`__ を正式実装しました。",
@@ -668,9 +675,14 @@ class EFTBot(commands.Bot):
                 and message.channel.id != notificationGneralChannelId
             ):
                 await message.delete()
-                await message.channel.send(
-                    f"<@&{voiceChatRole}> {message.content} by {message.author.name}"
-                )
+                if message.mentions:
+                    await message.channel.send(
+                        f"<@&{voiceChatRole}> {message.mentions[0].mention} {message.content} by {message.author.name}"
+                    )
+                else:
+                    await message.channel.send(
+                        f"<@&{voiceChatRole}> {message.content} by {message.author.name}"
+                    )
         except:
             pass
         if not message.author.bot:
@@ -880,7 +892,9 @@ def GetMapData(mapLists):
                 mapData[key]["Images"].update(
                     {
                         image["alt"]: re.sub(
-                            "scale-to-width-down/[0-9]*\?cb=[0-9]*", "", image["src"]
+                            "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                            "",
+                            image["data-src"],
                         )
                         + "?format=original"
                     }
@@ -998,7 +1012,7 @@ def GetWeaponsData():
                             "imageUrl": re.sub(
                                 "scale-to-width-down/[0-9]*\?cb=[0-9]*",
                                 "",
-                                weapon.find("img")["src"],
+                                weapon.find("img")["data-src"],
                             )
                             + "?format=original",
                             "重量": [
@@ -1077,7 +1091,7 @@ def GetWeaponsData():
                             "imageUrl": re.sub(
                                 "scale-to-width-down/[0-9]*\?cb=[0-9]*",
                                 "",
-                                weapon.find("img")["src"],
+                                weapon.find("img")["data-src"],
                             )
                             + "?format=original",
                             "重量": [
@@ -1137,7 +1151,7 @@ def GetWeaponsData():
                             "imageUrl": re.sub(
                                 "scale-to-width-down/[0-9]*\?cb=[0-9]*",
                                 "",
-                                weapon.find("img")["src"],
+                                weapon.find("img")["data-src"],
                             )
                             + "?format=original",
                             "重量": [
@@ -1194,7 +1208,7 @@ def GetWeaponsData():
                             "imageUrl": re.sub(
                                 "scale-to-width-down/[0-9]*\?cb=[0-9]*",
                                 "",
-                                weapon.find("img")["src"],
+                                weapon.find("img")["data-src"],
                             )
                             + "?format=original",
                             "重量": [
@@ -1242,7 +1256,7 @@ def GetWeaponsData():
                             "imageUrl": re.sub(
                                 "scale-to-width-down/[0-9]*\?cb=[0-9]*",
                                 "",
-                                weapon.find("img")["src"],
+                                weapon.find("img")["data-src"],
                             )
                             + "?format=original",
                             "重量": [
@@ -1324,16 +1338,28 @@ def GetTaskData():
         soup = BeautifulSoup(res.text, "lxml").find(
             "div", {"class": "mw-parser-output"}
         )
-        dealerThumbnail = (
-            re.sub(
-                "scale-to-width-down/[0-9]*\?cb=[0-9]*",
-                "",
-                soup.find("td", {"class": "va-infobox-mainimage-image"}).find("img")[
-                    "src"
-                ],
+        try:
+            dealerThumbnail = (
+                re.sub(
+                    "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                    "",
+                    soup.find("td", {"class": "va-infobox-mainimage-image"}).find(
+                        "img"
+                    )["data-src"],
+                )
+                + "?format=original"
             )
-            + "?format=original"
-        )
+        except:
+            dealerThumbnail = (
+                re.sub(
+                    "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                    "",
+                    soup.find("td", {"class": "va-infobox-mainimage-image"}).find(
+                        "img"
+                    )["src"],
+                )
+                + "?format=original"
+            )
         for task in tasks.find_all("tr")[2:]:
             try:
                 taskDict = {
@@ -1386,32 +1412,62 @@ def GetTaskData():
                                 ).p.text.replace("\n", ""): re.sub(
                                     "scale-to-width-down/[0-9]*\?cb=[0-9]*",
                                     "",
-                                    image.find("img")["src"],
+                                    image.find("img")["data-src"],
                                 )
                                 + "?format=original"
                             }
                         )
                     except:
-                        taskImages.update(
-                            {
-                                f"None{n}": re.sub(
-                                    "scale-to-width-down/[0-9]*\?cb=[0-9]*",
-                                    "",
-                                    image.find("img")["src"],
-                                )
-                                + "?format=original"
-                            }
-                        )
+                        try:
+                            taskImages.update(
+                                {
+                                    f"No Name Image {n}": re.sub(
+                                        "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                                        "",
+                                        image.find("img")["data-src"],
+                                    )
+                                    + "?format=original"
+                                }
+                            )
+                        except:
+                            taskImages.update(
+                                {
+                                    f"None{n}": re.sub(
+                                        "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                                        "",
+                                        image.find("img")["src"],
+                                    )
+                                    + "?format=original"
+                                }
+                            )
+                try:
+                    taskDict.update(
+                        {
+                            "taskThumbnail": re.sub(
+                                "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                                "",
+                                soup.find(
+                                    "td", {"class": "va-infobox-mainimage-image"}
+                                ).find("img")["data-src"],
+                            )
+                            + "?format=original",
+                        }
+                    )
+                except:
+                    taskDict.update(
+                        {
+                            "taskThumbnail": re.sub(
+                                "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                                "",
+                                soup.find(
+                                    "td", {"class": "va-infobox-mainimage-image"}
+                                ).find("img")["src"],
+                            )
+                            + "?format=original",
+                        }
+                    )
                 taskDict.update(
                     {
-                        "taskThumbnail": re.sub(
-                            "scale-to-width-down/[0-9]*\?cb=[0-9]*",
-                            "",
-                            soup.find(
-                                "td", {"class": "va-infobox-mainimage-image"}
-                            ).find("img")["src"],
-                        )
-                        + "?format=original",
                         "taskImage": taskImages,
                         "location": [
                             {
@@ -1423,30 +1479,47 @@ def GetTaskData():
                             )[1].find_all("a")
                         ],
                         "reqKappa": soup.find_all(
-                            "td", {"class": "va-infobox-content"}
-                        )[3].font.text,
-                        "previousQuest": [
-                            {
-                                "text": PreviousQuest.text,
-                                "linkText": PreviousQuest["href"].replace(
-                                    "/wiki/", "", 1
-                                ),
-                            }
-                            for PreviousQuest in soup.find_all(
-                                "td", {"class": "va-infobox-content"}
-                            )[4].find_all("a")
-                        ],
-                        "nextQuest": [
-                            {
-                                "text": nextQuest.text,
-                                "linkText": nextQuest["href"].replace("/wiki/", "", 1),
-                            }
-                            for nextQuest in soup.find_all(
-                                "td", {"class": "va-infobox-content"}
-                            )[5].find_all("a")
-                        ],
+                            "table", {"class": "va-infobox-group"}
+                        )[1]
+                        .find_all("td", {"class": "va-infobox-content"})[-1]
+                        .text,
                     }
                 )
+                try:
+                    taskDict.update(
+                        {
+                            "previousQuest": [
+                                {
+                                    "text": PreviousQuest.text,
+                                    "linkText": PreviousQuest["href"].replace(
+                                        "/wiki/", "", 1
+                                    ),
+                                }
+                                for PreviousQuest in soup.find_all(
+                                    "table", {"class": "va-infobox-group"}
+                                )[2]
+                                .find_all("td", {"class": "va-infobox-content"})[0]
+                                .find_all("a")
+                            ],
+                            "nextQuest": [
+                                {
+                                    "text": nextQuest.text,
+                                    "linkText": nextQuest["href"].replace(
+                                        "/wiki/", "", 1
+                                    ),
+                                }
+                                for nextQuest in soup.find_all(
+                                    "table", {"class": "va-infobox-group"}
+                                )[2]
+                                .find_all("td", {"class": "va-infobox-content"})[1]
+                                .find_all("a")
+                            ],
+                        }
+                    )
+                except:
+                    taskDict.update(
+                        {"previousQuest": [], "nextQuest": [],}
+                    )
                 taskData[dealerName]["tasks"].append(taskDict)
             except:
                 pass

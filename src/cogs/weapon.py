@@ -1,5 +1,6 @@
 import discord
 import requests as rq
+import itertools
 from discord.ext import commands
 
 
@@ -37,11 +38,12 @@ class Weapon(commands.Cog):
     @commands.command(description="武器一覧表示")
     async def weapon(self, ctx, *arg):
         async with ctx.typing():
-            if len(arg) == 1:
-                if type(arg[0]) == str:
+            arg = list(itertools.chain.from_iterable(arg))
+            if len(arg) != 0:
+                if len(arg) == 1:
                     argText = arg[0].upper()
                 else:
-                    argText = " ".join(arg[0].upper())
+                    argText = " ".join(arg).upper()
                 if argText in self.bot.weaponsName:
                     infoStr = ""
                     fixtext = argText.upper().replace(" ", "")
