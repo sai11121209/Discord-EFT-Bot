@@ -12,8 +12,8 @@ class Task(commands.Cog):
     @commands.command(description="タスク一覧表示コマンド")
     async def task(self, ctx, *arg):
         async with ctx.typing():
+            arg = list(itertools.chain.from_iterable(arg))
             if len(arg) != 0:
-                arg = list(itertools.chain.from_iterable(arg))
                 if "".join(str(x) for x in arg).upper() in self.bot.taskName:
                     infoStr = ""
                     fixtext = "".join(str(x) for x in arg).upper().replace(" ", "")

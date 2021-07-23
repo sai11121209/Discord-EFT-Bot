@@ -69,7 +69,6 @@ class Other(commands.Cog):
                 # icon_url=client.get_user(279995095124803595).avatar_url,
             )
             embed.set_footer(text=f"EFT Wiki Bot最終更新")
-            print(len(embed))
             sendMessage = await ctx.send(embed=embed)
             await sendMessage.add_reaction("❌")
 

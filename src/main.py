@@ -125,8 +125,17 @@ traderList = {
         "fullname": "Pavel Yegorovich Romanenko",
         "location": "Town",
         "origin": "ロシア連邦",
-        "wares": ["武器", "弾薬", "手榴弾", "弾倉", "武器MOD",],
-        "services": ["保険", "修理",],
+        "wares": [
+            "武器",
+            "弾薬",
+            "手榴弾",
+            "弾倉",
+            "武器MOD",
+        ],
+        "services": [
+            "保険",
+            "修理",
+        ],
         "currencies": ["Roubles (₽)"],
     },
     "Therapist": {
@@ -134,63 +143,128 @@ traderList = {
         "fullname": "Elvira Khabibullina",
         "location": "Streets of Tarkov",
         "origin": "ロシア連邦",
-        "wares": ["医療品", "地図", "食料品", "コンテナ",],
-        "services": ["保険",],
-        "currencies": ["Roubles (₽)", "Euros (€)",],
+        "wares": [
+            "医療品",
+            "地図",
+            "食料品",
+            "コンテナ",
+        ],
+        "services": [
+            "保険",
+        ],
+        "currencies": [
+            "Roubles (₽)",
+            "Euros (€)",
+        ],
     },
     "Fence": {
         "stampid": 828552627989512204,
         "fullname": "Real name unknown",
         "location": "A network of outlets all over Tarkov and its outskirts",
         "origin": "ロシア連邦",
-        "wares": ["売られたもの全て",],
+        "wares": [
+            "売られたもの全て",
+        ],
         "services": [],
-        "currencies": ["Roubles (₽)",],
+        "currencies": [
+            "Roubles (₽)",
+        ],
     },
     "Skier": {
         "stampid": 828552629436416010,
         "fullname": "Alexander Fyodorovich Kiselyov",
         "location": "Customs",
         "origin": "ロシア連邦",
-        "wares": ["武器", "弾薬", "武器MOD", "コンテナ", "ユーロ",],
-        "services": ["修理",],
-        "currencies": ["Roubles (₽)", "Dollars ($)", "Euros (€)",],
+        "wares": [
+            "武器",
+            "弾薬",
+            "武器MOD",
+            "コンテナ",
+            "ユーロ",
+        ],
+        "services": [
+            "修理",
+        ],
+        "currencies": [
+            "Roubles (₽)",
+            "Dollars ($)",
+            "Euros (€)",
+        ],
     },
     "Peacekeeper": {
         "stampid": 828552628682096710,
         "fullname": "Tadeusz Pilsudski",
         "location": "Terminal",
         "origin": "ポーランド共和国",
-        "wares": ["欧米・NATOの武器", "弾薬", "手榴弾", "弾倉", "武器MOD", "USドル",],
+        "wares": [
+            "欧米・NATOの武器",
+            "弾薬",
+            "手榴弾",
+            "弾倉",
+            "武器MOD",
+            "USドル",
+        ],
         "services": [],
-        "currencies": ["Dollars ($)",],
+        "currencies": [
+            "Dollars ($)",
+        ],
     },
     "Mechanic": {
         "stampid": 828552628887093328,
         "fullname": "Sergey Arsenyevich Samoylov",
         "location": "Factory",
         "origin": "不明",
-        "wares": ["欧米・NATOの武器", "グロック17/18", "弾薬", "弾倉", "武器MOD",],
-        "services": ["修理",],
-        "currencies": ["Roubles (₽)", "Euros (€)", "Bitcoin (₿)",],
+        "wares": [
+            "欧米・NATOの武器",
+            "グロック17/18",
+            "弾薬",
+            "弾倉",
+            "武器MOD",
+        ],
+        "services": [
+            "修理",
+        ],
+        "currencies": [
+            "Roubles (₽)",
+            "Euros (€)",
+            "Bitcoin (₿)",
+        ],
     },
     "Ragman": {
         "stampid": 828552630120349716,
         "fullname": "Abramyan Arshavir Sarkisivich",
         "location": "Interchange",
         "origin": "不明",
-        "wares": ["衣類", "アーマー", "バックパック", "タクティカリグ", "ギア",],
-        "services": ["戦闘服",],
-        "currencies": ["Roubles (₽)",],
+        "wares": [
+            "衣類",
+            "アーマー",
+            "バックパック",
+            "タクティカリグ",
+            "ギア",
+        ],
+        "services": [
+            "戦闘服",
+        ],
+        "currencies": [
+            "Roubles (₽)",
+        ],
     },
     "Jaeger": {
         "stampid": 828552628396621855,
         "fullname": "Kharitonov Ivan Egorovich",
         "location": "Woods",
         "origin": "不明",
-        "wares": ["ソビエト連邦の武器", "弾薬", "弾倉", "武器MOD", "隠れ家素材",],
+        "wares": [
+            "ソビエト連邦の武器",
+            "弾薬",
+            "弾倉",
+            "武器MOD",
+            "隠れ家素材",
+        ],
         "services": [],
-        "currencies": ["Roubles (₽)",],
+        "currencies": [
+            "Roubles (₽)",
+        ],
     },
 }
 
@@ -219,7 +293,9 @@ bossList = {
         "stampid": 834774058724753418,
         "location": ["Reserve"],
         "pawnchance": {"Reserve": 43},
-        "drops": ["ASh-12 12.7x55 assault rifle",],
+        "drops": [
+            "ASh-12 12.7x55 assault rifle",
+        ],
         "followers": "6",
     },
     "Shturman": {
@@ -311,7 +387,9 @@ patchNotes = {
     ],
     "2.3:2021/05/20 19:00": ["コマンド不一致時に表示されるヒントコマンドをリアクション選択から実行できるようになりました。"],
     "2.2.1:2021/05/20 14:00": ["各武器詳細表示コマンド __`武器名`__ の仕様を変更しました。"],
-    "2.2:2021/05/15 18:00": ["出会いを目的としたフレンド募集を含む投稿を行った場合警告が送られる様になりました。",],
+    "2.2:2021/05/15 18:00": [
+        "出会いを目的としたフレンド募集を含む投稿を行った場合警告が送られる様になりました。",
+    ],
     "2.1:2021/05/08 17:00": [
         "自動全体メンションに本文を含む様に変更されました。",
         "TarkovTools情報表示コマンド __`TARKOVTOOLS`__ を追加しました。",
@@ -513,14 +591,14 @@ class EFTBot(commands.Bot):
     async def on_reaction_add(self, reaction, user):
         if not user.bot and not self.developMode:
             try:
-                if len(self.hints[reaction.emoji].split(" ")) == 2:
-                    await self.all_commands[self.hints[reaction.emoji].split(" ")[0]](
-                        reaction.message.channel,
-                        self.hints[reaction.emoji].split(" ")[1],
-                    )
-                else:
+                if len(self.hints[reaction.emoji].split(" ")) == 1:
                     await self.all_commands[self.hints[reaction.emoji]](
                         reaction.message.channel
+                    )
+                else:
+                    await self.all_commands[self.hints[reaction.emoji].split(" ")[0]](
+                        reaction.message.channel,
+                        self.hints[reaction.emoji].split(" ")[1:],
                     )
             except:
                 pass
@@ -727,7 +805,11 @@ class EFTBot(commands.Bot):
         if message.author.bot == False and self.LOCAL_HOST == False:
             if re.search(r"出会い|繋がりたい|美女|美男|可愛い|募集|フレンド", message.content):
                 text = f"本discordサーバでは**出会い**を目的とした**フレンド募集**を含む投稿を全面的に禁止しています。\n\n 以下の文章が違反している可能性があります。\n\n **以下違反文** \n ```{message.content}```"
-                embed = discord.Embed(title="警告!!", description=text, color=0xFF0000,)
+                embed = discord.Embed(
+                    title="警告!!",
+                    description=text,
+                    color=0xFF0000,
+                )
 
                 await message.channel.send(f"{message.author.mention}")
                 await message.channel.send(embed=embed)
@@ -793,16 +875,28 @@ def GetMapList():
                 columnData.append(mapData.get_text().replace("\n", ""))
             else:
                 if columnData[j] == "Banner":
-                    mapList[mapName].update(
-                        {
-                            columnData[j]: re.sub(
-                                "scale-to-width-down/[0-9]*\?cb=[0-9]*",
-                                "",
-                                mapData.find("img")["src"],
-                            )
-                            + "?format=original"
-                        }
-                    )
+                    try:
+                        mapList[mapName].update(
+                            {
+                                columnData[j]: re.sub(
+                                    "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                                    "",
+                                    mapData.find("img")["data-src"],
+                                )
+                                + "?format=original"
+                            }
+                        )
+                    except:
+                        mapList[mapName].update(
+                            {
+                                columnData[j]: re.sub(
+                                    "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                                    "",
+                                    mapData.find("img")["src"],
+                                )
+                                + "?format=original"
+                            }
+                        )
 
                 elif columnData[j] == "Name":
                     mapList[mapName].update(
@@ -1178,19 +1272,34 @@ def GetWeaponsData():
                             ][0],
                             "斬撃ダメージ": weapon.find_all("td")[1]
                             .get_text()
-                            .replace("\n", "",),
+                            .replace(
+                                "\n",
+                                "",
+                            ),
                             "斬撃距離": weapon.find_all("td")[2]
                             .get_text()
-                            .replace("\n", "",),
+                            .replace(
+                                "\n",
+                                "",
+                            ),
                             "刺突ダメージ": weapon.find_all("td")[3]
                             .get_text()
-                            .replace("\n", "",),
+                            .replace(
+                                "\n",
+                                "",
+                            ),
                             "刺突距離": weapon.find_all("td")[4]
                             .get_text()
-                            .replace("\n", "",),
+                            .replace(
+                                "\n",
+                                "",
+                            ),
                             "詳細": weapon.find_all("td")[5]
                             .get_text()
-                            .replace("\n", "",),
+                            .replace(
+                                "\n",
+                                "",
+                            ),
                         }
                     )
                 except:
@@ -1518,7 +1627,10 @@ def GetTaskData():
                     )
                 except:
                     taskDict.update(
-                        {"previousQuest": [], "nextQuest": [],}
+                        {
+                            "previousQuest": [],
+                            "nextQuest": [],
+                        }
                     )
                 taskData[dealerName]["tasks"].append(taskDict)
             except:
