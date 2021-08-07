@@ -351,6 +351,9 @@ commandList = {
 notificationInformation = {}
 # 上に追記していくこと
 patchNotes = {
+    "3.1:2021/08/07 16:00": [
+        "各武器詳細表示コマンド __`WEAPON 武器名`__ を入力した際に弾薬表も同時に表示されるようになりました。",
+    ],
     "3.0.1:2021/07/24 01:00": [
         "各武器詳細表示コマンド __`WEAPON 武器名`__ を入力した際に発生していたエラー20210654072607を修正しました。WOLTERFEN#6329ありがとうございます。",
         "海外公式wikiのサイト更新に伴う仕様変更によりマップ、タスク、武器情報にアクセスできなかった問題を修正しました。",
@@ -482,6 +485,7 @@ class EFTBot(commands.Bot):
         weaponsData,
         taskName,
         taskData,
+        ammoData,
         updateTimestamp,
     ):
         super().__init__(command_prefix, case_insensitive=case_insensitive)
@@ -501,6 +505,7 @@ class EFTBot(commands.Bot):
         self.weaponsData = weaponsData
         self.taskName = taskName
         self.taskData = taskData
+        self.ammoData = ammoData
         self.updateTimestamp = updateTimestamp
         self.hits = {}
         self.enrageCounter = 0
@@ -843,6 +848,7 @@ def Initialize():
     bossNames = GetBossName()
     weaponsName, weaponsData = GetWeaponsData()
     taskName, taskData = GetTaskData()
+    ammoData = GetAmmoData()
     updateTimestamp = datetime.datetime.utcfromtimestamp(
         dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
     )
@@ -854,6 +860,7 @@ def Initialize():
         weaponsData,
         taskName,
         taskData,
+        ammoData,
         updateTimestamp,
     )
 
@@ -1643,6 +1650,40 @@ def GetTaskData():
     return taskName, taskData
 
 
+def GetAmmoData():
+    ammoCaliberUrlList = []
+    ammoHeader = []
+    ammoDatas = {}
+    res = rq.get(f"{enWikiUrl}Ammunition")
+    soup = BeautifulSoup(res.text, "lxml").find("div", {"class": "mw-parser-output"})
+    soup.find("div", {"class": "toc"}).decompose()
+    for table in soup.find_all("table", {"class": "wikitable"}):
+        for ammoCaliber in table.find("tbody").find_all("tr")[1:]:
+            ammoCaliberUrlList.append(
+                ammoCaliber.find("a").get("href").replace("/wiki/", "")
+            )
+    for ammoCaliberUrl in ammoCaliberUrlList:
+        res = rq.get(f"{enWikiUrl}{ammoCaliberUrl}")
+        soup = BeautifulSoup(res.text, "lxml").find(
+            "div", {"class": "mw-parser-output"}
+        )
+        for table in soup.find_all("table", {"class": "wikitable"}):
+            for n, ammoCaliber in enumerate(table.find("tbody").find_all("tr")):
+                if n == 0:
+                    for theader in ammoCaliber.find_all("th")[1:]:
+                        ammoHeader.append(
+                            theader.get_text(strip=True).replace("\xa0%", "")
+                        )
+                else:
+                    ammoData = {}
+                    for theader, ammo in zip(
+                        ammoHeader, ammoCaliber.find_all(["th", "td"])[1:]
+                    ):
+                        ammoData[theader] = ammo.get_text(strip=True)
+                    ammoDatas[ammoData[ammoHeader[0]]] = ammoData
+    return ammoDatas
+
+
 if __name__ == "__main__":
     (
         mapData,
@@ -1652,6 +1693,7 @@ if __name__ == "__main__":
         weaponsData,
         taskName,
         taskData,
+        ammoData,
         updateTimestamp,
     ) = Initialize()
     bot = EFTBot(
@@ -1673,6 +1715,7 @@ if __name__ == "__main__":
         weaponsData=weaponsData,
         taskName=taskName,
         taskData=taskData,
+        ammoData=ammoData,
         updateTimestamp=updateTimestamp,
     )  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
     bot.run(TOKEN)  # Botのトークン

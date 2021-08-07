@@ -2,6 +2,8 @@ import discord
 import requests as rq
 import itertools
 from discord.ext import commands
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 class Weapon(commands.Cog):
@@ -38,6 +40,7 @@ class Weapon(commands.Cog):
     @commands.command(description="武器一覧表示")
     async def weapon(self, ctx, *arg):
         async with ctx.typing():
+            ammunitionList = []
             arg = list(itertools.chain.from_iterable(arg))
             if len(arg) != 0:
                 if len(arg) == 1:
@@ -93,12 +96,39 @@ class Weapon(commands.Cog):
                             infoStr += f"\n**{colName.capitalize()}**:"
                             for ammunition in weaponData[colName]:
                                 infoStr += f"\n・__[{ammunition}]({self.bot.enWikiUrl}{ammunition.replace(' ','_')})__"
+                                ammunitionList.append(self.bot.ammoData[ammunition])
                         elif colName == "リコイル":
                             infoStr += f"\n**{colName.capitalize()}**:"
                             for key, value in weaponData[colName].items():
                                 infoStr += f"\n・**{key}**: __{value}__"
                         else:
                             infoStr += f"\n**{colName.capitalize()}**: __{weaponData[colName]}__"
+                    X, Y, Name = [], [], []
+                    for ammunition in ammunitionList:
+                        Name.append(ammunition["Name"])
+                        X.append(int(ammunition["Damage"]))
+                        Y.append(int(ammunition["Penetration Power"]))
+                    xmin, xmax = 0, max(X) + 10
+                    hlinesList = np.arange(10, max(Y) + 10, 10)
+                    for x, y, name in zip(X, Y, Name):
+                        plt.plot(x, y, "o")
+                        plt.annotate(name.split(" ", 1)[1], xy=(x, y), color="white")
+                    plt.hlines(hlinesList, xmin, xmax, linestyle="dashed")
+                    for n, hline in enumerate(hlinesList):
+                        plt.annotate(
+                            f"ARMOR CLASS {n+1}", xy=(max(X) - 5, hline), color="green"
+                        )
+                    plt.xlim(min(X) - 10, max(X) + 10)
+                    plt.ylim(0, max(Y) + 10)
+                    plt.xlabel("DAMAGE")
+                    plt.ylabel("PENETRATION")
+                    plt.title("Ammo Chart")
+                    plt.grid()
+                    ax = plt.gca()
+                    ax.set_facecolor("black")
+                    plt.savefig("ammo.png")
+                    plt.clf()
+
                     embed = discord.Embed(
                         title=weaponData["名前"],
                         url=f"{self.bot.enWikiUrl}{weaponData['weaponUrl']}",
@@ -110,6 +140,19 @@ class Weapon(commands.Cog):
                     )
                     embed.set_image(url=weaponData["imageUrl"])
                     sendMessage = await ctx.send(embed=embed)
+                    await sendMessage.add_reaction("❌")
+
+                    file = discord.File("ammo.png")
+                    embed = discord.Embed(
+                        title=f"{weaponData['名前']}弾薬表",
+                        url=f"{self.bot.enWikiUrl}{weaponData['cartridgeUrl']}",
+                        timestamp=self.bot.updateTimestamp,
+                    )
+                    embed.set_image(url="attachment://ammo.png")
+                    embed.set_footer(
+                        text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
+                    )
+                    sendMessage = await ctx.send(embed=embed, file=file)
                     await sendMessage.add_reaction("❌")
                 else:
                     await self.bot.on_command_error(
