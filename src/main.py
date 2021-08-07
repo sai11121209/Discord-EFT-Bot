@@ -642,7 +642,7 @@ class EFTBot(commands.Bot):
                             ctx.message.content.replace(fixText, "").lower(),
                             self.command_prefix + command,
                         ).ratio()
-                        >= 0.65
+                        >= 0.59
                     ][:10]
                 )
             }
