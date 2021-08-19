@@ -178,6 +178,34 @@ class Chart(commands.Cog):
                 sendMessage = await ctx.send(embed=embed)
                 await sendMessage.add_reaction("❌")
 
+    @commands.command(name="headset", description="ヘッドセット早見表")
+    async def headset(self, ctx):
+        async with ctx.typing():
+            headsetImages = [
+                "chart.PNG",
+                "gssh_comtac2.PNG",
+                "sordin_tactical.PNG",
+                "razor_xcel.PNG",
+                "m32_rac.PNG",
+            ]
+            for n, url in enumerate(headsetImages):
+                file = discord.File(f"./imgs/chart/headset/{url}")
+                embed = discord.Embed(
+                    title=f"({n+1}/{len(headsetImages)})ヘッドセット早見表",
+                    color=0x808080,
+                    url=f"{self.bot.enWikiUrl}Headsets",
+                )
+                embed.set_image(url=f"attachment://{url}")
+                embed.set_author(
+                    name="セヴンスGaming",
+                    url="https://www.youtube.com/channel/UCZpSzN3ozBUnJrXLmx50qVA",
+                )
+                embed.set_footer(
+                    text="提供元: [ EFT 解説 ] ヘッドセットの選び方ガイド②考察編【タルコフ】 https://www.youtube.com/watch?v=LyVGpyBZ0EU"
+                )
+                sendMessage = await ctx.send(embed=embed, file=file)
+                await sendMessage.add_reaction("❌")
+
 
 # Bot本体側からコグを読み込む際に呼び出される関数。
 def setup(bot):
