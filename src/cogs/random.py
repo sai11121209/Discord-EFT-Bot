@@ -17,11 +17,13 @@ class Random(commands.Cog):
                 description=f"{ctx.author.mention}が赴くマップは...",
                 color=0x2ECC69,
             )
-            map = r.choice(list(self.bot.mapList)).lower()
+            map = r.choice(
+                [key for key, val in self.bot.mapData.items() if val["Duration"] != ""]
+            ).lower()
             embed.add_field(name="MAP", value=map, inline=False)
             sendMessage = await ctx.send(embed=embed)
             await sendMessage.add_reaction("❌")
-            await self.bot.all_commands["map"](ctx, map)
+            await self.bot.all_commands["map"](ctx, [map])
 
     @commands.command(description="武器抽選")
     async def randomweapon(self, ctx):
@@ -35,7 +37,7 @@ class Random(commands.Cog):
             embed.add_field(name="WEAPON", value=weapon, inline=False)
             sendMessage = await ctx.send(embed=embed)
             await sendMessage.add_reaction("❌")
-            await self.bot.all_commands["weapon"](ctx, weapon)
+            await self.bot.all_commands["weapon"](ctx, [weapon])
 
 
 # Bot本体側からコグを読み込む際に呼び出される関数。
