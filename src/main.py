@@ -607,7 +607,7 @@ class EFTBot(commands.Bot):
         if (
             not user.bot
             and not self.developMode
-            and reaction.message.channel.id == 890461420330819586
+            and reaction.message.channel.id != 890461420330819586
         ):
             try:
                 if len(self.hints[reaction.emoji].split(" ")) == 1:
