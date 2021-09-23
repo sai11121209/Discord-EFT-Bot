@@ -604,7 +604,11 @@ class EFTBot(commands.Bot):
     # リアクション反応時発火
     @client.event
     async def on_reaction_add(self, reaction, user):
-        if not user.bot and not self.developMode:
+        if (
+            not user.bot
+            and not self.developMode
+            and reaction.message.channel.id == 890461420330819586
+        ):
             try:
                 if len(self.hints[reaction.emoji].split(" ")) == 1:
                     await self.all_commands[self.hints[reaction.emoji]](
