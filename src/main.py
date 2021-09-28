@@ -774,7 +774,7 @@ class EFTBot(commands.Bot):
                 await message.delete()
                 if message.mentions:
                     await message.channel.send(
-                        f"<@&{voiceChatRole}> {message.mentions[0].mention} {message.content} by {message.author.name}"
+                        f"<@&{voiceChatRole}> {message.content} by {message.author.name}"
                     )
                 else:
                     await message.channel.send(
