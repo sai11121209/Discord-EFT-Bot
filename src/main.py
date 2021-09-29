@@ -593,6 +593,7 @@ class EFTBot(commands.Bot):
             and before.self_mute == after.self_mute
             and before.self_stream == after.self_stream
             and before.self_video == after.self_video
+            and before.channel.id != after.channel.id
         ):
             await channel.send(
                 f"@everyone {user} がボイスチャンネル {before.channel} からボイスチャンネル {after.channel} に移動しました。"
@@ -770,6 +771,7 @@ class EFTBot(commands.Bot):
             if (
                 message.guild.get_role(voiceChatRole) in message.author.roles
                 and message.channel.id != notificationGneralChannelId
+                and message.channel.id != 890618625508122624
             ):
                 await message.delete()
                 if message.mentions:
