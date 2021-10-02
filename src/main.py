@@ -634,7 +634,11 @@ class EFTBot(commands.Bot):
             channel = await self.fetch_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
             if not self.developMode:
-                if payload.emoji.name == "❌" and message.author.bot:
+                if (
+                    payload.emoji.name == "❌"
+                    and message.author.bot
+                    and message.channel.id != 890618625508122624
+                ):
                     await message.delete()
 
     @client.event
