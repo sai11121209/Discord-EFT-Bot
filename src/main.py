@@ -352,6 +352,11 @@ commandList = {
 notificationInformation = {}
 # 上に追記していくこと
 patchNotes = {
+    "3.4:2021/10/25 18:00": [
+        "コマンド実行時呼び出しに使用したメッセージを消去するようになりました",
+        "海外Wikiのサイト仕様変更に伴う内部処理の修正",
+        "その他細かい修正",
+    ],
     "3.3:2021/09/30 00:00": [
         "Among Us Botとの連携アップデート",
         "その他細かい修正",
@@ -860,8 +865,10 @@ class EFTBot(commands.Bot):
         elif "@everyone BOTの更新をしました!" == message.content:
             await self.all_commands["patch"](message.channel)
         if not self.developMode:
+            await message.delete()
             await bot.process_commands(message)
         elif message.content == f"{self.command_prefix}develop":
+            await message.delete()
             await bot.process_commands(message)
 
 
