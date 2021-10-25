@@ -864,12 +864,13 @@ class EFTBot(commands.Bot):
 
         elif "@everyone BOTの更新をしました!" == message.content:
             await self.all_commands["patch"](message.channel)
-        if not self.developMode:
-            await message.delete()
-            await bot.process_commands(message)
-        elif message.content == f"{self.command_prefix}develop":
-            await message.delete()
-            await bot.process_commands(message)
+        if message.content[0] == self.command_prefix:
+            if not self.developMode:
+                await message.delete()
+                await bot.process_commands(message)
+            elif message.content == f"{self.command_prefix}develop":
+                await message.delete()
+                await bot.process_commands(message)
 
 
 def Initialize():
