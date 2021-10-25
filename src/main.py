@@ -1467,17 +1467,20 @@ def GetTaskData():
     taskData = {}
     for tasks in soup.find_all("table", {"class": "wikitable"}):
         dealerName = tasks.find_all("a")[0].text.replace("\n", "")
-        taskData[dealerName] = {
-            "dealerName": tasks.find_all("a")[0].text.replace("\n", ""),
-            "dealerUrl": tasks.find_all("th")[0]
-            .find("a")["href"]
-            .replace("/wiki/", "", 1),
-            "tasks": [],
-        }
-        res = rq.get(f"{enWikiUrl}{taskData[dealerName]['dealerUrl']}")
-        soup = BeautifulSoup(res.text, "lxml").find(
-            "div", {"class": "mw-parser-output"}
-        )
+        try:
+            taskData[dealerName] = {
+                "dealerName": tasks.find_all("a")[0].text.replace("\n", ""),
+                "dealerUrl": tasks.find_all("th")[0]
+                .find("a")["href"]
+                .replace("/wiki/", "", 1),
+                "tasks": [],
+            }
+            res = rq.get(f"{enWikiUrl}{taskData[dealerName]['dealerUrl']}")
+            soup = BeautifulSoup(res.text, "lxml").find(
+                "div", {"class": "mw-parser-output"}
+            )
+        except:
+            pass
         try:
             dealerThumbnail = (
                 re.sub(
