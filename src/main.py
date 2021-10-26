@@ -625,6 +625,9 @@ class EFTBot(commands.Bot):
                         reaction.message.channel
                     )
                 else:
+                    if self.hintsEmbed:
+                        await self.hintsEmbed.delete()
+                        self.hintsEmbed = None
                     await self.all_commands[self.hints[reaction.emoji].split(" ")[0]](
                         reaction.message.channel,
                         self.hints[reaction.emoji].split(" ")[1:],
@@ -636,15 +639,18 @@ class EFTBot(commands.Bot):
     async def on_raw_reaction_add(self, payload):
         user = await self.fetch_user(payload.user_id)
         if not user.bot:
-            channel = await self.fetch_channel(payload.channel_id)
-            message = await channel.fetch_message(payload.message_id)
-            if not self.developMode:
-                if (
-                    payload.emoji.name == "❌"
-                    and message.author.bot
-                    and message.channel.id != 890618625508122624
-                ):
-                    await message.delete()
+            try:
+                channel = await self.fetch_channel(payload.channel_id)
+                message = await channel.fetch_message(payload.message_id)
+                if not self.developMode:
+                    if (
+                        payload.emoji.name == "❌"
+                        and message.author.bot
+                        and message.channel.id != 890618625508122624
+                    ):
+                        await message.delete()
+            except:
+                pass
 
     @client.event
     async def on_command_error(self, ctx, error):
@@ -705,9 +711,12 @@ class EFTBot(commands.Bot):
                         await ctx.invoke(self.get_command(self.hints["1️⃣"]))
                 else:
                     embed.set_footer(text="これ以外に使えるコマンドは /help で確認できるよ!")
-                    helpEmbed = await ctx.send(embed=embed)
-                    for emoji in self.hints.keys():
-                        await helpEmbed.add_reaction(emoji)
+                    self.hintsEmbed = await ctx.send(embed=embed)
+                    try:
+                        for emoji in self.hints.keys():
+                            await self.hintsEmbed.add_reaction(emoji)
+                    except:
+                        pass
             else:
                 text = f"入力されたコマンド {ctx.message.content} は見つからなかったよ...ごめんね。\n"
                 text += f"これ以外に使えるコマンドは {self.command_prefix}help で確認できるよ!"
@@ -780,23 +789,6 @@ class EFTBot(commands.Bot):
         # メッセージ送信者がBotだった場合は無視する
         if not len(message.content):
             return 0
-        try:
-            if (
-                message.guild.get_role(voiceChatRole) in message.author.roles
-                and message.channel.id != notificationGneralChannelId
-                and message.channel.id != 890618625508122624
-            ):
-                await message.delete()
-                if message.mentions:
-                    await message.channel.send(
-                        f"<@&{voiceChatRole}> {message.content} by {message.author.name}"
-                    )
-                else:
-                    await message.channel.send(
-                        f"<@&{voiceChatRole}> {message.content} by {message.author.name}"
-                    )
-        except:
-            pass
         if not message.author.bot:
             if message.channel.id == notificationGneralChannelId:
                 await message.delete()
@@ -804,7 +796,6 @@ class EFTBot(commands.Bot):
                     f"@everyone {message.content} by {message.author.name}"
                 )
                 return 0
-
         if message.author.bot and LOCAL_HOST == False:
             # 本番テキストチャンネル
             specificChannelId = 811566006132408340
@@ -871,6 +862,24 @@ class EFTBot(commands.Bot):
             elif message.content == f"{self.command_prefix}develop":
                 await message.delete()
                 await bot.process_commands(message)
+        else:
+            try:
+                if (
+                    message.guild.get_role(voiceChatRole) in message.author.roles
+                    and message.channel.id != notificationGneralChannelId
+                    and message.channel.id != 890618625508122624
+                ):
+                    await message.delete()
+                    if message.mentions:
+                        await message.channel.send(
+                            f"<@&{voiceChatRole}> {message.mentions[0].mention} {message.content} by {message.author.name}"
+                        )
+                    else:
+                        await message.channel.send(
+                            f"<@&{voiceChatRole}> {message.content} by {message.author.name}"
+                        )
+            except:
+                pass
 
 
 def Initialize():

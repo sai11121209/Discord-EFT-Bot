@@ -133,13 +133,13 @@ class Weapon(commands.Cog):
                             plt.annotate(
                                 f"ARMOR CLASS {n+1}",
                                 xy=(max(X) - 5, hline),
-                                color="green",
+                                color="red",
                             )
                         plt.xlim(min(X) - 10, max(X) + 10)
                         plt.ylim(0, max(Y) + 10)
                         plt.xlabel("DAMAGE")
                         plt.ylabel("PENETRATION")
-                        plt.title("Ammo Chart")
+                        plt.title(f"{fixtext} Ammo Chart")
                         plt.grid()
                         ax = plt.gca()
                         ax.set_facecolor("black")
