@@ -542,30 +542,30 @@ class EFTBot(commands.Bot):
         channel = self.get_channel(848999028658405406)
         # 起動したらターミナルにログイン通知が表示される
         print("ログインしました")
-        # if LOCAL_HOST == False:
-        await self.change_presence(
-            activity=discord.Game(name="Escape from Tarkov", type=1)
-        )
-        elapsed_time = time.time() - start
-        startTime = dt.now(pytz.timezone("Asia/Tokyo"))
-        embed = discord.Embed(
-            title=f" StartingLog ({startTime.strftime('%Y%m%d%H%M%S')})",
-            color=0xFF0000,
-            timestamp=datetime.datetime.utcfromtimestamp(
-                dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
-            ),
-        )
-        embed.add_field(
-            name="StartupTime",
-            value=f"```{startTime.strftime('%Y/%m/%d %H:%M:%S')}```",
-            inline=False,
-        )
-        embed.add_field(
-            name="TimeRequired", value=f"```{elapsed_time}```", inline=False
-        )
-        embed.set_footer(text=f"{self.user.name}")
-        self.change_status.start()
-        await channel.send(embed=embed)
+        if LOCAL_HOST == False:
+            await self.change_presence(
+                activity=discord.Game(name="Escape from Tarkov", type=1)
+            )
+            elapsed_time = time.time() - start
+            startTime = dt.now(pytz.timezone("Asia/Tokyo"))
+            embed = discord.Embed(
+                title=f" StartingLog ({startTime.strftime('%Y%m%d%H%M%S')})",
+                color=0xFF0000,
+                timestamp=datetime.datetime.utcfromtimestamp(
+                    dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
+                ),
+            )
+            embed.add_field(
+                name="StartupTime",
+                value=f"```{startTime.strftime('%Y/%m/%d %H:%M:%S')}```",
+                inline=False,
+            )
+            embed.add_field(
+                name="TimeRequired", value=f"```{elapsed_time}```", inline=False
+            )
+            embed.set_footer(text=f"{self.user.name}")
+            self.change_status.start()
+            await channel.send(embed=embed)
 
     @tasks.loop(minutes=10)
     async def change_status(self):
