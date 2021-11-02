@@ -806,7 +806,13 @@ class EFTBot(commands.Bot):
             if message.channel.id == notificationGneralChannelId:
                 await message.delete()
                 if message.reference:
-                    return 0
+                    user = [
+                        member
+                        for member in message.guild.members
+                        if message.reference.resolved.content.split(" by ")[1]
+                        == member.name
+                    ][0]
+                    await message.channel.send(f"{user.mention} {message.content}")
                 else:
                     await message.channel.send(
                         f"@everyone {message.content} by {message.author.name}"
