@@ -46,7 +46,8 @@ INITIAL_EXTENSIONS = [
 ]
 
 # 接続に必要なオブジェクトを生成
-client = discord.Client()
+intents = discord.Intents.all()
+client = discord.Client(intents=intents)
 developMode = False
 prefix = "/"
 jaWikiUrl = "https://wikiwiki.jp/eft/"
@@ -805,13 +806,7 @@ class EFTBot(commands.Bot):
             if message.channel.id == notificationGneralChannelId:
                 await message.delete()
                 if message.reference:
-                    user = [
-                        member
-                        for member in message.guild.members
-                        if message.reference.resolved.content.split(" by ")[1]
-                        == member.name
-                    ][0]
-                    await message.channel.send(f"{user.mention} {message.content}")
+                    return 0
                 else:
                     await message.channel.send(
                         f"@everyone {message.content} by {message.author.name}"
