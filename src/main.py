@@ -486,6 +486,7 @@ class EFTBot(commands.Bot):
     def __init__(
         self,
         command_prefix,
+        intents,
         case_insensitive,
         LOCAL_HOST,
         developMode,
@@ -506,7 +507,9 @@ class EFTBot(commands.Bot):
         ammoData,
         updateTimestamp,
     ):
-        super().__init__(command_prefix, case_insensitive=case_insensitive)
+        super().__init__(
+            command_prefix, intents=intents, case_insensitive=case_insensitive
+        )
         self.LOCAL_HOST = LOCAL_HOST
         self.developMode = developMode
         self.jaWikiUrl = jaWikiUrl
@@ -789,6 +792,7 @@ class EFTBot(commands.Bot):
                 )
                 await ctx.send(embed=embed)
 
+    @client.event
     async def on_command_completion(self, ctx):
         if ctx.message.content != f"{self.command_prefix}help" and self.helpEmbed:
             await self.helpEmbed.delete()
@@ -1764,6 +1768,7 @@ if __name__ == "__main__":
     ) = Initialize()
     bot = EFTBot(
         command_prefix="/",
+        intents=intents,
         case_insensitive=True,
         LOCAL_HOST=LOCAL_HOST,
         developMode=developMode,
