@@ -804,10 +804,19 @@ class EFTBot(commands.Bot):
         if not message.author.bot:
             if message.channel.id == notificationGneralChannelId:
                 await message.delete()
-                await message.channel.send(
-                    f"@everyone {message.content} by {message.author.name}"
-                )
-                return 0
+                if message.reference:
+                    user = [
+                        member
+                        for member in message.guild.members
+                        if message.reference.resolved.content.split(" by ")[1]
+                        == member.name
+                    ][0]
+                    await message.channel.send(f"{user.mention} {message.content}")
+                else:
+                    await message.channel.send(
+                        f"@everyone {message.content} by {message.author.name}"
+                    )
+                    return 0
         if message.author.bot and LOCAL_HOST == False:
             # 本番テキストチャンネル
             specificChannelId = 811566006132408340
