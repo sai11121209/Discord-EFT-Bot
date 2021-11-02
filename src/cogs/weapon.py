@@ -112,9 +112,7 @@ class Weapon(commands.Cog):
                     embed.set_footer(
                         text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
                     )
-                    embed.set_image(url=weaponData["imageUrl"])
-                    sendMessage = await ctx.send(embed=embed)
-                    await sendMessage.add_reaction("❌")
+                    embed.set_thumbnail(url=weaponData["imageUrl"])
                     try:
                         X, Y, Name = [], [], []
                         for ammunition in ammunitionList:
@@ -147,11 +145,6 @@ class Weapon(commands.Cog):
                         plt.clf()
 
                         file = discord.File("ammo.png")
-                        embed = discord.Embed(
-                            title=f"{weaponData['名前']}弾薬表",
-                            url=f"{self.bot.enWikiUrl}{weaponData['cartridgeUrl']}",
-                            timestamp=self.bot.updateTimestamp,
-                        )
                         embed.set_image(url="attachment://ammo.png")
                         embed.set_footer(
                             text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
