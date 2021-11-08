@@ -1082,12 +1082,12 @@ def GetTraderName():
 
 
 def GetBossName():
-    res = rq.get(f"{enWikiUrl}Characters")
+    res = rq.get(f"{enWikiUrl}Scav_Bosses")
     soup = BeautifulSoup(res.text, "lxml")
-    soup = soup.find_all(class_="wikitable sortable")
+    soup = soup.find(class_="wikitable sortable")
     return [
         s.find_all("a")[0].get_text().replace(" ", "")
-        for s in soup[1].find_all("tr")
+        for s in soup.find_all("tr")
         if s.find_all("a")
     ]
 
