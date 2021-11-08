@@ -58,12 +58,6 @@ class Weapon(commands.Cog):
                         for value in values
                         if value["名前"].upper().replace(" ", "") == fixtext
                     ][0]
-                    embed = discord.Embed(
-                        title=weaponData["名前"],
-                        url=f"{self.bot.enWikiUrl}{weaponData['weaponUrl']}",
-                        description=infoStr,
-                        timestamp=self.bot.updateTimestamp,
-                    )
                     for colName, value in weaponData.items():
                         if colName in [
                             "名前",
@@ -144,6 +138,12 @@ class Weapon(commands.Cog):
                                 infoStr += f"\n・**{key}**: __{value}__"
                         else:
                             infoStr += f"\n**{colName.capitalize()}**: __{weaponData[colName]}__"
+                    embed = discord.Embed(
+                        title=weaponData["名前"],
+                        url=f"{self.bot.enWikiUrl}{weaponData['weaponUrl']}",
+                        description=infoStr,
+                        timestamp=self.bot.updateTimestamp,
+                    )
                     embed.set_footer(
                         text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
                     )
