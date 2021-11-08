@@ -1,3 +1,4 @@
+from typing import Tuple
 import discord
 import requests as rq
 import itertools
@@ -41,6 +42,7 @@ class Weapon(commands.Cog):
     async def weapon(self, ctx, *arg):
         async with ctx.typing():
             ammunitionList = []
+            ammoChartCheck = False
             arg = list(itertools.chain.from_iterable(arg))
             if len(arg) != 0:
                 if len(arg) == 1:
@@ -56,6 +58,12 @@ class Weapon(commands.Cog):
                         for value in values
                         if value["名前"].upper().replace(" ", "") == fixtext
                     ][0]
+                    embed = discord.Embed(
+                        title=weaponData["名前"],
+                        url=f"{self.bot.enWikiUrl}{weaponData['weaponUrl']}",
+                        description=infoStr,
+                        timestamp=self.bot.updateTimestamp,
+                    )
                     for colName, value in weaponData.items():
                         if colName in [
                             "名前",
@@ -97,62 +105,57 @@ class Weapon(commands.Cog):
                             for ammunition in weaponData[colName]:
                                 infoStr += f"\n・__[{ammunition}]({self.bot.enWikiUrl}{ammunition.replace(' ','_')})__"
                                 ammunitionList.append(self.bot.ammoData[ammunition])
+                            try:
+                                X, Y, Name = [], [], []
+                                for ammunition in ammunitionList:
+                                    Name.append(ammunition["Name"])
+                                    X.append(int(ammunition["Damage"]))
+                                    Y.append(int(ammunition["Penetration Power"]))
+                                xmin, xmax = 0, max(X) + 10
+                                hlinesList = np.arange(10, 61, 10)
+                                for x, y, name in zip(X, Y, Name):
+                                    plt.plot(x, y, "o")
+                                    plt.annotate(
+                                        name.split(" ", 1)[1], xy=(x, y), color="white"
+                                    )
+                                plt.hlines(hlinesList, xmin, xmax, linestyle="dashed")
+                                for n, hline in enumerate(hlinesList):
+                                    plt.annotate(
+                                        f"ARMOR CLASS {n+1}",
+                                        xy=(max(X) - 5, hline),
+                                        color="red",
+                                    )
+                                plt.xlim(min(X) - 10, max(X) + 10)
+                                plt.ylim(0, max(Y) + 10)
+                                plt.xlabel("DAMAGE")
+                                plt.ylabel("PENETRATION")
+                                plt.title(f"{fixtext} Ammo Chart")
+                                plt.grid()
+                                ax = plt.gca()
+                                ax.set_facecolor("black")
+                                plt.savefig("ammo.png")
+                                plt.close()
+                                ammoChartCheck = True
+                            except:
+                                pass
                         elif colName == "リコイル":
                             infoStr += f"\n**{colName.capitalize()}**:"
                             for key, value in weaponData[colName].items():
                                 infoStr += f"\n・**{key}**: __{value}__"
                         else:
                             infoStr += f"\n**{colName.capitalize()}**: __{weaponData[colName]}__"
-                    embed = discord.Embed(
-                        title=weaponData["名前"],
-                        url=f"{self.bot.enWikiUrl}{weaponData['weaponUrl']}",
-                        description=infoStr,
-                        timestamp=self.bot.updateTimestamp,
-                    )
                     embed.set_footer(
                         text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
                     )
                     embed.set_thumbnail(url=weaponData["imageUrl"])
-                    try:
-                        X, Y, Name = [], [], []
-                        for ammunition in ammunitionList:
-                            Name.append(ammunition["Name"])
-                            X.append(int(ammunition["Damage"]))
-                            Y.append(int(ammunition["Penetration Power"]))
-                        xmin, xmax = 0, max(X) + 10
-                        hlinesList = np.arange(10, 61, 10)
-                        for x, y, name in zip(X, Y, Name):
-                            plt.plot(x, y, "o")
-                            plt.annotate(
-                                name.split(" ", 1)[1], xy=(x, y), color="white"
-                            )
-                        plt.hlines(hlinesList, xmin, xmax, linestyle="dashed")
-                        for n, hline in enumerate(hlinesList):
-                            plt.annotate(
-                                f"ARMOR CLASS {n+1}",
-                                xy=(max(X) - 5, hline),
-                                color="red",
-                            )
-                        plt.xlim(min(X) - 10, max(X) + 10)
-                        plt.ylim(0, max(Y) + 10)
-                        plt.xlabel("DAMAGE")
-                        plt.ylabel("PENETRATION")
-                        plt.title(f"{fixtext} Ammo Chart")
-                        plt.grid()
-                        ax = plt.gca()
-                        ax.set_facecolor("black")
-                        plt.savefig("ammo.png")
-                        plt.clf()
-
+                    if ammoChartCheck:
                         file = discord.File("ammo.png")
                         embed.set_image(url="attachment://ammo.png")
-                        embed.set_footer(
-                            text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
-                        )
                         sendMessage = await ctx.send(embed=embed, file=file)
                         await sendMessage.add_reaction("❌")
-                    except:
-                        pass
+                    else:
+                        sendMessage = await ctx.send(embed=embed)
+                        await sendMessage.add_reaction("❌")
                 else:
                     await self.bot.on_command_error(
                         ctx, commands.CommandNotFound("weapon")
