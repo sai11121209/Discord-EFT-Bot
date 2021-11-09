@@ -5,6 +5,7 @@ import itertools
 from discord.ext import commands
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 
 class Weapon(commands.Cog):
@@ -114,14 +115,15 @@ class Weapon(commands.Cog):
                                     )
                                 plt.hlines(hlinesList, xmin, xmax, linestyle="dashed")
                                 for n, hline in enumerate(hlinesList):
-                                    plt.text(
-                                        max(X) + 10,
-                                        hline + 0.5,
-                                        f"ARMOR CLASS {n+1}",
-                                        size=10,
-                                        horizontalalignment="right",
-                                        color="green",
-                                    )
+                                    if hline < max(Y) + 10:
+                                        plt.text(
+                                            max(X) + 10,
+                                            hline + 0.5,
+                                            f"ARMOR CLASS {n+1}",
+                                            size=10,
+                                            horizontalalignment="right",
+                                            color="green",
+                                        )
                                 plt.xlim(min(X) - 10, max(X) + 10)
                                 plt.ylim(0, max(Y) + 10)
                                 plt.xlabel("DAMAGE")
@@ -158,6 +160,7 @@ class Weapon(commands.Cog):
                         embed.set_image(url="attachment://ammo.png")
                         sendMessage = await ctx.send(embed=embed, file=file)
                         await sendMessage.add_reaction("❌")
+                        os.remove("ammo.png")
                     else:
                         sendMessage = await ctx.send(embed=embed)
                         await sendMessage.add_reaction("❌")

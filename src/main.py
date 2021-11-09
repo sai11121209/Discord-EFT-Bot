@@ -1004,9 +1004,7 @@ def GetMapList():
                             for map in mapData.contents:
                                 try:
                                     tempData.append(map.get_text().replace(" ", ""))
-                                    print(map)
                                 except:
-                                    print(map)
                                     pass
                             mapList[mapName].update(
                                 {columnData[j]: list(set(tempData))}
