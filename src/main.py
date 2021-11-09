@@ -1002,8 +1002,15 @@ def GetMapList():
                         elif columnData[j] == "Enemies":
                             tempData = []
                             for map in mapData.contents:
-                                tempData.append(map.get_text().replace(" ", ""))
-                            mapList[mapName].update({columnData[j]: tempData})
+                                try:
+                                    tempData.append(map.get_text().replace(" ", ""))
+                                    print(map)
+                                except:
+                                    print(map)
+                                    pass
+                            mapList[mapName].update(
+                                {columnData[j]: list(set(tempData))}
+                            )
                     else:
                         if columnData[j] == "Enemies":
                             mapList[mapName].update(

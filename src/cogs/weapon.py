@@ -114,10 +114,13 @@ class Weapon(commands.Cog):
                                     )
                                 plt.hlines(hlinesList, xmin, xmax, linestyle="dashed")
                                 for n, hline in enumerate(hlinesList):
-                                    plt.annotate(
+                                    plt.text(
+                                        max(X) + 10,
+                                        hline + 0.5,
                                         f"ARMOR CLASS {n+1}",
-                                        xy=(max(X) - 5, hline),
-                                        color="red",
+                                        size=10,
+                                        horizontalalignment="right",
+                                        color="green",
                                     )
                                 plt.xlim(min(X) - 10, max(X) + 10)
                                 plt.ylim(0, max(Y) + 10)
@@ -127,9 +130,12 @@ class Weapon(commands.Cog):
                                 plt.grid()
                                 ax = plt.gca()
                                 ax.set_facecolor("black")
-                                plt.savefig("ammo.png")
+                                plt.savefig(
+                                    "ammo.png", bbox_inches="tight", pad_inches=0.05
+                                )
                                 plt.close()
                                 ammoChartCheck = True
+                                file = discord.File("ammo.png")
                             except:
                                 pass
                         elif colName == "リコイル":
@@ -149,7 +155,6 @@ class Weapon(commands.Cog):
                     )
                     embed.set_thumbnail(url=weaponData["imageUrl"])
                     if ammoChartCheck:
-                        file = discord.File("ammo.png")
                         embed.set_image(url="attachment://ammo.png")
                         sendMessage = await ctx.send(embed=embed, file=file)
                         await sendMessage.add_reaction("❌")
