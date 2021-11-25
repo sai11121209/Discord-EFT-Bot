@@ -578,15 +578,18 @@ class EFTBot(commands.Bot):
     @tasks.loop(minutes=10)
     async def change_status(self):
         rand_int = random.randint(0, 5)
-        if rand_int == 0:
-            await self.change_presence(
-                activity=discord.Game(name="Escape from Tarkov", type=1)
-            )
-        else:
-            map = r.choice(
-                [key for key, val in self.mapData.items() if val["Duration"] != ""]
-            ).upper()
-            await self.change_presence(activity=discord.Game(name=f"マップ{map}", type=1))
+        if not developMode:
+            if rand_int == 0:
+                await self.change_presence(
+                    activity=discord.Game(name="Escape from Tarkov", type=1)
+                )
+            else:
+                map = r.choice(
+                    [key for key, val in self.mapData.items() if val["Duration"] != ""]
+                ).upper()
+                await self.change_presence(
+                    activity=discord.Game(name=f"マップ{map}", type=1)
+                )
 
     # 役職追加時発火
     @client.event
@@ -681,6 +684,10 @@ class EFTBot(commands.Bot):
                 hitCommands.append(self.all_commands[command].name)
             hitCommands += [map.lower() for map in self.mapData]
             hitCommands += [weaponName.lower() for weaponName in self.weaponsName]
+            hitCommands += [ammoData for ammoData in self.ammoData.keys()]
+            hitCommands += [
+                ammo["Name"] for ammoData in self.ammoData.values() for ammo in ammoData
+            ]
             hitCommands += [taskName.lower() for taskName in self.taskName]
             if len(error.args[0].split(" ")) == 1:
                 fixText = error.args[0]
@@ -715,6 +722,14 @@ class EFTBot(commands.Bot):
                         weaponName.lower() for weaponName in self.weaponsName
                     ]:
                         fixHints[emoji] = f"weapon {hint}"
+                    elif hint in [ammoData for ammoData in self.ammoData.keys()]:
+                        fixHints[emoji] = f"ammo {hint}"
+                    elif hint in [
+                        ammo["Name"]
+                        for ammoData in self.ammoData.values()
+                        for ammo in ammoData
+                    ]:
+                        fixHints[emoji] = f"ammo {hint}"
                     elif hint in [task.lower() for task in self.taskName]:
                         fixHints[emoji] = f"task {hint}"
                     embed.add_field(
@@ -735,6 +750,7 @@ class EFTBot(commands.Bot):
                     try:
                         for emoji in self.hints.keys():
                             await self.hintsEmbed.add_reaction(emoji)
+                        await self.hintsEmbed.add_reaction("❌")
                     except:
                         pass
             else:
@@ -1746,6 +1762,7 @@ def GetAmmoData():
         soup = BeautifulSoup(res.text, "lxml").find(
             "div", {"class": "mw-parser-output"}
         )
+        ammoDatas[ammoCaliberUrl.replace("_", " ")] = []
         for table in soup.find_all("table", {"class": "wikitable"}):
             for n, ammoCaliber in enumerate(table.find("tbody").find_all("tr")):
                 if n == 0:
@@ -1755,11 +1772,29 @@ def GetAmmoData():
                         )
                 else:
                     ammoData = {}
+                    try:
+                        ammoData["Icon"] = (
+                            re.sub(
+                                "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                                "",
+                                ammoCaliber.find(["th", "td"]).find("img")["data-src"],
+                            )
+                            + "?format=original"
+                        )
+                    except:
+                        ammoData["Icon"] = (
+                            re.sub(
+                                "scale-to-width-down/[0-9]*\?cb=[0-9]*",
+                                "",
+                                ammoCaliber.find(["th", "td"]).find("img")["src"],
+                            )
+                            + "?format=original"
+                        )
                     for theader, ammo in zip(
                         ammoHeader, ammoCaliber.find_all(["th", "td"])[1:]
                     ):
                         ammoData[theader] = ammo.get_text(strip=True)
-                    ammoDatas[ammoData[ammoHeader[0]]] = ammoData
+                    ammoDatas[ammoCaliberUrl.replace("_", " ")].append(ammoData)
     return ammoDatas
 
 

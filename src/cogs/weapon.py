@@ -13,37 +13,163 @@ class Weapon(commands.Cog):
     # TestCogクラスのコンストラクタ。Botを受取り、インスタンス変数として保持。
     def __init__(self, bot):
         self.bot = bot
+        self.ammoChartCheck = None
+        self.file = None
+
+    def ammunition_figure_generation(self, ammoData, Caliber):
+        try:
+            X, Y, Name = [], [], []
+            for ammunition in ammoData[Caliber]:
+                Name.append(ammunition["Name"])
+                X.append(int(ammunition["Damage"]))
+                Y.append(int(ammunition["Penetration Power"]))
+            xmin, xmax = 0, max(X) + 10
+            hlinesList = np.arange(10, 61, 10)
+            for x, y, name in zip(X, Y, Name):
+                plt.plot(x, y, "o")
+                plt.annotate(name.split(" ", 1)[1], xy=(x, y), color="white")
+            plt.hlines(hlinesList, xmin, xmax, linestyle="dashed")
+            for n, hline in enumerate(hlinesList):
+                if hline < max(Y) + 10:
+                    plt.text(
+                        max(X) + 10,
+                        hline + 0.5,
+                        f"ARMOR CLASS {n+1}",
+                        size=10,
+                        horizontalalignment="right",
+                        color="green",
+                    )
+            plt.xlim(min(X) - 10, max(X) + 10)
+            plt.ylim(0, max(Y) + 10)
+            plt.xlabel("DAMAGE")
+            plt.ylabel("PENETRATION")
+            plt.title(f"{Caliber} Ammo Chart")
+            plt.grid()
+            ax = plt.gca()
+            ax.set_facecolor("black")
+            plt.savefig("ammo.png", bbox_inches="tight", pad_inches=0.05)
+            plt.close()
+            self.ammoChartCheck = True
+            self.file = discord.File("ammo.png")
+        except:
+            pass
 
     @commands.command(description="弾薬性能表示")
-    async def ammo(self, ctx):
+    async def ammo(self, ctx, *arg):
         async with ctx.typing():
-            text = "弾薬性能表示"
-            ammoImages = [
-                "https://cdn.discordapp.com/attachments/806055934211653632/828931828101546024/image0.jpg",
-                "https://cdn.discordapp.com/attachments/806055934211653632/828931828353073172/image1.jpg",
-            ]
-            for n, url in enumerate(ammoImages):
-                embed = discord.Embed(
-                    title=f"({n+1}/{len(ammoImages)}){text}",
-                    color=0x808080,
-                    url=f"https://eft.monster/",
-                )
-                embed.set_image(url=url)
-                embed.set_author(
-                    name="Twitter: bojotaro_tarkov",
-                    url="https://twitter.com/bojotaro_tarkov",
-                )
-                embed.set_footer(
-                    text="提供元: https://twitter.com/bojotaro_tarkov/status/1368569066928046080?s=20"
-                )
-                sendMessage = await ctx.send(embed=embed)
-                await sendMessage.add_reaction("❌")
+            self.ammoChartCheck = False
+            arg = list(itertools.chain.from_iterable(arg))
+            if len(arg) != 0:
+                if len(arg) == 1:
+                    argText = arg[0]
+                else:
+                    argText = " ".join(arg)
+                if argText in self.bot.ammoData.keys():
+                    infoStr = ""
+                    infoStr += f"\n**弾薬**:"
+                    for ammunition in self.bot.ammoData[argText]:
+                        infoStr += f"\n・__[{ammunition['Name']}]({self.bot.enWikiUrl}{ammunition['Name'].replace(' ','_')})__"
+                    embed = discord.Embed(
+                        title=argText,
+                        url=f"{self.bot.enWikiUrl}{argText.replace(' ', '_')}",
+                        description=infoStr,
+                        timestamp=self.bot.updateTimestamp,
+                    )
+                    embed.set_footer(
+                        text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
+                    )
+                    self.ammunition_figure_generation(self.bot.ammoData, argText)
+                    embed.set_image(url="attachment://ammo.png")
+                    sendMessage = await ctx.send(embed=embed, file=self.file)
+                    await sendMessage.add_reaction("❌")
+                    os.remove("ammo.png")
+                elif argText in [
+                    ammo["Name"]
+                    for ammoData in self.bot.ammoData.values()
+                    for ammo in ammoData
+                ]:
+                    ammunition = [
+                        ammo
+                        for ammoData in self.bot.ammoData.values()
+                        for ammo in ammoData
+                        if argText == ammo["Name"]
+                    ][0]
+                    infoStr = ""
+                    for key, value in ammunition.items():
+                        if value != "":
+                            if key == "Damage":
+                                infoStr += f"\n**ダメージ**: {value}"
+                            elif key == "Penetration Power":
+                                infoStr += f"\n**貫通力**: {value}"
+                            elif key == "Armor Damage":
+                                infoStr += f"\n**アーマーダメージ**: {value}"
+                            elif key == "Accuracy":
+                                infoStr += f"\n**精度**: {value}"
+                            elif key == "Recoil":
+                                infoStr += f"\n**リコイル**: {value}"
+                            elif key == "Fragmentationchance":
+                                infoStr += f"\n**破裂確率**: {value}"
+                            elif key == "Projectile Speed (m/s)":
+                                infoStr += f"\n**跳弾確率**: {value}"
+                            elif key == "Light bleedingchance":
+                                infoStr += f"\n**軽度出血確率**: {value}%"
+                            elif key == "Heavy bleedingchance":
+                                infoStr += f"\n**重度出血確率**: {value}%"
+                            elif key == "Ricochetchance":
+                                infoStr += f"\n**弾速**: {value}"
+                            elif key == "Special effects":
+                                infoStr += f"\n**特殊効果**: {value}"
+                            elif key == "Sold by":
+                                infoStr += f"\n**販売元**: {value}"
+
+                    embed = discord.Embed(
+                        title=argText,
+                        url=f"{self.bot.enWikiUrl}{argText.replace(' ', '_')}",
+                        description=infoStr,
+                        timestamp=self.bot.updateTimestamp,
+                    )
+                    embed.set_thumbnail(url=ammunition["Icon"])
+                    embed.set_footer(
+                        text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
+                    )
+                    try:
+                        sendMessage = await ctx.send(embed=embed)
+                        await sendMessage.add_reaction("❌")
+                    except:
+                        import traceback
+
+                        traceback.print_exc()
+                else:
+                    await self.bot.on_command_error(
+                        ctx, commands.CommandNotFound("weapon")
+                    )
+            else:
+                text = "弾薬性能表示"
+                ammoImages = [
+                    "https://cdn.discordapp.com/attachments/806055934211653632/828931828101546024/image0.jpg",
+                    "https://cdn.discordapp.com/attachments/806055934211653632/828931828353073172/image1.jpg",
+                ]
+                for n, url in enumerate(ammoImages):
+                    embed = discord.Embed(
+                        title=f"({n+1}/{len(ammoImages)}){text}",
+                        color=0x808080,
+                        url=f"https://eft.monster/",
+                    )
+                    embed.set_image(url=url)
+                    embed.set_author(
+                        name="Twitter: bojotaro_tarkov",
+                        url="https://twitter.com/bojotaro_tarkov",
+                    )
+                    embed.set_footer(
+                        text="提供元: https://twitter.com/bojotaro_tarkov/status/1368569066928046080?s=20"
+                    )
+                    sendMessage = await ctx.send(embed=embed)
+                    await sendMessage.add_reaction("❌")
 
     @commands.command(description="武器一覧表示")
     async def weapon(self, ctx, *arg):
         async with ctx.typing():
-            ammunitionList = []
-            ammoChartCheck = False
+            self.ammoChartCheck = False
             arg = list(itertools.chain.from_iterable(arg))
             if len(arg) != 0:
                 if len(arg) == 1:
@@ -99,48 +225,9 @@ class Weapon(commands.Cog):
                             infoStr += f"\n**{colName.capitalize()}**:"
                             for ammunition in weaponData[colName]:
                                 infoStr += f"\n・__[{ammunition}]({self.bot.enWikiUrl}{ammunition.replace(' ','_')})__"
-                                ammunitionList.append(self.bot.ammoData[ammunition])
-                            try:
-                                X, Y, Name = [], [], []
-                                for ammunition in ammunitionList:
-                                    Name.append(ammunition["Name"])
-                                    X.append(int(ammunition["Damage"]))
-                                    Y.append(int(ammunition["Penetration Power"]))
-                                xmin, xmax = 0, max(X) + 10
-                                hlinesList = np.arange(10, 61, 10)
-                                for x, y, name in zip(X, Y, Name):
-                                    plt.plot(x, y, "o")
-                                    plt.annotate(
-                                        name.split(" ", 1)[1], xy=(x, y), color="white"
-                                    )
-                                plt.hlines(hlinesList, xmin, xmax, linestyle="dashed")
-                                for n, hline in enumerate(hlinesList):
-                                    if hline < max(Y) + 10:
-                                        plt.text(
-                                            max(X) + 10,
-                                            hline + 0.5,
-                                            f"ARMOR CLASS {n+1}",
-                                            size=10,
-                                            horizontalalignment="right",
-                                            color="green",
-                                        )
-                                plt.xlim(min(X) - 10, max(X) + 10)
-                                plt.ylim(0, max(Y) + 10)
-                                plt.xlabel("DAMAGE")
-                                plt.ylabel("PENETRATION")
-                                plt.title(f"{fixtext} Ammo Chart")
-                                plt.grid()
-                                ax = plt.gca()
-                                ax.set_facecolor("black")
-                                plt.savefig(
-                                    "ammo.png", bbox_inches="tight", pad_inches=0.05
-                                )
-                                plt.close()
-                                ammoChartCheck = True
-                                file = discord.File("ammo.png")
-                                print(file)
-                            except:
-                                pass
+                            self.ammunition_figure_generation(
+                                self.bot.ammoData, weaponData["口径"]
+                            )
                         elif colName == "リコイル":
                             infoStr += f"\n**{colName.capitalize()}**:"
                             for key, value in weaponData[colName].items():
@@ -159,7 +246,7 @@ class Weapon(commands.Cog):
                     embed.set_image(url=weaponData["imageUrl"])
                     sendMessage = await ctx.send(embed=embed)
                     await sendMessage.add_reaction("❌")
-                    if ammoChartCheck:
+                    if self.ammoChartCheck:
                         embed = discord.Embed(
                             title=f'{weaponData["名前"]}弾薬表',
                             url=f"{self.bot.enWikiUrl}{weaponData['weaponUrl']}",
@@ -170,7 +257,7 @@ class Weapon(commands.Cog):
                             text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
                         )
                         embed.set_image(url="attachment://ammo.png")
-                        sendMessage = await ctx.send(embed=embed, file=file)
+                        sendMessage = await ctx.send(embed=embed, file=self.file)
                         await sendMessage.add_reaction("❌")
                         os.remove("ammo.png")
                 else:
