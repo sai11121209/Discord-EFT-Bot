@@ -66,7 +66,7 @@ class Weapon(commands.Cog):
                     argText = " ".join(arg)
                 if argText in self.bot.ammoData.keys():
                     infoStr = ""
-                    infoStr += f"\n**弾薬**:"
+                    infoStr += f"\n**弾薬一覧**:"
                     for ammunition in self.bot.ammoData[argText]:
                         infoStr += f"\n・__[{ammunition['Name']}]({self.bot.enWikiUrl}{ammunition['Name'].replace(' ','_')})__"
                     embed = discord.Embed(
