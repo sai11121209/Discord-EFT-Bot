@@ -1777,6 +1777,7 @@ def GetAmmoData():
                         )
                 else:
                     ammoData = {}
+                    ammoData["Caliber"] = ammoCaliberUrl.replace("_", " ")
                     try:
                         ammoData["Icon"] = (
                             re.sub(

@@ -97,7 +97,9 @@ class Weapon(commands.Cog):
                     infoStr = ""
                     for key, value in ammunition.items():
                         if value != "":
-                            if key == "Damage":
+                            if key == "Caliber":
+                                infoStr += f"\n**口径**: __[{value}]({self.bot.enWikiUrl}{value.replace('_', ' ')})__"
+                            elif key == "Damage":
                                 infoStr += f"\n**ダメージ**: {value}"
                             elif key == "Penetration Power":
                                 infoStr += f"\n**貫通力**: {value}"
