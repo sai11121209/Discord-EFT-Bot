@@ -45,6 +45,8 @@ INITIAL_EXTENSIONS = [
     "cogs.develop",
 ]
 
+# BOT起動時にデータ読み込みしない場合True
+SAFE_MODE = True
 # 接続に必要なオブジェクトを生成
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
@@ -515,6 +517,7 @@ class EFTBot(commands.Bot):
         taskData,
         ammoData,
         updateTimestamp,
+        safeMode,
     ):
         super().__init__(
             command_prefix, intents=intents, case_insensitive=case_insensitive
@@ -537,6 +540,7 @@ class EFTBot(commands.Bot):
         self.taskData = taskData
         self.ammoData = ammoData
         self.updateTimestamp = updateTimestamp
+        self.safeMode = safeMode
         self.hits = {}
         self.enrageCounter = 0
         self.saiId = 279995095124803595
@@ -907,12 +911,20 @@ class EFTBot(commands.Bot):
         elif "@everyone BOTの更新をしました!" == message.content:
             await self.all_commands["patch"](message.channel)
         if message.content[0] == self.command_prefix:
-            if not self.developMode:
+            if self.safeMode:
                 await message.delete()
-                await bot.process_commands(message)
-            elif message.content == f"{self.command_prefix}develop":
-                await message.delete()
-                await bot.process_commands(message)
+                embed = discord.Embed(
+                    title="現在セーフモードで動作しているためコマンドを呼び出すことはできません。",
+                    color=0xFF0000,
+                )
+                await message.channel.send(embed=embed)
+            else:
+                if not self.developMode:
+                    await message.delete()
+                    await bot.process_commands(message)
+                elif message.content == f"{self.command_prefix}develop":
+                    await message.delete()
+                    await bot.process_commands(message)
         else:
             try:
                 if (
@@ -1805,38 +1817,74 @@ def GetAmmoData():
 
 
 if __name__ == "__main__":
-    (
-        mapData,
-        traderNames,
-        bossNames,
-        weaponsName,
-        weaponsData,
-        taskName,
-        taskData,
-        ammoData,
-        updateTimestamp,
-    ) = Initialize()
-    bot = EFTBot(
-        command_prefix="/",
-        intents=intents,
-        case_insensitive=True,
-        LOCAL_HOST=LOCAL_HOST,
-        developMode=developMode,
-        jaWikiUrl=jaWikiUrl,
-        enWikiUrl=enWikiUrl,
-        emojiList=emojiList,
-        mapData=mapData,
-        traderList=traderList,
-        bossList=bossList,
-        notificationInformation=notificationInformation,
-        patchNotes=patchNotes,
-        traderNames=traderNames,
-        bossNames=bossNames,
-        weaponsName=weaponsName,
-        weaponsData=weaponsData,
-        taskName=taskName,
-        taskData=taskData,
-        ammoData=ammoData,
-        updateTimestamp=updateTimestamp,
-    )  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
+    if SAFE_MODE:
+        mapData = None
+        traderNames = None
+        bossNames = None
+        weaponsName = None
+        weaponsData = None
+        taskName = None
+        taskData = None
+        ammoData = None
+        updateTimestamp = None
+        bot = EFTBot(
+            command_prefix="/",
+            intents=intents,
+            case_insensitive=True,
+            LOCAL_HOST=LOCAL_HOST,
+            developMode=developMode,
+            jaWikiUrl=jaWikiUrl,
+            enWikiUrl=enWikiUrl,
+            emojiList=emojiList,
+            mapData=mapData,
+            traderList=traderList,
+            bossList=bossList,
+            notificationInformation=notificationInformation,
+            patchNotes=patchNotes,
+            traderNames=traderNames,
+            bossNames=bossNames,
+            weaponsName=weaponsName,
+            weaponsData=weaponsData,
+            taskName=taskName,
+            taskData=taskData,
+            ammoData=ammoData,
+            updateTimestamp=updateTimestamp,
+            safeMode=SAFE_MODE,
+        )  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
+    else:
+        (
+            mapData,
+            traderNames,
+            bossNames,
+            weaponsName,
+            weaponsData,
+            taskName,
+            taskData,
+            ammoData,
+            updateTimestamp,
+        ) = Initialize()
+        bot = EFTBot(
+            command_prefix="/",
+            intents=intents,
+            case_insensitive=True,
+            LOCAL_HOST=LOCAL_HOST,
+            developMode=developMode,
+            jaWikiUrl=jaWikiUrl,
+            enWikiUrl=enWikiUrl,
+            emojiList=emojiList,
+            mapData=mapData,
+            traderList=traderList,
+            bossList=bossList,
+            notificationInformation=notificationInformation,
+            patchNotes=patchNotes,
+            traderNames=traderNames,
+            bossNames=bossNames,
+            weaponsName=weaponsName,
+            weaponsData=weaponsData,
+            taskName=taskName,
+            taskData=taskData,
+            ammoData=ammoData,
+            updateTimestamp=updateTimestamp,
+            safeMode=SAFE_MODE,
+        )  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
     bot.run(TOKEN)  # Botのトークン
