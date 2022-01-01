@@ -42,10 +42,11 @@ class Help(commands.Cog):
                     text += "```/task {タスク名}```"
                 else:
                     text = f"```{self.bot.command_prefix}{self.bot.all_commands[command].name}```"
-                embed.add_field(
-                    name=f"{self.bot.all_commands[command].description}コマンド",
-                    value=text,
-                )
+                if self.bot.all_commands[command].name != "help":
+                    embed.add_field(
+                        name=f"{self.bot.all_commands[command].description}コマンド",
+                        value=text,
+                    )
             # embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
             embed.set_author(
                 name="EFT(Escape from Tarkov) Wiki Bot",

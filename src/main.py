@@ -4,6 +4,7 @@ import re
 import random as r
 import time
 import pytz
+import json
 import discord
 import random
 import requests as rq
@@ -42,6 +43,7 @@ INITIAL_EXTENSIONS = [
     "cogs.chart",
     "cogs.other",
     "cogs.random",
+    "cogs.status",
     "cogs.develop",
 ]
 
@@ -49,6 +51,8 @@ INITIAL_EXTENSIONS = [
 SAFE_MODE = True
 # 接続に必要なオブジェクトを生成
 intents = discord.Intents.all()
+intents.members = True
+intents.reactions = True
 client = discord.Client(intents=intents)
 developMode = False
 prefix = "/"
@@ -353,6 +357,11 @@ commandList = {
 notificationInformation = {}
 # 上に追記していくこと
 patchNotes = {
+    "3.7:2022/01/02 06:00": [
+        "サーバステータス確認コマンドを __`STATUS`__ を実装しました。",
+        "本BOTが5分置きににEscape from Tarkovサーバの状態を監視し、異常があった場合に通知してくれる機能を実装しました。",
+        "その他細かい修正",
+    ],
     "3.6:2021/11/25 20:00": [
         "弾薬性能表示コマンドにおいて __`AMMO 口径名`__ __`AMMO 弾薬名`__ を入力することで特定口径の弾薬や、弾薬の性能を見ることできるようになりました。",
         "その他細かい修正",
@@ -546,6 +555,8 @@ class EFTBot(commands.Bot):
         self.saiId = 279995095124803595
         self.remove_command("help")
         self.helpEmbed = None
+        self.server_status = None
+        self.server_status_count = 0
         for cog in INITIAL_EXTENSIONS:
             try:
                 self.load_extension(cog)
@@ -559,6 +570,7 @@ class EFTBot(commands.Bot):
         channel = self.get_channel(848999028658405406)
         # 起動したらターミナルにログイン通知が表示される
         print("ログインしました")
+        self.server_status_checker.start()
         if LOCAL_HOST == False:
             await self.change_presence(
                 activity=discord.Game(name="Escape from Tarkov", type=1)
@@ -582,23 +594,124 @@ class EFTBot(commands.Bot):
             )
             embed.set_footer(text=f"{self.user.name}")
             self.change_status.start()
+            self.server_status_checker.start()
             await channel.send(embed=embed)
 
     @tasks.loop(minutes=10)
     async def change_status(self):
         rand_int = random.randint(0, 5)
-        if not developMode:
-            if rand_int == 0:
+        if LOCAL_HOST == False:
+            if not developMode:
+                if self.server_status == 0:
+                    if rand_int == 0:
+                        await self.change_presence(
+                            activity=discord.Game(name="Escape from Tarkov", type=1)
+                        )
+                    else:
+                        map = r.choice(
+                            [
+                                key
+                                for key, val in self.mapData.items()
+                                if val["Duration"] != ""
+                            ]
+                        ).upper()
+                        await self.change_presence(
+                            activity=discord.Game(name=f"マップ{map}", type=1)
+                        )
+
+    @tasks.loop(minutes=1)
+    async def server_status_checker(self):
+        res = rq.get("https://status.escapefromtarkov.com/api/global/status")
+        res = json.loads(res.text)["status"]
+        channel = self.get_channel(811566006132408340)
+        if self.server_status_count == 0:
+            self.server_status = res
+            self.server_status_count += 1
+        else:
+            if self.server_status == 0 and res != 0:
+                # 鯖落ち発生
+                if res == 1:
+                    embed = discord.Embed(
+                        title=f"EscapeTarkovServerStatus",
+                        description="現在アップデートのためEscapeTarkovServerは停止しています。",
+                        color=0xD42929,
+                        url="https://status.escapefromtarkov.com/",
+                        timestamp=datetime.datetime.utcfromtimestamp(
+                            dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
+                        ),
+                    )
+                    await self.change_presence(
+                        activity=discord.Game(
+                            name="EFTサーバアップデートにより停止中",
+                            start=dt.now(pytz.timezone("Asia/Tokyo")),
+                            type=5,
+                        )
+                    )
+                elif res == 2:
+                    embed = discord.Embed(
+                        title=f"EscapeTarkovServerStatus",
+                        description="現在EscapeTarkovServerへの接続が不安定な状態になっています。",
+                        color=0xD42929,
+                        url="https://status.escapefromtarkov.com/",
+                        timestamp=datetime.datetime.utcfromtimestamp(
+                            dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
+                        ),
+                    )
+                    await self.change_presence(
+                        activity=discord.Game(
+                            name="EFTサーバ接続不安定",
+                            start=dt.now(pytz.timezone("Asia/Tokyo")),
+                            type=5,
+                        )
+                    )
+                else:
+                    embed = discord.Embed(
+                        title=f"EscapeTarkovServerStatus",
+                        description="現在EscapeTarkovServerにおいて障害が発生しています。",
+                        color=0xD42929,
+                        url="https://status.escapefromtarkov.com/",
+                        timestamp=datetime.datetime.utcfromtimestamp(
+                            dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
+                        ),
+                    )
+                    await self.change_presence(
+                        activity=discord.Game(
+                            name="EFTサーバ障害発生中",
+                            start=dt.now(pytz.timezone("Asia/Tokyo")),
+                            type=5,
+                        )
+                    )
+                await channel.send("@everyone", embed=embed)
+                await self.all_commands["status"](channel)
+            elif self.server_status != 0 and res == 0:
+                # 鯖復活
+                if self.server_status == 1:
+                    embed = discord.Embed(
+                        title=f"EscapeTarkovServerStatus",
+                        description="EscapeTarkovServerのアップデートが終了しサービスが再開しました。",
+                        color=0x70B035,
+                        url="https://status.escapefromtarkov.com/",
+                        timestamp=datetime.datetime.utcfromtimestamp(
+                            dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
+                        ),
+                    )
+                else:
+                    embed = discord.Embed(
+                        title=f"EscapeTarkovServerStatus",
+                        description="EscapeTarkovServerにおいて発生していた障害は現在解消されました。",
+                        color=0x70B035,
+                        url="https://status.escapefromtarkov.com/",
+                        timestamp=datetime.datetime.utcfromtimestamp(
+                            dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
+                        ),
+                    )
+                await channel.message.send(embed=embed)
+                await self.all_commands["status"](channel)
                 await self.change_presence(
                     activity=discord.Game(name="Escape from Tarkov", type=1)
                 )
-            else:
-                map = r.choice(
-                    [key for key, val in self.mapData.items() if val["Duration"] != ""]
-                ).upper()
-                await self.change_presence(
-                    activity=discord.Game(name=f"マップ{map}", type=1)
-                )
+            self.server_status = res
+            self.server_status_count += 1
 
     # 役職追加時発火
     @client.event
@@ -911,7 +1024,7 @@ class EFTBot(commands.Bot):
         elif "@everyone BOTの更新をしました!" == message.content:
             await self.all_commands["patch"](message.channel)
         if message.content[0] == self.command_prefix:
-            if self.safeMode:
+            if not self.safeMode:
                 await message.delete()
                 embed = discord.Embed(
                     title="現在セーフモードで動作しているためコマンドを呼び出すことはできません。",
