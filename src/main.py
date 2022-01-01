@@ -48,7 +48,7 @@ INITIAL_EXTENSIONS = [
 ]
 
 # BOT起動時にデータ読み込みしない場合True
-SAFE_MODE = True
+SAFE_MODE = False
 # 接続に必要なオブジェクトを生成
 intents = discord.Intents.all()
 intents.members = True
@@ -570,7 +570,6 @@ class EFTBot(commands.Bot):
         channel = self.get_channel(848999028658405406)
         # 起動したらターミナルにログイン通知が表示される
         print("ログインしました")
-        self.server_status_checker.start()
         if LOCAL_HOST == False:
             await self.change_presence(
                 activity=discord.Game(name="Escape from Tarkov", type=1)
@@ -1024,7 +1023,7 @@ class EFTBot(commands.Bot):
         elif "@everyone BOTの更新をしました!" == message.content:
             await self.all_commands["patch"](message.channel)
         if message.content[0] == self.command_prefix:
-            if not self.safeMode:
+            if self.safeMode:
                 await message.delete()
                 embed = discord.Embed(
                     title="現在セーフモードで動作しているためコマンドを呼び出すことはできません。",
