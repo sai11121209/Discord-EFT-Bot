@@ -626,6 +626,30 @@ class EFTBot(commands.Bot):
         if self.server_status_count == 0:
             self.server_status = res
             self.server_status_count += 1
+            if res == 1:
+                await self.change_presence(
+                    activity=discord.Game(
+                        name="EFTサーバアップデートにより停止中",
+                        start=dt.now(pytz.timezone("Asia/Tokyo")),
+                        type=5,
+                    )
+                )
+            elif res == 2:
+                await self.change_presence(
+                    activity=discord.Game(
+                        name="EFTサーバ接続不安定",
+                        start=dt.now(pytz.timezone("Asia/Tokyo")),
+                        type=5,
+                    )
+                )
+            else:
+                await self.change_presence(
+                    activity=discord.Game(
+                        name="EFTサーバ障害発生中",
+                        start=dt.now(pytz.timezone("Asia/Tokyo")),
+                        type=5,
+                    )
+                )
         else:
             if self.server_status == 0 and res != 0:
                 # 鯖落ち発生
