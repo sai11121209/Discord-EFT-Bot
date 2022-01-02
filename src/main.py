@@ -728,7 +728,7 @@ class EFTBot(commands.Bot):
                             dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
                         ),
                     )
-                await channel.message.send(embed=embed)
+                await channel.send(embed=embed)
                 await self.all_commands["status"](channel)
                 await self.change_presence(
                     activity=discord.Game(name="Escape from Tarkov", type=1)
