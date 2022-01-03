@@ -626,7 +626,9 @@ class EFTBot(commands.Bot):
         if self.server_status_count == 0:
             self.server_status = res
             self.server_status_count += 1
-            if res == 1:
+            if res == 0:
+                pass
+            elif res == 1:
                 await self.change_presence(
                     activity=discord.Game(
                         name="EFTサーバアップデートにより停止中",
