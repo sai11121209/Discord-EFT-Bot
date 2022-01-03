@@ -719,8 +719,6 @@ class EFTBot(commands.Bot):
                         dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
                     ),
                 )
-                await channel.send(embed=embed)
-                await self.all_commands["status"](channel)
                 await self.change_presence(
                         activity=discord.Game(
                             name="EFTサーバ障害発生中",
@@ -728,6 +726,8 @@ class EFTBot(commands.Bot):
                             type=5,
                         )
                     )
+                await channel.send("@everyone", embed=embed)
+                await self.all_commands["status"](channel)
             elif self.server_status != 0 and res == 0:
                 # 鯖復活
                 if self.server_status == 1:
@@ -750,7 +750,7 @@ class EFTBot(commands.Bot):
                             dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
                         ),
                     )
-                await channel.send(embed=embed)
+                await channel.send("@everyone", embed=embed)
                 await self.all_commands["status"](channel)
                 await self.change_presence(
                     activity=discord.Game(name="Escape from Tarkov", type=1)
