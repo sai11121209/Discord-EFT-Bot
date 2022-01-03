@@ -708,6 +708,26 @@ class EFTBot(commands.Bot):
                     )
                 await channel.send("@everyone", embed=embed)
                 await self.all_commands["status"](channel)
+            elif self.server_status == 2 and res == 3:
+                # 鯖状況悪化
+                embed = discord.Embed(
+                    title=f"EscapeTarkovServerStatus",
+                    description="現在EscapeTarkovServerにおいて障害が発生しています。",
+                    color=0x70B035,
+                    url="https://status.escapefromtarkov.com/",
+                    timestamp=datetime.datetime.utcfromtimestamp(
+                        dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
+                    ),
+                )
+                await channel.send(embed=embed)
+                await self.all_commands["status"](channel)
+                await self.change_presence(
+                        activity=discord.Game(
+                            name="EFTサーバ障害発生中",
+                            start=dt.now(pytz.timezone("Asia/Tokyo")),
+                            type=5,
+                        )
+                    )
             elif self.server_status != 0 and res == 0:
                 # 鯖復活
                 if self.server_status == 1:
