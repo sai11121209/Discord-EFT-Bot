@@ -1,173 +1,198 @@
+import main
+import config
 import discord
-import requests as rq
 import itertools
+import requests as rq
 from bs4 import BeautifulSoup
 from discord.ext import commands
+from discord_slash import cog_ext, SlashContext
+from discord_slash.utils.manage_commands import create_option, create_choice
 
 
 class Map(commands.Cog):
-
+    try:
+        guild_ids = [config.guild_ids]
+        choices = []
+        for name in main.mapData:
+            choices.append(create_choice(name=name, value=name))
+        map_options = [
+            create_option(
+                name="name",
+                description="マップ名を指定します。",
+                option_type=3,  # str
+                required=True,
+                choices=choices,
+            ),
+        ]
+    except:
+        pass
     # TestCogクラスのコンストラクタ。Botを受取り、インスタンス変数として保持。
     def __init__(self, bot):
         self.bot = bot
 
-    # コマンドの作成。コマンドはcommandデコレータで必ず修飾する。
-    @commands.command(description="マップ一覧表示")
-    async def map(self, ctx, *arg):
+    @cog_ext.cog_slash(
+        name="map",
+        description="マップ一覧表示",
+        options=map_options,
+        guild_ids=guild_ids,
+    )
+    async def map(self, ctx: SlashContext, name: str = None):
         try:
             releaseText = ""
             releasedColor = 0x2ECC69
             unreleasedColor = 0xFF0000
-            async with ctx.typing():
-                arg = list(itertools.chain.from_iterable(arg))
-                if len(arg) != 0:
-                    if len(arg) == 1:
-                        argText = arg[0].upper()
-                    else:
-                        argText = " ".join(arg).upper()
-                    if argText in self.bot.mapData:
-                        receivedtext = argText
-                        text = f"{receivedtext} MAP INFORMATION\n"
-                        # LABORATORYのみ海外公式wikiのURLがThe_Labとなるため例外
-                        self.bot.mapData[argText]
-                        desText = ""
-                        for key, value in self.bot.mapData[argText].items():
-                            if key == "Banner":
-                                pass
-                            elif key == "Name":
-                                pass
-                            elif key == "MapUrl":
-                                pass
-                            elif key == "Features":
-                                featuresText = value
-                                # 翻訳前言語
-                                source = "en"
-                                # 翻訳後言語
-                                Target = "ja"
-                                gasUrl = f"https://script.google.com/macros/s/AKfycbxvCS-29LVgrm9-cSynGl19QUIB7jTpzuvFqflus_P0BJtXX80ahLazltfm2rbMGVVs/exec?text={featuresText}&source={source}&target={Target}"
-                                res = rq.get(gasUrl).json()
-                                if res["code"] == 200:
-                                    tranceText = res["text"]
-                                    featuresText = f"\n**特徴**:"
-                                    featuresText += f"\n> {value}"
-                                    featuresText += f"\n\n> {tranceText}"
-                                    featuresText += "\n> Google翻訳"
-                            elif key == "Duration":
-                                desText += f"**時間制限**: "
-                                try:
-                                    desText += f"__昼間:{value['Day']}分__ __夜間:{value['Night']}分__"
-                                except:
-                                    desText += f"__{value}分__"
-                                desText += "\n"
-                            elif key == "Players":
-                                desText += f"**人数**: "
-                                try:
-                                    desText += f"__昼間:{value['Day']}人__ __夜間:{value['Night']}人__"
-                                except:
-                                    desText += f"__{value}人__"
-                                desText += "\n"
-                            elif key == "Enemies":
-                                desText += f"**出現敵兵**: "
-                                for v in value:
-                                    if v == "ScavRaiders":
-                                        desText += f"__[{v}]({self.bot.enWikiUrl}Scav_Raiders)__ "
-                                    else:
-                                        desText += (
-                                            f"__[{v}]({self.bot.enWikiUrl}{v})__ "
-                                        )
-                                desText += "\n"
-                            elif key == "Release State":
-                                if value == "Released":
-                                    color = releasedColor
-                                else:
-                                    releaseText = "**未実装マップ**\n\n"
-                                    color = unreleasedColor
-                        embed = discord.Embed(
-                            title=text,
-                            description=releaseText + desText + featuresText,
-                            color=color,
-                            url=f"{self.bot.enWikiUrl}{self.bot.mapData[argText]['MapUrl']}",
-                            timestamp=self.bot.updateTimestamp,
-                        )
-                        embed.set_image(url=self.bot.mapData[argText]["Banner"])
-                        embed.set_footer(
-                            text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
-                        )
-                        sendMessage = await ctx.send(embed=embed)
-                        await sendMessage.add_reaction("❌")
-                        mapData = self.bot.mapData[argText]["Images"]
-                        n = 1
-                        for key, value in mapData.items():
-                            embed = discord.Embed(
-                                title=f"({n}/{len(mapData)}){text}",
-                                description=f"[{key}]({value})",
-                                color=color,
-                                url=f"{self.bot.enWikiUrl}{self.bot.mapData[argText]['MapUrl']}",
-                                timestamp=self.bot.updateTimestamp,
+            if name:
+                text = f"{name} MAP INFORMATION\n"
+                # LABORATORYのみ海外公式wikiのURLがThe_Labとなるため例外
+                self.bot.mapData[name]
+                desText = ""
+                for key, value in self.bot.mapData[name].items():
+                    if key == "Banner":
+                        pass
+                    elif key == "Name":
+                        pass
+                    elif key == "MapUrl":
+                        pass
+                    elif key == "Features":
+                        featuresText = value
+                        # 翻訳前言語
+                        source = "en"
+                        # 翻訳後言語
+                        Target = "ja"
+                        gasUrl = f"https://script.google.com/macros/s/AKfycbxvCS-29LVgrm9-cSynGl19QUIB7jTpzuvFqflus_P0BJtXX80ahLazltfm2rbMGVVs/exec?text={featuresText}&source={source}&target={Target}"
+                        res = rq.get(gasUrl).json()
+                        if res["code"] == 200:
+                            tranceText = res["text"]
+                            featuresText = f"\n**特徴**:"
+                            featuresText += f"\n> {value}"
+                            featuresText += f"\n\n> {tranceText}"
+                            featuresText += "\n> Google翻訳"
+                    elif key == "Duration":
+                        desText += f"**時間制限**: "
+                        try:
+                            desText += (
+                                f"__昼間:{value['Day']}分__ __夜間:{value['Night']}分__"
                             )
-                            embed.set_image(url=value)
-                            embed.set_footer(
-                                text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
+                        except:
+                            desText += f"__{value}分__"
+                        desText += "\n"
+                    elif key == "Players":
+                        desText += f"**人数**: "
+                        try:
+                            desText += (
+                                f"__昼間:{value['Day']}人__ __夜間:{value['Night']}人__"
                             )
-                            sendMessage = await ctx.send(embed=embed)
-                            await sendMessage.add_reaction("❌")
-                            n += 1
-                    else:
-                        await self.bot.on_command_error(
-                            ctx, commands.CommandNotFound("map")
-                        )
-                else:
+                        except:
+                            desText += f"__{value}人__"
+                        desText += "\n"
+                    elif key == "Enemies":
+                        desText += f"**出現敵兵**: "
+                        for v in value:
+                            if v == "ScavRaiders":
+                                desText += (
+                                    f"__[{v}]({self.bot.enWikiUrl}Scav_Raiders)__ "
+                                )
+                            else:
+                                desText += f"__[{v}]({self.bot.enWikiUrl}{v})__ "
+                        desText += "\n"
+                    elif key == "Release State":
+                        if value == "Released":
+                            color = releasedColor
+                        else:
+                            releaseText = "**未実装マップ**\n\n"
+                            color = unreleasedColor
+                embed = discord.Embed(
+                    title=text,
+                    description=releaseText + desText + featuresText,
+                    color=color,
+                    url=f"{self.bot.enWikiUrl}{self.bot.mapData[name]['MapUrl']}",
+                    timestamp=self.bot.updateTimestamp,
+                )
+                embed.set_image(url=self.bot.mapData[name]["Banner"])
+                embed.set_footer(
+                    text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
+                )
+                sendMessage = await ctx.send(embed=embed)
+                await sendMessage.add_reaction("❌")
+                mapData = self.bot.mapData[name]["Images"]
+                n = 1
+                for key, value in mapData.items():
                     embed = discord.Embed(
-                        title="マップ",
-                        url=f"{self.bot.enWikiUrl}Map",
-                        color=0x2ECC69,
+                        title=f"({n}/{len(mapData)}){text}",
+                        description=f"[{key}]({value})",
+                        color=color,
+                        url=f"{self.bot.enWikiUrl}{self.bot.mapData[name]['MapUrl']}",
                         timestamp=self.bot.updateTimestamp,
                     )
-                    for map, values in self.bot.mapData.items():
-                        text = ""
-                        if map == "The_Lab":
-                            receivedtext = "LABORATORY"
-                        else:
-                            receivedtext = map.capitalize()
-                        for key, value in values.items():
-                            if key == "Duration":
-                                text += f"**時間制限**: "
-                                try:
-                                    text += f"__昼間:{value['Day']}分__ __夜間:{value['Night']}分__"
-                                except:
-                                    text += f"__{value}分__"
-                                text += "\n"
-                            elif key == "difficulty":
-                                text += f"**難易度**: __{value}__"
-                                text += "\n"
-                            elif key == "Players":
-                                text += f"**人数**: "
-                                try:
-                                    text += f"__昼間:{value['Day']}人__ __夜間:{value['Night']}人__"
-                                except:
-                                    text += f"__{value}人__"
-                                text += "\n"
-                            elif key == "Enemies":
-                                text += f"**出現敵兵**: "
-                                for v in value:
-                                    if v == "ScavRaiders":
-                                        text += f"__[{v}]({self.bot.enWikiUrl}Scav_Raiders)__ "
-                                    else:
-                                        text += f"__[{v}]({self.bot.enWikiUrl}{v})__ "
-                                text += "\n"
-                        text += f"**詳細情報**: __[JA]({self.bot.jaWikiUrl}{map})__ / __[EN]({self.bot.enWikiUrl}{self.bot.mapData[map]['MapUrl']})__\n"
-                        if values["Release State"] == "Released":
-                            embed.add_field(name=values["Name"].upper(), value=text)
-                        else:
-                            embed.add_field(name=map, value=f"~~{text}~~")
-                    embed.set_thumbnail(
-                        url="https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/4/43/Map.png/revision/latest?cb=20200619104902&format=original"
-                    )
+                    embed.set_image(url=value)
                     embed.set_footer(
-                        text=f"{self.bot.command_prefix}マップ名で各マップの地形情報を表示できるよー。 例: {self.bot.command_prefix}reserve \n Source: The Official Escape from Tarkov Wiki 最終更新"
+                        text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
                     )
                     sendMessage = await ctx.send(embed=embed)
                     await sendMessage.add_reaction("❌")
+                    n += 1
+                else:
+                    await self.bot.on_command_error(
+                        ctx, commands.CommandNotFound("map")
+                    )
+            else:
+                embed = discord.Embed(
+                    title="マップ",
+                    url=f"{self.bot.enWikiUrl}Map",
+                    color=0x2ECC69,
+                    timestamp=self.bot.updateTimestamp,
+                )
+                for map, values in self.bot.mapData.items():
+                    text = ""
+                    if map == "The_Lab":
+                        receivedtext = "LABORATORY"
+                    else:
+                        receivedtext = map.capitalize()
+                    for key, value in values.items():
+                        if key == "Duration":
+                            text += f"**時間制限**: "
+                            try:
+                                text += (
+                                    f"__昼間:{value['Day']}分__ __夜間:{value['Night']}分__"
+                                )
+                            except:
+                                text += f"__{value}分__"
+                            text += "\n"
+                        elif key == "difficulty":
+                            text += f"**難易度**: __{value}__"
+                            text += "\n"
+                        elif key == "Players":
+                            text += f"**人数**: "
+                            try:
+                                text += (
+                                    f"__昼間:{value['Day']}人__ __夜間:{value['Night']}人__"
+                                )
+                            except:
+                                text += f"__{value}人__"
+                            text += "\n"
+                        elif key == "Enemies":
+                            text += f"**出現敵兵**: "
+                            for v in value:
+                                if v == "ScavRaiders":
+                                    text += (
+                                        f"__[{v}]({self.bot.enWikiUrl}Scav_Raiders)__ "
+                                    )
+                                else:
+                                    text += f"__[{v}]({self.bot.enWikiUrl}{v})__ "
+                            text += "\n"
+                    text += f"**詳細情報**: __[JA]({self.bot.jaWikiUrl}{map})__ / __[EN]({self.bot.enWikiUrl}{self.bot.mapData[map]['MapUrl']})__\n"
+                    if values["Release State"] == "Released":
+                        embed.add_field(name=values["Name"].upper(), value=text)
+                    else:
+                        embed.add_field(name=map, value=f"~~{text}~~")
+                embed.set_thumbnail(
+                    url="https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/4/43/Map.png/revision/latest?cb=20200619104902&format=original"
+                )
+                embed.set_footer(
+                    text=f"{self.bot.command_prefix}マップ名で各マップの地形情報を表示できるよー。 例: {self.bot.command_prefix}reserve \n Source: The Official Escape from Tarkov Wiki 最終更新"
+                )
+                sendMessage = await ctx.send(embed=embed)
+                await sendMessage.add_reaction("❌")
         except:
             import traceback
 

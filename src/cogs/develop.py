@@ -1,17 +1,31 @@
+import config
 import discord
 from discord.ext import commands
+from discord_slash import cog_ext, SlashContext
+from discord_slash.model import SlashCommandPermissionType
+from discord_slash.utils.manage_commands import create_permission
 
 
 class Develop(commands.Cog):
-
+    guild_ids = [config.guild_ids]
     # TestCogクラスのコンストラクタ。Botを受取り、インスタンス変数として保持。
     def __init__(self, bot):
         self.bot = bot
 
     # コマンドの作成。コマンドはcommandデコレータで必ず修飾する。
-    @commands.command(description="開発用(実行権限制限あり)")
-    @commands.has_role(848998133882159174)
-    async def develop(self, ctx):
+    @cog_ext.cog_slash(
+        name="develop",
+        description="開発用(実行権限制限あり)",
+        permissions={
+            616231205032951825: [
+                create_permission(
+                    848998133882159174, SlashCommandPermissionType.ROLE, True
+                ),
+            ]
+        },
+        guild_ids=guild_ids,
+    )
+    async def develop(self, ctx: SlashContext):
         async with ctx.typing():
             if self.bot.LOCAL_HOST == False:
                 self.bot.developMode = not self.bot.developMode

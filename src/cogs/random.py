@@ -1,16 +1,22 @@
+import config
 import random as r
 import discord
 from discord.ext import commands
+from discord_slash import cog_ext, SlashContext
 
 
 class Random(commands.Cog):
-
+    guild_ids = [config.guild_ids]
     # TestCogクラスのコンストラクタ。Botを受取り、インスタンス変数として保持。
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(description="マップ抽選")
-    async def randommap(self, ctx):
+    @cog_ext.cog_slash(
+        name="randommap",
+        description="マップ抽選",
+        guild_ids=guild_ids,
+    )
+    async def randommap(self, ctx: SlashContext):
         async with ctx.typing():
             embed = discord.Embed(
                 title="迷ったときのEFTマップ抽選",
@@ -25,8 +31,12 @@ class Random(commands.Cog):
             await sendMessage.add_reaction("❌")
             await self.bot.all_commands["map"](ctx, [map])
 
-    @commands.command(description="武器抽選")
-    async def randomweapon(self, ctx):
+    @cog_ext.cog_slash(
+        name="randomweapon",
+        description="武器抽選",
+        guild_ids=guild_ids,
+    )
+    async def randomweapon(self, ctx: SlashContext):
         async with ctx.typing():
             embed = discord.Embed(
                 title="迷ったときのEFT武器抽選",

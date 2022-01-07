@@ -10,9 +10,12 @@ import random
 import requests as rq
 import datetime
 import difflib
+import config
 from datetime import datetime as dt
 from bs4 import BeautifulSoup
 from discord.ext import commands, tasks
+from discord_slash import SlashCommand
+from discord_slash.utils import manage_commands
 import traceback  # エラー表示のためにインポート
 
 
@@ -49,6 +52,7 @@ INITIAL_EXTENSIONS = [
 
 # BOT起動時にデータ読み込みしない場合True
 SAFE_MODE = False
+start_state = True
 # 接続に必要なオブジェクトを生成
 intents = discord.Intents.all()
 intents.members = True
@@ -61,6 +65,7 @@ enWikiUrl = "https://escapefromtarkov.fandom.com/wiki/"
 sendTemplatetext = "EFT(Escape from Tarkov) Wiki "
 voiceChatRole = 839773477095211018
 receivedtext = None
+mapData = None
 emojiList = [
     "1️⃣",
     "2️⃣",
@@ -73,57 +78,6 @@ emojiList = [
     "9️⃣",
     "🔟",
 ]
-mapList = {
-    "FACTORY": {
-        "overview": "ここ第16科学工場の施設はTerraグループに違法に使用されていた。\n契約戦争の間、プラント施設は、Tarkovの工場地区の支配をめぐりUSECとBEARとの間で多くの戦いの場となった。\n混乱の後、プラント施設は避難民やSCAV、その他の勢力、USECとBEARが残した物資を含む避難所と変わった。",
-        "time": {"day": 20, "nigth": 25},
-        "difficulty": "BREEZE",
-        "number": {"day": "4-5", "nigth": "4-6"},
-        "enemies": ["Scavs"],
-    },
-    "WOODS": {
-        "overview": "Prozersk自然保護区は最近、北西連邦の国立野生動物保護区のリストに含まれていた。",
-        "time": 50,
-        "difficulty": "NORMAL",
-        "number": "8-14",
-        "enemies": ["Scavs", "Cultists", "Shturman"],
-    },
-    "CUSTOMS": {
-        "overview": "工場に隣接する大規模な工業団地。ターミナル、寮、燃料タンクやその他のオブジェクトが多数存在する。",
-        "time": 45,
-        "difficulty": "NORMAL",
-        "number": "8-12",
-        "enemies": ["Scavs", "Cultists", "Reshala"],
-    },
-    "SHORELINE": {
-        "overview": "海岸線(SHORELINE)は、ポートエリアに隣接するタルコフ郊外の主要な部分。\n地域には部分的に放棄された村、近代的な民家と畑、ボート施設付きの長い海岸線、ガソリンスタンド、気象ステーション、携帯電話基地局が存在する。\nその主要なポイントは、独自の水力発電所を備えたいくつかの豪華な建物からなる大規模な「Azure Coast」保養地。\nこのリゾートは、かつてタルコフ港を通じた脱出に備えて、TERRAグループとその関連会社のスタッフの一時的な宿泊施設として使用されていた。",
-        "time": 50,
-        "difficulty": "HARD",
-        "number": "10-13",
-        "enemies": ["Scavs", "Cultists", "Sanitar"],
-    },
-    "INTERCHANGE": {
-        "overview": "南インターチェンジは市内での輸送の重要な場所。\nこの戦略的エリアはポートランド港とタルコフの工業郊外を結んでいる。\n大型のウルトラショッピングモールがあり、EMERCOM救出作戦の主要拠点として使用されていた。",
-        "time": 45,
-        "difficulty": "HARD",
-        "number": "10-14",
-        "enemies": ["Scavs", "Killa"],
-    },
-    "LABORATORY": {
-        "overview": "タルコフ市中心部の地下に存在するTERRAグループの秘密研究施設。\n非公式な存在であり、化学、物理学、生物学、ハイテク分野での研究開発を秘密裏に行っていた。",
-        "time": 40,
-        "difficulty": "INSANE",
-        "number": "6-10",
-        "enemies": ["ScavRaiders"],
-    },
-    "RESERVE": {
-        "overview": "都市伝説となっている連邦準備局の秘密基地。\nそこには核戦争にも耐えうる数年分の備蓄（食料、医薬品、その他物資）が含まれているという。",
-        "time": 50,
-        "difficulty": "HARD",
-        "number": "9-12",
-        "enemies": ["Scavs", "ScavRaiders", "Glukhar"],
-    },
-}
 traderList = {
     "Prapor": {
         "stampid": 828552629248327690,
@@ -272,7 +226,6 @@ traderList = {
         ],
     },
 }
-
 bossList = {
     "Reshala": {
         "stampid": 834774060029706240,
@@ -335,7 +288,7 @@ commandList = {
     "日本EFTWiki表示": ["JAWIKI"],
     "海外EFTWiki表示": ["ENWIKI"],
     "マップ一覧表示": ["MAP"],
-    "各マップ情報表示": mapList,
+    # "各マップ情報表示": mapList,
     "武器一覧表示": ["WEAPON"],
     "各武器詳細表示": [],
     "弾薬性能表示": ["AMMO"],
@@ -531,6 +484,7 @@ class EFTBot(commands.Bot):
         super().__init__(
             command_prefix, intents=intents, case_insensitive=case_insensitive
         )
+        slash = SlashCommand(self, sync_commands=True, override_type=True)
         self.LOCAL_HOST = LOCAL_HOST
         self.developMode = developMode
         self.jaWikiUrl = jaWikiUrl
@@ -552,7 +506,9 @@ class EFTBot(commands.Bot):
         self.safeMode = safeMode
         self.hits = {}
         self.enrageCounter = 0
-        self.saiId = 279995095124803595
+        self.bot_id = config.bot_id
+        self.guild_ids = config.guild_ids
+        self.saiId = config.saiId
         self.remove_command("help")
         self.helpEmbed = None
         self.server_status = None
@@ -570,6 +526,13 @@ class EFTBot(commands.Bot):
         channel = self.get_channel(848999028658405406)
         # 起動したらターミナルにログイン通知が表示される
         print("ログインしました")
+        cmds = await manage_commands.get_all_commands(
+            config.bot_id, TOKEN, config.guild_ids
+        )
+        for cmd in cmds:
+            print(cmd)
+        await manage_commands.remove_all_commands(config.bot_id, TOKEN)
+        print("remove all guild command.")
         if LOCAL_HOST == False:
             await self.change_presence(
                 activity=discord.Game(name="Escape from Tarkov", type=1)
@@ -720,12 +683,12 @@ class EFTBot(commands.Bot):
                     ),
                 )
                 await self.change_presence(
-                        activity=discord.Game(
-                            name="EFTサーバ障害発生中",
-                            start=dt.now(pytz.timezone("Asia/Tokyo")),
-                            type=5,
-                        )
+                    activity=discord.Game(
+                        name="EFTサーバ障害発生中",
+                        start=dt.now(pytz.timezone("Asia/Tokyo")),
+                        type=5,
                     )
+                )
                 await channel.send("@everyone", embed=embed)
                 await self.all_commands["status"](channel)
             elif self.server_status != 0 and res == 0:
@@ -1974,75 +1937,76 @@ def GetAmmoData():
     return ammoDatas
 
 
-if __name__ == "__main__":
-    if SAFE_MODE:
-        mapData = None
-        traderNames = None
-        bossNames = None
-        weaponsName = None
-        weaponsData = None
-        taskName = None
-        taskData = None
-        ammoData = None
-        updateTimestamp = None
-        bot = EFTBot(
-            command_prefix="/",
-            intents=intents,
-            case_insensitive=True,
-            LOCAL_HOST=LOCAL_HOST,
-            developMode=developMode,
-            jaWikiUrl=jaWikiUrl,
-            enWikiUrl=enWikiUrl,
-            emojiList=emojiList,
-            mapData=mapData,
-            traderList=traderList,
-            bossList=bossList,
-            notificationInformation=notificationInformation,
-            patchNotes=patchNotes,
-            traderNames=traderNames,
-            bossNames=bossNames,
-            weaponsName=weaponsName,
-            weaponsData=weaponsData,
-            taskName=taskName,
-            taskData=taskData,
-            ammoData=ammoData,
-            updateTimestamp=updateTimestamp,
-            safeMode=SAFE_MODE,
-        )  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
-    else:
-        (
-            mapData,
-            traderNames,
-            bossNames,
-            weaponsName,
-            weaponsData,
-            taskName,
-            taskData,
-            ammoData,
-            updateTimestamp,
-        ) = Initialize()
-        bot = EFTBot(
-            command_prefix="/",
-            intents=intents,
-            case_insensitive=True,
-            LOCAL_HOST=LOCAL_HOST,
-            developMode=developMode,
-            jaWikiUrl=jaWikiUrl,
-            enWikiUrl=enWikiUrl,
-            emojiList=emojiList,
-            mapData=mapData,
-            traderList=traderList,
-            bossList=bossList,
-            notificationInformation=notificationInformation,
-            patchNotes=patchNotes,
-            traderNames=traderNames,
-            bossNames=bossNames,
-            weaponsName=weaponsName,
-            weaponsData=weaponsData,
-            taskName=taskName,
-            taskData=taskData,
-            ammoData=ammoData,
-            updateTimestamp=updateTimestamp,
-            safeMode=SAFE_MODE,
-        )  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
+if SAFE_MODE:
+    mapData = None
+    traderNames = None
+    bossNames = None
+    weaponsName = None
+    weaponsData = None
+    taskName = None
+    taskData = None
+    ammoData = None
+    updateTimestamp = None
+    bot = EFTBot(
+        command_prefix="/",
+        intents=intents,
+        case_insensitive=True,
+        LOCAL_HOST=LOCAL_HOST,
+        developMode=developMode,
+        jaWikiUrl=jaWikiUrl,
+        enWikiUrl=enWikiUrl,
+        emojiList=emojiList,
+        mapData=mapData,
+        traderList=traderList,
+        bossList=bossList,
+        notificationInformation=notificationInformation,
+        patchNotes=patchNotes,
+        traderNames=traderNames,
+        bossNames=bossNames,
+        weaponsName=weaponsName,
+        weaponsData=weaponsData,
+        taskName=taskName,
+        taskData=taskData,
+        ammoData=ammoData,
+        updateTimestamp=updateTimestamp,
+        safeMode=SAFE_MODE,
+    )  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
     bot.run(TOKEN)  # Botのトークン
+else:
+    (
+        mapData,
+        traderNames,
+        bossNames,
+        weaponsName,
+        weaponsData,
+        taskName,
+        taskData,
+        ammoData,
+        updateTimestamp,
+    ) = Initialize()
+    if __name__ == "__main__":
+        bot = EFTBot(
+            command_prefix="/",
+            intents=intents,
+            case_insensitive=True,
+            LOCAL_HOST=LOCAL_HOST,
+            developMode=developMode,
+            jaWikiUrl=jaWikiUrl,
+            enWikiUrl=enWikiUrl,
+            emojiList=emojiList,
+            mapData=mapData,
+            traderList=traderList,
+            bossList=bossList,
+            notificationInformation=notificationInformation,
+            patchNotes=patchNotes,
+            traderNames=traderNames,
+            bossNames=bossNames,
+            weaponsName=weaponsName,
+            weaponsData=weaponsData,
+            taskName=taskName,
+            taskData=taskData,
+            ammoData=ammoData,
+            updateTimestamp=updateTimestamp,
+            safeMode=SAFE_MODE,
+        )  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
+        bot.run(TOKEN)  # Botのトークン
