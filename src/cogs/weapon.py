@@ -271,7 +271,7 @@ class Weapon(commands.Cog):
                         )
                 embed = discord.Embed(
                     title=weaponData["名前"],
-                    url=f"{self.bot.enWikiUrl}{weaponData['cartridgeUrl']}",
+                    url=f"{self.bot.enWikiUrl}{weaponData['weaponUrl']}",
                     description=infoStr,
                     timestamp=self.bot.updateTimestamp,
                 )
