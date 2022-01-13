@@ -39,7 +39,7 @@ class Chart(commands.Cog):
             },
         ]
         for n, (url, author) in enumerate(zip(recoveryImages, authorList)):
-            file = discord.File(f"./imgs/chart/health/{url}")
+            file = discord.File(f"../imgs/chart/health/{url}")
             embed = discord.Embed(
                 title=f"({n+1}/{len(recoveryImages)})回復早見表",
                 color=0x808080,
@@ -82,7 +82,7 @@ class Chart(commands.Cog):
             },
         ]
         for n, (url, author) in enumerate(zip(itemValueImages, authorList)):
-            file = discord.File(f"./imgs/chart/item/{url}")
+            file = discord.File(f"../imgs/chart/item/{url}")
             embed = discord.Embed(
                 title=f"({n+1}/{len(itemValueImages)})アイテム価格早見表",
                 color=0x808080,
@@ -159,7 +159,7 @@ class Chart(commands.Cog):
             },
         ]
         for n, (url, author) in enumerate(zip(taskItemImages, authorList)):
-            file = discord.File(f"./imgs/chart/task/{url}")
+            file = discord.File(f"../imgs/chart/task/{url}")
             embed = discord.Embed(
                 title=f"({n+1}/{len(taskItemImages)})タスクツリー早見表",
                 color=0x808080,
@@ -188,7 +188,7 @@ class Chart(commands.Cog):
             "graph.jpg",
         ]
         for n, url in enumerate(armorImages):
-            file = discord.File(f"./imgs/chart/armor/{url}")
+            file = discord.File(f"../imgs/chart/armor/{url}")
             embed = discord.Embed(
                 title=f"({n+1}/{len(armorImages)})アーマー早見表",
                 color=0x808080,
@@ -220,7 +220,7 @@ class Chart(commands.Cog):
             "m32_rac.PNG",
         ]
         for n, url in enumerate(headsetImages):
-            file = discord.File(f"./imgs/chart/headset/{url}")
+            file = discord.File(f"../imgs/chart/headset/{url}")
             embed = discord.Embed(
                 title=f"({n+1}/{len(headsetImages)})ヘッドセット早見表",
                 color=0x808080,
@@ -251,7 +251,7 @@ class Chart(commands.Cog):
             "lighthouse_4.jpg",
         ]
         for n, url in enumerate(lighthousetaskImages):
-            file = discord.File(f"./imgs/chart/task/{url}")
+            file = discord.File(f"../imgs/chart/task/{url}")
             embed = discord.Embed(
                 title=f"({n+1}/{len(lighthousetaskImages)})ヘッドセット早見表",
                 color=0x808080,

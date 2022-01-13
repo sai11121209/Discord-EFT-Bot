@@ -12,7 +12,7 @@ except ImportError:
 
     keep_alive.keep_alive()
 
-
+# SlashCommand初期化処理
 async def remove():
     await manage_commands.remove_all_commands_in(config.bot_id, TOKEN, config.guild_ids)
     print("remove sucsess")

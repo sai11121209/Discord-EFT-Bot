@@ -19,6 +19,8 @@ from discord_slash.utils import manage_commands
 import traceback  # エラー表示のためにインポート
 
 
+os.chdir(os.path.dirname(os.path.abspath(__file__)))  # カレントディレクトリ変更
+
 start = time.time()
 
 try:
@@ -540,16 +542,6 @@ class EFTBot(commands.Bot):
         channel = self.get_channel(848999028658405406)
         # 起動したらターミナルにログイン通知が表示される
         print("ログインしました")
-        cmds = await manage_commands.get_all_commands(
-            config.bot_id, TOKEN, config.guild_ids
-        )
-        for cmd in cmds:
-            print(cmd)
-        # slashcommand初期化処理
-        # await manage_commands.remove_all_commands_in(
-        #    config.bot_id, TOKEN, config.guild_ids
-        # )
-        # print("remove all guild command.")
         if LOCAL_HOST == False:
             await self.change_presence(
                 activity=discord.Game(name="Escape from Tarkov", type=1)
@@ -1088,85 +1080,6 @@ class EFTBot(commands.Bot):
                         )
             except:
                 pass
-
-    async def error_job(self, ctx, name):
-        fixText = ""
-        hitCommands = []
-        if ctx.command == "map":
-            hitCommands += [map.lower() for map in self.mapData]
-        elif ctx.command == "weapon":
-            hitCommands += [weaponName.lower() for weaponName in self.weaponsName]
-        elif ctx.command == "ammo":
-            hitCommands += [ammoData for ammoData in self.ammoData.keys()]
-            hitCommands += [
-                ammo["Name"] for ammoData in self.ammoData.values() for ammo in ammoData
-            ]
-        elif ctx.command == "task":
-            hitCommands += [taskName.lower() for taskName in self.taskName]
-        if len(error.args[0].split(" ")) == 1:
-            fixText = error.args[0]
-        # コマンドの予測変換
-        self.hints = {
-            self.emojiList[n]: hint
-            for n, hint in enumerate(
-                [
-                    command
-                    for command in hitCommands
-                    if difflib.SequenceMatcher(
-                        None,
-                        ctx.message.content.replace(fixText, "").lower(),
-                        self.command_prefix + command,
-                    ).ratio()
-                    >= 0.59
-                ][:10]
-            )
-        }
-        if ctx.message.content.lower().split("/")[1] in self.hints.values():
-            self.hints = {"1️⃣": ctx.message.content.lower().split("/")[1]}
-        if len(self.hints) > 0:
-            text = ""
-            embed = discord.Embed(
-                title="Hint", description="もしかして以下のコマンドじゃね?", color=0xFF0000
-            )
-            fixHints = self.hints
-            for emoji, hint in self.hints.items():
-                if hint in [map.lower() for map in self.mapData]:
-                    fixHints[emoji] = f"map {hint}"
-                elif hint in [weaponName.lower() for weaponName in self.weaponsName]:
-                    fixHints[emoji] = f"weapon {hint}"
-                elif hint in [ammoData for ammoData in self.ammoData.keys()]:
-                    fixHints[emoji] = f"ammo {hint}"
-                elif hint in [
-                    ammo["Name"]
-                    for ammoData in self.ammoData.values()
-                    for ammo in ammoData
-                ]:
-                    fixHints[emoji] = f"ammo {hint}"
-                elif hint in [task.lower() for task in self.taskName]:
-                    fixHints[emoji] = f"task {hint}"
-                embed.add_field(name=emoji, value=f"__`{prefix}{fixHints[emoji]}`__")
-            self.hints = fixHints
-            if len(self.hints) == 1:
-                if len(self.hints["1️⃣"].split(" ")) != 1:
-                    await ctx.invoke(
-                        self.get_command(self.hints["1️⃣"].split(" ")[0]),
-                        self.hints["1️⃣"].split(" ")[1:],
-                    )
-                else:
-                    await ctx.invoke(self.get_command(self.hints["1️⃣"]))
-            else:
-                embed.set_footer(text="これ以外に使えるコマンドは /help で確認できるよ!")
-                self.hintsEmbed = await ctx.send(embed=embed)
-                try:
-                    for emoji in self.hints.keys():
-                        await self.hintsEmbed.add_reaction(emoji)
-                    await self.hintsEmbed.add_reaction("❌")
-                except:
-                    pass
-        else:
-            text = f"入力されたコマンド {ctx.message.content} は見つからなかったよ...ごめんね。\n"
-            text += f"これ以外に使えるコマンドは {self.command_prefix}help で確認できるよ!"
-            await ctx.send(text)
 
 
 def Initialize():
@@ -2040,55 +1953,60 @@ def GetAmmoData():
     return ammoDatas
 
 
-if SAFE_MODE:
-    mapData = None
-    traderNames = None
-    bossNames = None
-    weaponsName = None
-    weaponsData = None
-    taskName = None
-    taskData = None
-    ammoData = None
-    updateTimestamp = None
-    bot = EFTBot(
-        command_prefix="/",
-        intents=intents,
-        case_insensitive=True,
-        LOCAL_HOST=LOCAL_HOST,
-        developMode=developMode,
-        jaWikiUrl=jaWikiUrl,
-        enWikiUrl=enWikiUrl,
-        emojiList=emojiList,
-        mapData=mapData,
-        traderList=traderList,
-        bossList=bossList,
-        notificationInformation=notificationInformation,
-        patchNotes=patchNotes,
-        traderNames=traderNames,
-        bossNames=bossNames,
-        weaponsName=weaponsName,
-        weaponsData=weaponsData,
-        taskName=taskName,
-        taskData=taskData,
-        ammoData=ammoData,
-        updateTimestamp=updateTimestamp,
-        safeMode=SAFE_MODE,
-    )  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
-    bot.run(TOKEN)  # Botのトークン
-else:
-    print("A")
-    (
-        mapData,
-        traderNames,
-        bossNames,
-        weaponsName,
-        weaponsData,
-        taskName,
-        taskData,
-        ammoData,
-        updateTimestamp,
-    ) = Initialize()
-    if __name__ == "__main__":
+if __name__ == "__main__":
+    if SAFE_MODE:
+        mapData = None
+        traderNames = None
+        bossNames = None
+        weaponsName = None
+        weaponsData = None
+        taskName = None
+        taskData = None
+        ammoData = None
+        updateTimestamp = None
+        bot = EFTBot(
+            command_prefix="/",
+            intents=intents,
+            case_insensitive=True,
+            LOCAL_HOST=LOCAL_HOST,
+            developMode=developMode,
+            jaWikiUrl=jaWikiUrl,
+            enWikiUrl=enWikiUrl,
+            emojiList=emojiList,
+            mapData=mapData,
+            traderList=traderList,
+            bossList=bossList,
+            notificationInformation=notificationInformation,
+            patchNotes=patchNotes,
+            traderNames=traderNames,
+            bossNames=bossNames,
+            weaponsName=weaponsName,
+            weaponsData=weaponsData,
+            taskName=taskName,
+            taskData=taskData,
+            ammoData=ammoData,
+            updateTimestamp=updateTimestamp,
+            safeMode=SAFE_MODE,
+        )  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
+        bot.run(TOKEN)  # Botのトークン
+    else:
+        (
+            mapData,
+            traderNames,
+            bossNames,
+            weaponsName,
+            weaponsData,
+            taskName,
+            taskData,
+            ammoData,
+            updateTimestamp,
+        ) = Initialize()
+        MAINDATA = {
+            "mapData": mapData,
+            "ammoData": ammoData,
+        }
+        with open("main_data.json", "w") as f:
+            json.dump(MAINDATA, f, indent=4)
         bot = EFTBot(
             command_prefix="/",
             intents=intents,

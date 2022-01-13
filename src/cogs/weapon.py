@@ -1,8 +1,7 @@
 import os
-import main
+import json
 import config
 import discord
-import itertools
 import numpy as np
 import requests as rq
 import matplotlib.pyplot as plt
@@ -15,7 +14,9 @@ class Weapon(commands.Cog):
     guild_ids = [config.guild_ids]
     try:
         ammo_choices = []
-        for name in main.ammoData:
+        json_open = open("./main_data.json", "r")
+        main_data = json.load(json_open)
+        for name in main_data["ammoData"]:
             ammo_choices.append(create_choice(name=name, value=name))
         weapon_choices = []
         ammo_options = [

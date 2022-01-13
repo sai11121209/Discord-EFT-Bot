@@ -1,8 +1,6 @@
-from math import fabs
-import main
+import json
 import config
 import discord
-import itertools
 import requests as rq
 from bs4 import BeautifulSoup
 from discord.ext import commands
@@ -14,7 +12,9 @@ class Map(commands.Cog):
     try:
         guild_ids = [config.guild_ids]
         choices = []
-        for name in main.mapData:
+        json_open = open("./main_data.json", "r")
+        main_data = json.load(json_open)
+        for name in main_data["mapData"]:
             choices.append(create_choice(name=name, value=name))
         map_options = [
             create_option(
