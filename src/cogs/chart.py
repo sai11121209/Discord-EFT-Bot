@@ -17,8 +17,8 @@ class Chart(commands.Cog):
     )
     async def recovery(self, ctx: SlashContext):
         recoveryImages = [
-            "https://cdn.discordapp.com/attachments/803425039864561675/804873530335690802/image0.jpg",
-            "https://cdn.discordapp.com/attachments/803425039864561675/804873530637811772/image1.jpg",
+            "abnormal_state.jpg",
+            "recovery.jpg",
         ]
         authorList = [
             {
@@ -37,18 +37,19 @@ class Chart(commands.Cog):
             },
         ]
         for n, (url, author) in enumerate(zip(recoveryImages, authorList)):
+            file = discord.File(f"./imgs/chart/health/{url}")
             embed = discord.Embed(
                 title=f"({n+1}/{len(recoveryImages)})回復早見表",
                 color=0x808080,
                 url=author["link"],
             )
-            embed.set_image(url=url)
+            embed.set_image(url=f"attachment://{url}")
             embed.set_author(
                 name=author["author"]["name"],
                 url=author["author"]["url"],
             )
             embed.set_footer(text=f"提供元: {author['link']}")
-            sendMessage = await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed, file=file)
             await sendMessage.add_reaction("❌")
 
     @cog_ext.cog_slash(
@@ -58,8 +59,8 @@ class Chart(commands.Cog):
     )
     async def itemvalue(self, ctx: SlashContext):
         itemValueImages = [
-            "https://cdn.discordapp.com/attachments/616231205032951831/805997840140599366/image0.jpg",
-            "https://media.discordapp.net/attachments/808820772536582154/814055787898077215/image1.webp",
+            "pyramid.jpg",
+            "chart.jpg",
         ]
         authorList = [
             {
@@ -78,18 +79,19 @@ class Chart(commands.Cog):
             },
         ]
         for n, (url, author) in enumerate(zip(itemValueImages, authorList)):
+            file = discord.File(f"./imgs/chart/item/{url}")
             embed = discord.Embed(
                 title=f"({n+1}/{len(itemValueImages)})アイテム価格早見表",
                 color=0x808080,
                 url=author["link"],
             )
-            embed.set_image(url=url)
+            embed.set_image(url=f"attachment://{url}")
             embed.set_author(
                 name=author["author"]["name"],
                 url=author["author"]["url"],
             )
             embed.set_footer(text=f"提供元: {author['link']}")
-            sendMessage = await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed, file=file)
             await sendMessage.add_reaction("❌")
 
     @cog_ext.cog_slash(
@@ -140,7 +142,7 @@ class Chart(commands.Cog):
     )
     async def tasktree(self, ctx: SlashContext):
         taskItemImages = [
-            "https://cdn.discordapp.com/attachments/806055934211653632/858391797121810442/image0.jpg",
+            "tree.jpg",
         ]
         authorList = [
             {
@@ -152,18 +154,19 @@ class Chart(commands.Cog):
             },
         ]
         for n, (url, author) in enumerate(zip(taskItemImages, authorList)):
+            file = discord.File(f"./imgs/chart/task/{url}")
             embed = discord.Embed(
                 title=f"({n+1}/{len(taskItemImages)})タスクツリー早見表",
                 color=0x808080,
                 url=author["link"],
             )
-            embed.set_image(url=url)
+            embed.set_image(url=f"attachment://{url}")
             embed.set_author(
                 name=author["author"]["name"],
                 url=author["author"]["url"],
             )
             embed.set_footer(text=f"提供元: {author['link']}")
-            sendMessage = await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed, file=file)
             await sendMessage.add_reaction("❌")
 
     @cog_ext.cog_slash(
@@ -173,18 +176,19 @@ class Chart(commands.Cog):
     )
     async def armor(self, ctx: SlashContext):
         armorImages = [
-            "https://cdn.discordapp.com/attachments/806055934211653632/826790299619426354/image3.jpg",
-            "https://cdn.discordapp.com/attachments/806055934211653632/826790298649624586/image0.jpg",
-            "https://cdn.discordapp.com/attachments/806055934211653632/826790298918453268/image1.jpg",
-            "https://cdn.discordapp.com/attachments/806055934211653632/826790299299872798/image2.jpg",
+            "class4.jpg",
+            "class5.jpg",
+            "class6.jpg",
+            "graph.jpg",
         ]
         for n, url in enumerate(armorImages):
+            file = discord.File(f"./imgs/chart/armor/{url}")
             embed = discord.Embed(
                 title=f"({n+1}/{len(armorImages)})アーマー早見表",
                 color=0x808080,
                 url=f"{self.bot.enWikiUrl}Armor_vests",
             )
-            embed.set_image(url=url)
+            embed.set_image(url=f"attachment://{url}")
             embed.set_author(
                 name="Twitter: @N7th_WF",
                 url="https://twitter.com/N7th_WF",
@@ -192,7 +196,7 @@ class Chart(commands.Cog):
             embed.set_footer(
                 text="提供元: https://twitter.com/N7th_WF/status/1376825476598013957?s=20"
             )
-            sendMessage = await ctx.send(embed=embed)
+            sendMessage = await ctx.send(embed=embed, file=file)
             await sendMessage.add_reaction("❌")
 
     @cog_ext.cog_slash(
@@ -201,6 +205,37 @@ class Chart(commands.Cog):
         guild_ids=guild_ids,
     )
     async def headset(self, ctx: SlashContext):
+        headsetImages = [
+            "chart.PNG",
+            "gssh_comtac2.PNG",
+            "sordin_tactical.PNG",
+            "razor_xcel.PNG",
+            "m32_rac.PNG",
+        ]
+        for n, url in enumerate(headsetImages):
+            file = discord.File(f"./imgs/chart/headset/{url}")
+            embed = discord.Embed(
+                title=f"({n+1}/{len(headsetImages)})ヘッドセット早見表",
+                color=0x808080,
+                url=f"{self.bot.enWikiUrl}Headsets",
+            )
+            embed.set_image(url=f"attachment://{url}")
+            embed.set_author(
+                name="セヴンスGaming",
+                url="https://www.youtube.com/channel/UCZpSzN3ozBUnJrXLmx50qVA",
+            )
+            embed.set_footer(
+                text="提供元: [ EFT 解説 ] ヘッドセットの選び方ガイド②考察編【タルコフ】 https://www.youtube.com/watch?v=LyVGpyBZ0EU"
+            )
+            sendMessage = await ctx.send(embed=embed, file=file)
+            await sendMessage.add_reaction("❌")
+
+    @cog_ext.cog_slash(
+        name="lighthousetask",
+        description="Lighthouseタスク早見表",
+        guild_ids=guild_ids,
+    )
+    async def lighthousetask(self, ctx: SlashContext):
         headsetImages = [
             "chart.PNG",
             "gssh_comtac2.PNG",

@@ -28,7 +28,7 @@ class Random(commands.Cog):
         embed.add_field(name="MAP", value=map, inline=False)
         sendMessage = await ctx.send(embed=embed)
         await sendMessage.add_reaction("❌")
-        await self.bot.all_commands["map"](ctx, [map])
+        await self.bot.slash.commands["map"].invoke(ctx, map)
 
     @cog_ext.cog_slash(
         name="randomweapon",
@@ -45,7 +45,7 @@ class Random(commands.Cog):
         embed.add_field(name="WEAPON", value=weapon, inline=False)
         sendMessage = await ctx.send(embed=embed)
         await sendMessage.add_reaction("❌")
-        await self.bot.all_commands["weapon"](ctx, [weapon])
+        await self.bot.slash.commands["weapon"].invoke(ctx, weapon)
 
 
 # Bot本体側からコグを読み込む際に呼び出される関数。

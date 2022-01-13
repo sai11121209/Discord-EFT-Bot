@@ -44,7 +44,7 @@ class Map(commands.Cog):
             text = f"{name} MAP INFORMATION\n"
             # LABORATORYのみ海外公式wikiのURLがThe_Labとなるため例外
             desText = ""
-            for key, value in self.bot.mapData[name].items():
+            for key, value in self.bot.mapData[name.upper()].items():
                 if key == "Banner":
                     pass
                 elif key == "Name":

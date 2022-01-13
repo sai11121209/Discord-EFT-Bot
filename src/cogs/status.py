@@ -47,6 +47,16 @@ class Status(commands.Cog):
         guild_ids=guild_ids,
     )
     async def status(self, ctx: SlashContext):
+        embed = discord.Embed(
+            title=f"EscapeTarkovServerStatus",
+            url="https://status.escapefromtarkov.com/",
+            timestamp=datetime.datetime.utcfromtimestamp(
+                dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
+            ),
+            description="情報取得中...",
+        )
+        load_embed = await ctx.send(embed=embed)
+        await load_embed.add_reaction("❌")
         for key, value in self.status_urls.items():
             res = rq.get(value)
             self.status_data[key] = json.loads(res.text)
@@ -101,8 +111,7 @@ class Status(commands.Cog):
             name="EFT(Escape from Tarkov) Wiki Bot",
             url="https://github.com/sai11121209",
         )
-        sendMessage = await ctx.send(embed=embed)
-        await sendMessage.add_reaction("❌")
+        await load_embed.edit(embed=embed)
 
 
 # Bot本体側からコグを読み込む際に呼び出される関数。

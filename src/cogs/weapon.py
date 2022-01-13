@@ -277,19 +277,8 @@ class Weapon(commands.Cog):
                 embed.set_footer(
                     text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
                 )
-                embed.set_image(url=weaponData["imageUrl"])
-                sendMessage = await ctx.send(embed=embed)
-                await sendMessage.add_reaction("❌")
+                embed.set_thumbnail(url=weaponData["imageUrl"])
                 if self.ammoChartCheck:
-                    embed = discord.Embed(
-                        title=f'{weaponData["名前"]}弾薬表',
-                        url=f"{self.bot.enWikiUrl}{weaponData['weaponUrl']}",
-                        description="Discordのバグ修正後、上記武器Embedと統合予定です",
-                        timestamp=self.bot.updateTimestamp,
-                    )
-                    embed.set_footer(
-                        text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
-                    )
                     embed.set_image(url="attachment://ammo.png")
                     sendMessage = await ctx.send(embed=embed, file=self.file)
                     await sendMessage.add_reaction("❌")

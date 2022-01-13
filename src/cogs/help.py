@@ -32,23 +32,23 @@ class Help(commands.Cog):
         )
         for command in self.bot.slash.commands:
             try:
-                if command.name == "weapon":
-                    text = f"```{self.bot.command_prefix}{command.name}```"
+                if command == "weapon":
+                    text = f"```{self.bot.command_prefix}{command}```"
                     text += "```/weapon {武器名}```"
-                elif command.name == "market":
-                    text = f"```{self.bot.command_prefix}{command.name}```"
+                elif command == "market":
+                    text = f"```{self.bot.command_prefix}{command}```"
                     text += "```!p {アイテム名}```"
-                elif command.name == "map":
-                    text = f"```{self.bot.command_prefix}{command.name}```"
+                elif command == "map":
+                    text = f"```{self.bot.command_prefix}{command}```"
                     text += "```/map {マップ名}```"
-                elif command.name == "task":
-                    text = f"```{self.bot.command_prefix}{command.name}```"
+                elif command == "task":
+                    text = f"```{self.bot.command_prefix}{command}```"
                     text += "```/task {タスク名}```"
                 else:
-                    text = f"```{self.bot.command_prefix}{command.name}```"
-                if command.name != "help":
+                    text = f"```{self.bot.command_prefix}{command}```"
+                if command != "help":
                     embed.add_field(
-                        name=f"{command.description}コマンド",
+                        name=f"{self.bot.slash.commands[command].description}コマンド",
                         value=text,
                     )
             except:

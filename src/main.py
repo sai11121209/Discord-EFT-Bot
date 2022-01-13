@@ -903,6 +903,8 @@ class EFTBot(commands.Bot):
                 text = f"入力されたコマンド {ctx.command} {ctx.args[0]} は見つからなかったよ...ごめんね。\n"
                 text += f"これ以外に使えるコマンドは {self.command_prefix}help で確認できるよ!"
                 await ctx.send(text)
+        elif isinstance(ex, commands.ExtensionError):
+            pass
         elif isinstance(ex, commands.MissingRole):
             pass
         else:
@@ -950,7 +952,10 @@ class EFTBot(commands.Bot):
 
     @client.event
     async def on_slash_command(self, ctx):
-        print(ctx)
+        if self.developMode:
+            await self.on_slash_command_error(
+                ctx, commands.ExtensionError("develop_mode")
+            )
 
     @client.event
     async def on_command_completion(self, ctx):
