@@ -1,3 +1,4 @@
+from math import fabs
 import main
 import config
 import discord
@@ -44,6 +45,7 @@ class Map(commands.Cog):
             text = f"{name} MAP INFORMATION\n"
             # LABORATORYのみ海外公式wikiのURLがThe_Labとなるため例外
             desText = ""
+            name = name.upper()
             for key, value in self.bot.mapData[name.upper()].items():
                 if key == "Banner":
                     pass

@@ -53,7 +53,7 @@ class Status(commands.Cog):
             timestamp=datetime.datetime.utcfromtimestamp(
                 dt.now(pytz.timezone("Asia/Tokyo")).timestamp()
             ),
-            description="情報取得中...",
+            description="Escape from Tarkovサーバ情報取得中です。しばらくお待ちください。",
         )
         load_embed = await ctx.send(embed=embed)
         await load_embed.add_reaction("❌")

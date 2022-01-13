@@ -2,6 +2,7 @@ import config
 import discord
 from discord.ext import commands
 from discord_slash import cog_ext, SlashContext
+from discord_slash.utils.manage_commands import create_option
 
 
 class Chart(commands.Cog):
@@ -10,12 +11,13 @@ class Chart(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @cog_ext.cog_slash(
+    @cog_ext.cog_subcommand(
+        base="chart",
         name="recovery",
         description="回復早見表",
         guild_ids=guild_ids,
     )
-    async def recovery(self, ctx: SlashContext):
+    async def chart_recovery(self, ctx: SlashContext):
         recoveryImages = [
             "abnormal_state.jpg",
             "recovery.jpg",
@@ -52,12 +54,13 @@ class Chart(commands.Cog):
             sendMessage = await ctx.send(embed=embed, file=file)
             await sendMessage.add_reaction("❌")
 
-    @cog_ext.cog_slash(
+    @cog_ext.cog_subcommand(
+        base="chart",
         name="itemvalue",
         description="アイテム価格早見表",
         guild_ids=guild_ids,
     )
-    async def itemvalue(self, ctx: SlashContext):
+    async def chart_itemvalue(self, ctx: SlashContext):
         itemValueImages = [
             "pyramid.jpg",
             "chart.jpg",
@@ -94,12 +97,13 @@ class Chart(commands.Cog):
             sendMessage = await ctx.send(embed=embed, file=file)
             await sendMessage.add_reaction("❌")
 
-    @cog_ext.cog_slash(
+    @cog_ext.cog_subcommand(
+        base="chart",
         name="taskitem",
         description="タスク使用アイテム早見表",
         guild_ids=guild_ids,
     )
-    async def taskitem(self, ctx: SlashContext):
+    async def chart_taskitem(self, ctx: SlashContext):
         taskItemImages = [
             "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/1/19/QuestItemRequirements.png/revision/latest?cb=20210212192637&format=original",
             "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/f/f8/QuestItemsInRaid.png/revision/latest?cb=20210212192627&format=original",
@@ -135,12 +139,13 @@ class Chart(commands.Cog):
             sendMessage = await ctx.send(embed=embed)
             await sendMessage.add_reaction("❌")
 
-    @cog_ext.cog_slash(
+    @cog_ext.cog_subcommand(
+        base="chart",
         name="tasktree",
         description="タスクツリー早見表",
         guild_ids=guild_ids,
     )
-    async def tasktree(self, ctx: SlashContext):
+    async def chart_tasktree(self, ctx: SlashContext):
         taskItemImages = [
             "tree.jpg",
         ]
@@ -169,12 +174,13 @@ class Chart(commands.Cog):
             sendMessage = await ctx.send(embed=embed, file=file)
             await sendMessage.add_reaction("❌")
 
-    @cog_ext.cog_slash(
+    @cog_ext.cog_subcommand(
+        base="chart",
         name="armor",
         description="アーマー早見表",
         guild_ids=guild_ids,
     )
-    async def armor(self, ctx: SlashContext):
+    async def chart_armor(self, ctx: SlashContext):
         armorImages = [
             "class4.jpg",
             "class5.jpg",
@@ -199,12 +205,13 @@ class Chart(commands.Cog):
             sendMessage = await ctx.send(embed=embed, file=file)
             await sendMessage.add_reaction("❌")
 
-    @cog_ext.cog_slash(
+    @cog_ext.cog_subcommand(
+        base="chart",
         name="headset",
         description="ヘッドセット早見表",
         guild_ids=guild_ids,
     )
-    async def headset(self, ctx: SlashContext):
+    async def chart_headset(self, ctx: SlashContext):
         headsetImages = [
             "chart.PNG",
             "gssh_comtac2.PNG",
@@ -230,34 +237,26 @@ class Chart(commands.Cog):
             sendMessage = await ctx.send(embed=embed, file=file)
             await sendMessage.add_reaction("❌")
 
-    @cog_ext.cog_slash(
+    @cog_ext.cog_subcommand(
+        base="chart",
         name="lighthousetask",
         description="Lighthouseタスク早見表",
         guild_ids=guild_ids,
     )
-    async def lighthousetask(self, ctx: SlashContext):
-        headsetImages = [
-            "chart.PNG",
-            "gssh_comtac2.PNG",
-            "sordin_tactical.PNG",
-            "razor_xcel.PNG",
-            "m32_rac.PNG",
+    async def chart_lighthousetask(self, ctx: SlashContext):
+        lighthousetaskImages = [
+            "lighthouse_1.jpg",
+            "lighthouse_2.jpg",
+            "lighthouse_3.jpg",
+            "lighthouse_4.jpg",
         ]
-        for n, url in enumerate(headsetImages):
-            file = discord.File(f"./imgs/chart/headset/{url}")
+        for n, url in enumerate(lighthousetaskImages):
+            file = discord.File(f"./imgs/chart/task/{url}")
             embed = discord.Embed(
-                title=f"({n+1}/{len(headsetImages)})ヘッドセット早見表",
+                title=f"({n+1}/{len(lighthousetaskImages)})ヘッドセット早見表",
                 color=0x808080,
-                url=f"{self.bot.enWikiUrl}Headsets",
             )
             embed.set_image(url=f"attachment://{url}")
-            embed.set_author(
-                name="セヴンスGaming",
-                url="https://www.youtube.com/channel/UCZpSzN3ozBUnJrXLmx50qVA",
-            )
-            embed.set_footer(
-                text="提供元: [ EFT 解説 ] ヘッドセットの選び方ガイド②考察編【タルコフ】 https://www.youtube.com/watch?v=LyVGpyBZ0EU"
-            )
             sendMessage = await ctx.send(embed=embed, file=file)
             await sendMessage.add_reaction("❌")
 

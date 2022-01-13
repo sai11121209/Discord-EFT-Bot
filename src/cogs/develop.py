@@ -26,23 +26,22 @@ class Develop(commands.Cog):
         guild_ids=guild_ids,
     )
     async def develop(self, ctx: SlashContext):
-        async with ctx.typing():
-            if self.bot.LOCAL_HOST == False:
-                self.bot.developMode = not self.bot.developMode
-                text = f"開発モード: {self.bot.developMode}"
-                if self.bot.developMode:
-                    await self.bot.change_presence(
-                        status=discord.Status.dnd,
-                        activity=discord.Activity(name="機能改善会議(メンテナンス中)", type=5),
-                    )
-                    self.bot.enrageCounter = 0
-                else:
-                    await self.bot.change_presence(
-                        status=discord.Status.online,
-                        activity=discord.Game(name="Escape from Tarkov", type=1),
-                    )
-                sendMessage = await ctx.send(text)
-                await sendMessage.add_reaction("❌")
+        if self.bot.LOCAL_HOST == False:
+            self.bot.developMode = not self.bot.developMode
+            text = f"開発モード: {self.bot.developMode}"
+            if self.bot.developMode:
+                await self.bot.change_presence(
+                    status=discord.Status.dnd,
+                    activity=discord.Activity(name="機能改善会議(メンテナンス中)", type=5),
+                )
+                self.bot.enrageCounter = 0
+            else:
+                await self.bot.change_presence(
+                    status=discord.Status.online,
+                    activity=discord.Game(name="Escape from Tarkov", type=1),
+                )
+            sendMessage = await ctx.send(text)
+            await sendMessage.add_reaction("❌")
 
 
 # Bot本体側からコグを読み込む際に呼び出される関数。

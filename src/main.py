@@ -311,6 +311,15 @@ commandList = {
 notificationInformation = {}
 # 上に追記していくこと
 patchNotes = {
+    "4.0:2022/01/14 02:00": [
+        "Discord SlashCommand の実装に伴う大幅仕様変更",
+        "各武器詳細表示コマンド __`WEAPON 武器名`__ において表示されるEmbedの表示方式を変更しました。",
+        "__`ARMOR`__ __`HEADSET`__ __`ITEMVALUE`__ __`RECOVERY`__ __`TASKITEM`__ __`TASKTREE`__ __`LIGHTHOUSETASK`__ の7コマンドが早見表表示コマンド __`CHART`__ のサブコマンドとして組み込まれました。以降は __`CHART ARMOR`__ のように呼び出せるようになります。",
+        "サーバステータス確認コマンド __`STATUS`__ の動作を安定化しました。",
+        "武器抽選コマンド __`RANDOMWEAPON`__ マップ抽選コマンド __`RANDOMMAP`__ において発生していたバグの修正。",
+        "一部処理の並列化による起動時間、応答時間の短縮。",
+        "その他細かい修正",
+    ],
     "3.7:2022/01/02 06:00": [
         "サーバステータス確認コマンドを __`STATUS`__ を実装しました。",
         "本BOTが5分置きににEscape from Tarkovサーバの状態を監視し、異常があった場合に通知してくれる機能を実装しました。",

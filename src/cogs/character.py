@@ -69,14 +69,14 @@ class Character(commands.Cog):
         guild_ids=guild_ids,
     )
     async def boss(self, ctx):
-        async with ctx.typing():
-            embed = discord.Embed(
-                title="ボス",
-                url=f"{self.bot.enWikiUrl}Characters#Bosses",
-                color=0x808080,
-                timestamp=self.bot.updateTimestamp,
-            )
-            for bossName in self.bot.bossNames:
+        embed = discord.Embed(
+            title="ボス",
+            url=f"{self.bot.enWikiUrl}Characters#Bosses",
+            color=0x808080,
+            timestamp=self.bot.updateTimestamp,
+        )
+        for bossName in self.bot.bossNames:
+            try:
                 boss = self.bot.bossList[bossName]
                 text = ""
                 text += "**場所**:"
@@ -108,16 +108,18 @@ class Character(commands.Cog):
                     name=f"<:{bossName}:{boss['stampid']}> {bossName}",
                     value=text,
                 )
-            embed.set_author(
-                name="EFT(Escape from Tarkov) Wiki Bot",
-                url="https://github.com/sai11121209",
-                # icon_url=client.get_user(279995095124803595).avatar_url,
-            )
-            embed.set_footer(
-                text="ボス名をクリックすることで各ボスの詳細情報にアクセスできるよー。",
-            )
-            sendMessage = await ctx.send(embed=embed)
-            await sendMessage.add_reaction("❌")
+            except:
+                pass
+        embed.set_author(
+            name="EFT(Escape from Tarkov) Wiki Bot",
+            url="https://github.com/sai11121209",
+            # icon_url=client.get_user(279995095124803595).avatar_url,
+        )
+        embed.set_footer(
+            text="ボス名をクリックすることで各ボスの詳細情報にアクセスできるよー。",
+        )
+        sendMessage = await ctx.send(embed=embed)
+        await sendMessage.add_reaction("❌")
 
 
 # Bot本体側からコグを読み込む際に呼び出される関数。
