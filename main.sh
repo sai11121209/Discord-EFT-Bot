@@ -1,4 +1,5 @@
 pip install -U git+https://github.com/Rapptz/discord.py
+pip install -U discord-py-slash-command
 pip install requests
 pip install beautifulsoup4
 pip install lxml
