@@ -66,6 +66,7 @@ sendTemplatetext = "EFT(Escape from Tarkov) Wiki "
 voiceChatRole = 839773477095211018
 receivedtext = None
 mapData = None
+slash = None
 emojiList = [
     "1️⃣",
     "2️⃣",
@@ -484,6 +485,7 @@ class EFTBot(commands.Bot):
         super().__init__(
             command_prefix, intents=intents, case_insensitive=case_insensitive
         )
+        global slash
         slash = SlashCommand(self, sync_commands=True, override_type=True)
         self.LOCAL_HOST = LOCAL_HOST
         self.developMode = developMode
@@ -513,11 +515,14 @@ class EFTBot(commands.Bot):
         self.helpEmbed = None
         self.server_status = None
         self.server_status_count = 0
-        for cog in INITIAL_EXTENSIONS:
-            try:
-                self.load_extension(cog)
-            except Exception:
-                traceback.print_exc()
+        try:
+            for cog in INITIAL_EXTENSIONS:
+                try:
+                    self.load_extension(cog)
+                except Exception:
+                    traceback.print_exc()
+        except:
+            pass
 
     # 起動時発火
     @client.event
@@ -531,8 +536,11 @@ class EFTBot(commands.Bot):
         )
         for cmd in cmds:
             print(cmd)
-        await manage_commands.remove_all_commands(config.bot_id, TOKEN)
-        print("remove all guild command.")
+        # slashcommand初期化処理
+        # await manage_commands.remove_all_commands_in(
+        #    config.bot_id, TOKEN, config.guild_ids
+        # )
+        # print("remove all guild command.")
         if LOCAL_HOST == False:
             await self.change_presence(
                 activity=discord.Game(name="Escape from Tarkov", type=1)
@@ -774,14 +782,16 @@ class EFTBot(commands.Bot):
         ):
             try:
                 if len(self.hints[reaction.emoji].split(" ")) == 1:
-                    await self.all_commands[self.hints[reaction.emoji]](
+                    await self.slash.commands[self.hints[reaction.emoji]](
                         reaction.message.channel
                     )
                 else:
                     if self.hintsEmbed:
                         await self.hintsEmbed.delete()
                         self.hintsEmbed = None
-                    await self.all_commands[self.hints[reaction.emoji].split(" ")[0]](
+                    await self.slash.commands[
+                        self.hints[reaction.emoji].split(" ")[0]
+                    ].invoke(
                         reaction.message.channel,
                         self.hints[reaction.emoji].split(" ")[1:],
                     )
@@ -806,21 +816,23 @@ class EFTBot(commands.Bot):
                 pass
 
     @client.event
-    async def on_command_error(self, ctx, error):
-        if isinstance(error, commands.CommandNotFound):
+    async def on_slash_command_error(self, ctx, ex):
+        if isinstance(ex, commands.CommandNotFound):
             fixText = ""
             hitCommands = []
-            for command in self.all_commands:
-                hitCommands.append(self.all_commands[command].name)
-            hitCommands += [map.lower() for map in self.mapData]
-            hitCommands += [weaponName.lower() for weaponName in self.weaponsName]
-            hitCommands += [ammoData for ammoData in self.ammoData.keys()]
-            hitCommands += [
-                ammo["Name"] for ammoData in self.ammoData.values() for ammo in ammoData
-            ]
-            hitCommands += [taskName.lower() for taskName in self.taskName]
-            if len(error.args[0].split(" ")) == 1:
-                fixText = error.args[0]
+            if ctx.command == "map":
+                hitCommands += [map.lower() for map in self.mapData]
+            elif ctx.command == "weapon":
+                hitCommands += [weaponName.lower() for weaponName in self.weaponsName]
+            elif ctx.command == "ammo":
+                hitCommands += [ammoData for ammoData in self.ammoData.keys()]
+                hitCommands += [
+                    ammo["Name"]
+                    for ammoData in self.ammoData.values()
+                    for ammo in ammoData
+                ]
+            elif ctx.command == "task":
+                hitCommands += [taskName.lower() for taskName in self.taskName]
             # コマンドの予測変換
             self.hints = {
                 self.emojiList[n]: hint
@@ -830,15 +842,15 @@ class EFTBot(commands.Bot):
                         for command in hitCommands
                         if difflib.SequenceMatcher(
                             None,
-                            ctx.message.content.replace(fixText, "").lower(),
+                            ctx.args[0].lower(),
                             self.command_prefix + command,
                         ).ratio()
                         >= 0.59
                     ][:10]
                 )
             }
-            if ctx.message.content.lower().split("/")[1] in self.hints.values():
-                self.hints = {"1️⃣": ctx.message.content.lower().split("/")[1]}
+            if ctx.args[0].lower() in self.hints.values():
+                self.hints = {"1️⃣": ctx.args[0].lower()}
             if len(self.hints) > 0:
                 text = ""
                 embed = discord.Embed(
@@ -868,12 +880,16 @@ class EFTBot(commands.Bot):
                 self.hints = fixHints
                 if len(self.hints) == 1:
                     if len(self.hints["1️⃣"].split(" ")) != 1:
-                        await ctx.invoke(
-                            self.get_command(self.hints["1️⃣"].split(" ")[0]),
+                        await self.slash.commands[
+                            self.hints["1️⃣"].split(" ")[0]
+                        ].invoke(
+                            ctx,
                             self.hints["1️⃣"].split(" ")[1:],
                         )
                     else:
-                        await ctx.invoke(self.get_command(self.hints["1️⃣"]))
+                        await self.slash.commands[self.hints["1️⃣"]].invoke(
+                            ctx,
+                        )
                 else:
                     embed.set_footer(text="これ以外に使えるコマンドは /help で確認できるよ!")
                     self.hintsEmbed = await ctx.send(embed=embed)
@@ -884,10 +900,10 @@ class EFTBot(commands.Bot):
                     except:
                         pass
             else:
-                text = f"入力されたコマンド {ctx.message.content} は見つからなかったよ...ごめんね。\n"
+                text = f"入力されたコマンド {ctx.command} {ctx.args[0]} は見つからなかったよ...ごめんね。\n"
                 text += f"これ以外に使えるコマンドは {self.command_prefix}help で確認できるよ!"
                 await ctx.send(text)
-        elif isinstance(error, commands.MissingRole):
+        elif isinstance(ex, commands.MissingRole):
             pass
         else:
             # exception-log チャンネル
@@ -923,9 +939,9 @@ class EFTBot(commands.Bot):
                 name="UserName", value=f"```{ctx.author.name}```", inline=False
             )
             embed.add_field(
-                name="ErrorCommand", value=f"```{ctx.message.content}```", inline=False
+                name="ErrorCommand", value=f"```{ctx.command}```", inline=False
             )
-            embed.add_field(name="ErrorDetails", value=f"```{error}```", inline=False)
+            embed.add_field(name="ErrorDetails", value=f"```{ex}```", inline=False)
             embed.set_footer(text=f"{ctx.me.name}")
             await channel.send(embed=embed)
             if self.LOCAL_HOST == False:
@@ -933,14 +949,8 @@ class EFTBot(commands.Bot):
                 await sendMessage.add_reaction("❌")
 
     @client.event
-    async def on_command(self, ctx):
-        if not self.developMode:
-            if self.LOCAL_HOST:
-                embed = discord.Embed(
-                    title="現在開発環境での処理内容が表示されており、実装の際に採用されない可能性がある機能、表示等が含まれている可能性があります。",
-                    color=0xFF0000,
-                )
-                await ctx.send(embed=embed)
+    async def on_slash_command(self, ctx):
+        print(ctx)
 
     @client.event
     async def on_command_completion(self, ctx):
@@ -1042,10 +1052,10 @@ class EFTBot(commands.Bot):
             else:
                 if not self.developMode:
                     await message.delete()
-                    await bot.process_commands(message)
+                    # await bot.process_commands(message)
                 elif message.content == f"{self.command_prefix}develop":
                     await message.delete()
-                    await bot.process_commands(message)
+                    # await bot.process_commands(message)
         else:
             try:
                 if (
@@ -1064,6 +1074,85 @@ class EFTBot(commands.Bot):
                         )
             except:
                 pass
+
+    async def error_job(self, ctx, name):
+        fixText = ""
+        hitCommands = []
+        if ctx.command == "map":
+            hitCommands += [map.lower() for map in self.mapData]
+        elif ctx.command == "weapon":
+            hitCommands += [weaponName.lower() for weaponName in self.weaponsName]
+        elif ctx.command == "ammo":
+            hitCommands += [ammoData for ammoData in self.ammoData.keys()]
+            hitCommands += [
+                ammo["Name"] for ammoData in self.ammoData.values() for ammo in ammoData
+            ]
+        elif ctx.command == "task":
+            hitCommands += [taskName.lower() for taskName in self.taskName]
+        if len(error.args[0].split(" ")) == 1:
+            fixText = error.args[0]
+        # コマンドの予測変換
+        self.hints = {
+            self.emojiList[n]: hint
+            for n, hint in enumerate(
+                [
+                    command
+                    for command in hitCommands
+                    if difflib.SequenceMatcher(
+                        None,
+                        ctx.message.content.replace(fixText, "").lower(),
+                        self.command_prefix + command,
+                    ).ratio()
+                    >= 0.59
+                ][:10]
+            )
+        }
+        if ctx.message.content.lower().split("/")[1] in self.hints.values():
+            self.hints = {"1️⃣": ctx.message.content.lower().split("/")[1]}
+        if len(self.hints) > 0:
+            text = ""
+            embed = discord.Embed(
+                title="Hint", description="もしかして以下のコマンドじゃね?", color=0xFF0000
+            )
+            fixHints = self.hints
+            for emoji, hint in self.hints.items():
+                if hint in [map.lower() for map in self.mapData]:
+                    fixHints[emoji] = f"map {hint}"
+                elif hint in [weaponName.lower() for weaponName in self.weaponsName]:
+                    fixHints[emoji] = f"weapon {hint}"
+                elif hint in [ammoData for ammoData in self.ammoData.keys()]:
+                    fixHints[emoji] = f"ammo {hint}"
+                elif hint in [
+                    ammo["Name"]
+                    for ammoData in self.ammoData.values()
+                    for ammo in ammoData
+                ]:
+                    fixHints[emoji] = f"ammo {hint}"
+                elif hint in [task.lower() for task in self.taskName]:
+                    fixHints[emoji] = f"task {hint}"
+                embed.add_field(name=emoji, value=f"__`{prefix}{fixHints[emoji]}`__")
+            self.hints = fixHints
+            if len(self.hints) == 1:
+                if len(self.hints["1️⃣"].split(" ")) != 1:
+                    await ctx.invoke(
+                        self.get_command(self.hints["1️⃣"].split(" ")[0]),
+                        self.hints["1️⃣"].split(" ")[1:],
+                    )
+                else:
+                    await ctx.invoke(self.get_command(self.hints["1️⃣"]))
+            else:
+                embed.set_footer(text="これ以外に使えるコマンドは /help で確認できるよ!")
+                self.hintsEmbed = await ctx.send(embed=embed)
+                try:
+                    for emoji in self.hints.keys():
+                        await self.hintsEmbed.add_reaction(emoji)
+                    await self.hintsEmbed.add_reaction("❌")
+                except:
+                    pass
+        else:
+            text = f"入力されたコマンド {ctx.message.content} は見つからなかったよ...ごめんね。\n"
+            text += f"これ以外に使えるコマンドは {self.command_prefix}help で確認できるよ!"
+            await ctx.send(text)
 
 
 def Initialize():
@@ -1973,6 +2062,7 @@ if SAFE_MODE:
     )  # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
     bot.run(TOKEN)  # Botのトークン
 else:
+    print("A")
     (
         mapData,
         traderNames,

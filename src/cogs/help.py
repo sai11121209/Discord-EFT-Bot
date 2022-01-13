@@ -30,26 +30,29 @@ class Help(commands.Cog):
                 ).timestamp()
             ),
         )
-        for command in self.bot.all_commands:
-            if self.bot.all_commands[command].name == "weapon":
-                text = f"```{self.bot.command_prefix}{self.bot.all_commands[command].name}```"
-                text += "```/weapon {武器名}```"
-            elif self.bot.all_commands[command].name == "market":
-                text = f"```{self.bot.command_prefix}{self.bot.all_commands[command].name}```"
-                text += "```!p {アイテム名}```"
-            elif self.bot.all_commands[command].name == "map":
-                text = f"```{self.bot.command_prefix}{self.bot.all_commands[command].name}```"
-                text += "```/map {マップ名}```"
-            elif self.bot.all_commands[command].name == "task":
-                text = f"```{self.bot.command_prefix}{self.bot.all_commands[command].name}```"
-                text += "```/task {タスク名}```"
-            else:
-                text = f"```{self.bot.command_prefix}{self.bot.all_commands[command].name}```"
-            if self.bot.all_commands[command].name != "help":
-                embed.add_field(
-                    name=f"{self.bot.all_commands[command].description}コマンド",
-                    value=text,
-                )
+        for command in self.bot.slash.commands:
+            try:
+                if command.name == "weapon":
+                    text = f"```{self.bot.command_prefix}{command.name}```"
+                    text += "```/weapon {武器名}```"
+                elif command.name == "market":
+                    text = f"```{self.bot.command_prefix}{command.name}```"
+                    text += "```!p {アイテム名}```"
+                elif command.name == "map":
+                    text = f"```{self.bot.command_prefix}{command.name}```"
+                    text += "```/map {マップ名}```"
+                elif command.name == "task":
+                    text = f"```{self.bot.command_prefix}{command.name}```"
+                    text += "```/task {タスク名}```"
+                else:
+                    text = f"```{self.bot.command_prefix}{command.name}```"
+                if command.name != "help":
+                    embed.add_field(
+                        name=f"{command.description}コマンド",
+                        value=text,
+                    )
+            except:
+                pass
         # embed.set_thumbnail(url=client.get_user(803770349908131850).avatar_url)
         embed.set_author(
             name="EFT(Escape from Tarkov) Wiki Bot",

@@ -17,19 +17,18 @@ class Random(commands.Cog):
         guild_ids=guild_ids,
     )
     async def randommap(self, ctx: SlashContext):
-        async with ctx.typing():
-            embed = discord.Embed(
-                title="迷ったときのEFTマップ抽選",
-                description=f"{ctx.author.mention}が赴くマップは...",
-                color=0x2ECC69,
-            )
-            map = r.choice(
-                [key for key, val in self.bot.mapData.items() if val["Duration"] != ""]
-            ).lower()
-            embed.add_field(name="MAP", value=map, inline=False)
-            sendMessage = await ctx.send(embed=embed)
-            await sendMessage.add_reaction("❌")
-            await self.bot.all_commands["map"](ctx, [map])
+        embed = discord.Embed(
+            title="迷ったときのEFTマップ抽選",
+            description=f"{ctx.author.mention}が赴くマップは...",
+            color=0x2ECC69,
+        )
+        map = r.choice(
+            [key for key, val in self.bot.mapData.items() if val["Duration"] != ""]
+        ).lower()
+        embed.add_field(name="MAP", value=map, inline=False)
+        sendMessage = await ctx.send(embed=embed)
+        await sendMessage.add_reaction("❌")
+        await self.bot.all_commands["map"](ctx, [map])
 
     @cog_ext.cog_slash(
         name="randomweapon",
@@ -37,17 +36,16 @@ class Random(commands.Cog):
         guild_ids=guild_ids,
     )
     async def randomweapon(self, ctx: SlashContext):
-        async with ctx.typing():
-            embed = discord.Embed(
-                title="迷ったときのEFT武器抽選",
-                description=f"{ctx.author.mention}が使用する武器は...",
-                color=0x2ECC69,
-            )
-            weapon = r.choice(self.bot.weaponsName)
-            embed.add_field(name="WEAPON", value=weapon, inline=False)
-            sendMessage = await ctx.send(embed=embed)
-            await sendMessage.add_reaction("❌")
-            await self.bot.all_commands["weapon"](ctx, [weapon])
+        embed = discord.Embed(
+            title="迷ったときのEFT武器抽選",
+            description=f"{ctx.author.mention}が使用する武器は...",
+            color=0x2ECC69,
+        )
+        weapon = r.choice(self.bot.weaponsName)
+        embed.add_field(name="WEAPON", value=weapon, inline=False)
+        sendMessage = await ctx.send(embed=embed)
+        await sendMessage.add_reaction("❌")
+        await self.bot.all_commands["weapon"](ctx, [weapon])
 
 
 # Bot本体側からコグを読み込む際に呼び出される関数。
