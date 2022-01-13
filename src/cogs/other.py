@@ -7,8 +7,8 @@ import requests as rq
 from discord.ext import commands
 from datetime import datetime as dt
 from matplotlib import pyplot as plt
-from dateutil.relativedelta import relativedelta
 from discord_slash import cog_ext, SlashContext
+from dateutil.relativedelta import relativedelta
 
 
 class Other(commands.Cog):

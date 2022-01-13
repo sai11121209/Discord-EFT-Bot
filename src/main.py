@@ -1,22 +1,21 @@
 # インストールした discord.py を読み込む
 import os
 import re
-import random as r
 import time
 import pytz
 import json
-import discord
-import random
-import requests as rq
-import datetime
-import difflib
 import config
-from datetime import datetime as dt
+import random
+import discord
+import difflib
+import datetime
+import traceback
+import random as r
+import requests as rq
 from bs4 import BeautifulSoup
-from discord.ext import commands, tasks
+from datetime import datetime as dt
 from discord_slash import SlashCommand
-from discord_slash.utils import manage_commands
-import traceback  # エラー表示のためにインポート
+from discord.ext import commands, tasks
 
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # カレントディレクトリ変更
@@ -419,9 +418,9 @@ patchNotes = {
         "マップ抽選コマンド __`RANDOM`__ で発生していたデータ型キャスト不具合の修正を行いました。",
         "タイムゾーン未指定による更新日時が正常に表示されていなかった問題の修正。",
     ],
-    "1.10.2:2021/04/06 19:13": ["弾薬性能表示コマンド　__`AMMO`__ の挙動が変更されました。"],
+    "1.10.2:2021/04/06 19:13": ["弾薬性能表示コマンド __`AMMO`__ の挙動が変更されました。"],
     "1.10.1:2021/04/06 03:20": [
-        "機能改善に伴いタスク一覧表示コマンドが　~~__`TASK`__~~  から ディーラー一覧表示コマンドの __`DEALER`__ に統合されました。"
+        "機能改善に伴いタスク一覧表示コマンドが ~~__`TASK`__~~  から ディーラー一覧表示コマンドの __`DEALER`__ に統合されました。"
     ],
     "1.10:2021/04/02 12:00": ["アーマの早見表表示コマンド __`ARMOR`__ が仮実装されました。"],
     "1.9.1:2021/03/30 01:35": [
@@ -679,7 +678,7 @@ class EFTBot(commands.Bot):
                         )
                     )
                 await channel.send("@everyone", embed=embed)
-                await self.all_commands["status"](channel)
+                await self.slash.commands["status"].invoke(channel)
             elif self.server_status == 2 and res == 3:
                 # 鯖状況悪化
                 embed = discord.Embed(
@@ -699,7 +698,7 @@ class EFTBot(commands.Bot):
                     )
                 )
                 await channel.send("@everyone", embed=embed)
-                await self.all_commands["status"](channel)
+                await self.slash.commands["status"].invoke(channel)
             elif self.server_status != 0 and res == 0:
                 # 鯖復活
                 if self.server_status == 1:
@@ -723,7 +722,7 @@ class EFTBot(commands.Bot):
                         ),
                     )
                 await channel.send("@everyone", embed=embed)
-                await self.all_commands["status"](channel)
+                await self.slash.commands["status"].invoke(channel)
                 await self.change_presence(
                     activity=discord.Game(name="Escape from Tarkov", type=1)
                 )
@@ -1046,7 +1045,7 @@ class EFTBot(commands.Bot):
             self.enrageCounter += 1
 
         elif "@everyone BOTの更新をしました!" == message.content:
-            await self.all_commands["patch"](message.channel)
+            await self.slash.commands["patch"].invoke(message.channel)
         if message.content[0] == self.command_prefix:
             if self.safeMode:
                 await message.delete()

@@ -1,6 +1,6 @@
 import config
-import random as r
 import discord
+import random as r
 from discord.ext import commands
 from discord_slash import cog_ext, SlashContext
 
