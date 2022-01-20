@@ -48,6 +48,7 @@ INITIAL_EXTENSIONS = [
     "cogs.other",
     "cogs.random",
     "cogs.status",
+    "cogs.rate",
     "cogs.develop",
 ]
 
@@ -63,6 +64,7 @@ developMode = False
 prefix = "/"
 jaWikiUrl = "https://wikiwiki.jp/eft/"
 enWikiUrl = "https://escapefromtarkov.fandom.com/wiki/"
+marketUrl = "https://tarkov-market.com/item/"
 sendTemplatetext = "EFT(Escape from Tarkov) Wiki "
 voiceChatRole = 839773477095211018
 receivedtext = None
@@ -312,6 +314,12 @@ commandList = {
 notificationInformation = {}
 # 上に追記していくこと
 patchNotes = {
+    "4.1:2022/01/20 16:00": [
+        "現在のユーロ、ドルのEFT為替レート表示コマンド _`RATE`_ を追加しました。",
+        "ユーロからルーブルの値段を計算するコマンド _`RATE EURO`_ を追加しました。",
+        "ドルからルーブルの値段を計算するコマンド _`RATE DOLLAR`_ を追加しました。",
+        "弾薬性能表示コマンド __`AMMO`__ を呼び出した際に表示される弾薬の性能比較画像を12.12版に更新しました。",
+    ],
     "4.0:2022/01/14 02:00": [
         "Discord SlashCommand の実装に伴う大幅仕様変更",
         "各武器詳細表示コマンド __`WEAPON 武器名`__ において表示されるEmbedの表示方式を変更しました。",
@@ -476,6 +484,7 @@ class EFTBot(commands.Bot):
         developMode,
         jaWikiUrl,
         enWikiUrl,
+        marketUrl,
         emojiList,
         mapData,
         traderList,
@@ -501,6 +510,7 @@ class EFTBot(commands.Bot):
         self.developMode = developMode
         self.jaWikiUrl = jaWikiUrl
         self.enWikiUrl = enWikiUrl
+        self.marketUrl = marketUrl
         self.emojiList = emojiList
         self.mapData = mapData
         self.traderList = traderList
@@ -2014,6 +2024,7 @@ if __name__ == "__main__":
             developMode=developMode,
             jaWikiUrl=jaWikiUrl,
             enWikiUrl=enWikiUrl,
+            marketUrl=marketUrl,
             emojiList=emojiList,
             mapData=mapData,
             traderList=traderList,

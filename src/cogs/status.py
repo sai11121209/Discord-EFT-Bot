@@ -1,5 +1,4 @@
 import json
-import time
 import pytz
 import config
 import discord

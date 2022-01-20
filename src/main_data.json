@@ -8,9 +8,9 @@
             "Duration": "35 ",
             "Players": "9-12",
             "Enemies": [
-                "Reshala",
                 "Cultists",
-                "Scavs"
+                "Scavs",
+                "Reshala"
             ],
             "Release State": "Released",
             "Images": {
@@ -35,8 +35,8 @@
             "Players": "4-6",
             "Enemies": [
                 "Cultists",
-                "Scavs",
-                "Tagilla"
+                "Tagilla",
+                "Scavs"
             ],
             "Release State": "Released",
             "Images": {
@@ -53,8 +53,8 @@
             "Duration": "45 ",
             "Players": "10-14",
             "Enemies": [
-                "Killa",
-                "Scavs"
+                "Scavs",
+                "Killa"
             ],
             "Release State": "Released",
             "Images": {
@@ -90,9 +90,9 @@
             "Duration": "40 ",
             "Players": "9-12",
             "Enemies": [
+                "Glukhar",
                 "ScavRaiders",
-                "Scavs",
-                "Glukhar"
+                "Scavs"
             ],
             "Release State": "Released",
             "Images": {
@@ -112,8 +112,8 @@
             "Players": "10-13",
             "Enemies": [
                 "Cultists",
-                "Sanitar",
-                "Scavs"
+                "Scavs",
+                "Sanitar"
             ],
             "Release State": "Released",
             "Images": {

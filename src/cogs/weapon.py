@@ -178,24 +178,25 @@ class Weapon(commands.Cog):
         else:
             text = "弾薬性能表示"
             ammoImages = [
-                "https://cdn.discordapp.com/attachments/806055934211653632/828931828101546024/image0.jpg",
-                "https://cdn.discordapp.com/attachments/806055934211653632/828931828353073172/image1.jpg",
+                "Ammunition_List_1.jpg",
+                "Ammunition_List_2.jpg",
             ]
             for n, url in enumerate(ammoImages):
+                file = discord.File(f"../imgs/chart/ammo/{url}")
                 embed = discord.Embed(
                     title=f"({n+1}/{len(ammoImages)}){text}",
                     color=0x808080,
                     url=f"https://eft.monster/",
                 )
-                embed.set_image(url=url)
+                embed.set_image(url=f"attachment://{url}")
                 embed.set_author(
                     name="Twitter: bojotaro_tarkov",
                     url="https://twitter.com/bojotaro_tarkov",
                 )
                 embed.set_footer(
-                    text="提供元: https://twitter.com/bojotaro_tarkov/status/1368569066928046080?s=20"
+                    text="提供元: https://twitter.com/bojotaro_tarkov/status/1476871141709213702"
                 )
-                sendMessage = await ctx.send(embed=embed)
+                sendMessage = await ctx.send(embed=embed, file=file)
                 await sendMessage.add_reaction("❌")
 
     @cog_ext.cog_slash(
