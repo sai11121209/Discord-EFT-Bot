@@ -123,8 +123,21 @@ class Map(commands.Cog):
                 sendMessage = await ctx.send(embed=embed)
                 await sendMessage.add_reaction("❌")
                 n += 1
-            else:
-                await self.bot.on_command_error(ctx, commands.CommandNotFound("map"))
+            if name == "RESERVE":
+                file = discord.File(f"../imgs/map/reserve/1.jpg")
+                embed = discord.Embed(
+                    title=f"({n}/{len(mapData)}){text}",
+                    color=0x808080,
+                    color=color,
+                    url=f"{self.bot.enWikiUrl}{self.bot.mapData[name]['MapUrl']}",
+                    timestamp=self.bot.updateTimestamp,
+                )
+                embed.set_image(url=f"attachment://1.jpg")
+                embed.set_footer(
+                    text=f"Source: The Official Escape from Tarkov Wiki 最終更新"
+                )
+                sendMessage = await ctx.send(embed=embed, file=file)
+                await sendMessage.add_reaction("❌")
         else:
             embed = discord.Embed(
                 title="マップ",
