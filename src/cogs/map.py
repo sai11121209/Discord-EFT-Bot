@@ -127,7 +127,6 @@ class Map(commands.Cog):
                 file = discord.File(f"../imgs/map/reserve/1.jpg")
                 embed = discord.Embed(
                     title=f"({n}/{len(mapData)}){text}",
-                    color=0x808080,
                     color=color,
                     url=f"{self.bot.enWikiUrl}{self.bot.mapData[name]['MapUrl']}",
                     timestamp=self.bot.updateTimestamp,
