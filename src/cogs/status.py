@@ -86,24 +86,27 @@ class Status(commands.Cog):
                     inline=False,
                 )
             if key == "information":
-                infoStr = ""
-                text = values[0]["content"]
-                # 翻訳前言語
-                source = "en"
-                # 翻訳後言語
-                Target = "ja"
-                gasUrl = f"https://script.google.com/macros/s/AKfycbxvCS-29LVgrm9-cSynGl19QUIB7jTpzuvFqflus_P0BJtXX80ahLazltfm2rbMGVVs/exec?text={text}&source={source}&target={Target}"
-                res = rq.get(gasUrl).json()
-                if res["code"] == 200:
-                    text = res["text"]
-                infoStr += f"\n> {values[0]['content']}\n"
-                infoStr += f"\n> {text}"
-                infoStr += "\n> Google翻訳"
-                embed.add_field(
-                    name=f"アナウンス最終更新 {dt.fromisoformat(values[0]['time']).astimezone(timezone('Asia/Tokyo')).strftime('%Y-%m-%d %H:%M:%S')}",
-                    value=f"{infoStr} ",
-                    inline=False,
-                )
+                try:
+                    infoStr = ""
+                    text = values[0]["content"]
+                    # 翻訳前言語
+                    source = "en"
+                    # 翻訳後言語
+                    Target = "ja"
+                    gasUrl = f"https://script.google.com/macros/s/AKfycbxvCS-29LVgrm9-cSynGl19QUIB7jTpzuvFqflus_P0BJtXX80ahLazltfm2rbMGVVs/exec?text={text}&source={source}&target={Target}"
+                    res = rq.get(gasUrl).json()
+                    if res["code"] == 200:
+                        text = res["text"]
+                    infoStr += f"\n> {values[0]['content']}\n"
+                    infoStr += f"\n> {text}"
+                    infoStr += "\n> Google翻訳"
+                    embed.add_field(
+                        name=f"アナウンス最終更新 {dt.fromisoformat(values[0]['time']).astimezone(timezone('Asia/Tokyo')).strftime('%Y-%m-%d %H:%M:%S')}",
+                        value=f"{infoStr} ",
+                        inline=False,
+                    )
+                except:
+                    pass
         embed.set_thumbnail(url="https://status.escapefromtarkov.com/favicon.ico")
         embed.set_footer(text=f"Source: Escape from Tarkov Status 最終更新")
         embed.set_author(
