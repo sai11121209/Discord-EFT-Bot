@@ -4,15 +4,10 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/9/9f/Customs_Banner.png/revision/latest/?format=original",
             "Name": "Customs",
             "MapUrl": "Customs",
-            "Features": "Taking place in an industrial part of Tarkov, Customs features a self-storage lot, a river with a bridge, a two and three story dormitory, gas stations, warehouses, construction zones, and some military checkpoints.",
+            "Description": "A large area of industrial park land situated adjacent to the factory. This area houses a customs terminal, fuel storage facilities, offices, and dorms as well as a variety of other infrastructure buildings.",
             "Duration": "35 ",
             "Players": "9-12",
-            "Enemies": [
-                "Cultists",
-                "Scavs",
-                "Reshala"
-            ],
-            "Release State": "Released",
+            "Release state": "Released",
             "Images": {
                 "CustomsMapRealNorthBW Reemr.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/4/49/CustomsMapRealNorthBW_Reemr.png/revision/latest/?format=original",
                 "CustomsMapRealNorthColour Reemr.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/0/0b/CustomsMapRealNorthColour_Reemr.png/revision/latest/?format=original",
@@ -27,18 +22,13 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/1/1a/Factory-Day_Banner.png/revision/latest/?format=original",
             "Name": "Factory",
             "MapUrl": "Factory",
-            "Features": "A small, fast-paced CQC map inside of a multi-story industrial factory, complete with tunnels and overhead walkways.",
+            "Description": "The industrial estate and facilities of Chemical Plant No. 16 were rented out illegally to the TerraGroup corporation. During the advent of the Contract Wars the plant became the scene of numerous firefights between USEC and BEAR that ultimately determined control of the industrial district of Tarkov. Later on, in the wake of the chaos the plant facilities became shelter for the remaining civilians, Scavs and military operatives including the scattered remains of the USEC and BEAR contingents.",
             "Duration": {
                 "Day": "20",
                 "Night": "25"
             },
             "Players": "4-6",
-            "Enemies": [
-                "Cultists",
-                "Tagilla",
-                "Scavs"
-            ],
-            "Release State": "Released",
+            "Release state": "Released",
             "Images": {
                 "Factory 3D b Johnny Tushonka.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/c/cd/Factory_3D_b_Johnny_Tushonka.jpg/revision/latest/?format=original",
                 "EFT Factory Map 12.11 stealtheh.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/3/32/EFT_Factory_Map_12.11_stealtheh.jpg/revision/latest/?format=original",
@@ -49,14 +39,10 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/3/3e/Banner_interchange.png/revision/latest/?format=original",
             "Name": "Interchange",
             "MapUrl": "Interchange",
-            "Features": "A three-story shopping complex comprising of a variety of different types of stores typical to malls, as well as 3 major anchor stores IDEA, OLI, and Goshan. It also has underground parking, roads circling the building, and a go-kart track.",
+            "Description": "The South interchange is a key location for transport in the city. This strategic area connects the port and harbour with the industrial outskirts of Tarkov. Located in the center of the interchange is a huge ULTRA shopping mall which was used as the main base of operation for the EMERCOM evacuation.",
             "Duration": "45 ",
             "Players": "10-14",
-            "Enemies": [
-                "Scavs",
-                "Killa"
-            ],
-            "Release State": "Released",
+            "Release state": "Released",
             "Images": {
                 "InterchangeMap Updated 4.24.2020.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/e/e5/InterchangeMap_Updated_4.24.2020.png/revision/latest/?format=original",
                 "Interchange hidden stash map.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/f/fe/Interchange_hidden_stash_map.jpg/revision/latest/?format=original",
@@ -67,14 +53,10 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/d/dc/Banner_lighthouse.png/revision/latest/?format=original",
             "Name": "Lighthouse",
             "MapUrl": "Lighthouse",
-            "Features": "The lighthouse at Cape Dalniy was an important strategic object on the way to Tarkov. During Contract Wars, it was the main entry point for USEC units and served as their base of operations. After the conflict, Scavs took a fancy to this place, until the old owners returned, who decided to stay in Tarkov and establish their own order.",
+            "Description": "The lighthouse at Cape Dalniy was an important strategic object on the way to Tarkov. During Contract Wars, it was the main entry point for USEC units and served as their base of operations. After the conflict, Scavs took a fancy to this place, until the old owners returned, who decided to stay in Tarkov and establish their own order.",
             "Duration": "40 ",
             "Players": "9-12",
-            "Enemies": [
-                "Scavs",
-                "Rogues"
-            ],
-            "Release State": "Released",
+            "Release state": "Released",
             "Images": {
                 "Jindouz Lighthouse Map V1.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/1/13/Jindouz_Lighthouse_Map_V1.png/revision/latest/?format=original",
                 "Re3mrLighthouseIsometricDay-min.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/e/e2/Re3mrLighthouseIsometricDay-min.png/revision/latest/?format=original",
@@ -86,16 +68,12 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/f/f4/Reserve.png/revision/latest/?format=original",
             "Name": "Reserve",
             "MapUrl": "Reserve",
-            "Features": "The secret Federal State Reserve Agency base that, according to urban legends, contains enough supplies to last for years: food, medications and other resources, enough to survive an all-out nuclear war.",
+            "Description": "The secret Federal State Reserve Agency base that, according to urban legends, contains enough supplies to last for years; food, medications and other resources, enough to survive an all-out nuclear war.",
             "Duration": "40 ",
             "Players": "9-12",
-            "Enemies": [
-                "Glukhar",
-                "ScavRaiders",
-                "Scavs"
-            ],
-            "Release State": "Released",
+            "Release state": "Released",
             "Images": {
+                "Re3mrReserveCardinalNorthWikiVer.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/3/38/Re3mrReserveCardinalNorthWikiVer.jpg/revision/latest/?format=original",
                 "Keys and doors v3.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/9/9f/Keys_and_doors_v3.png/revision/latest/?format=original",
                 "3D Map by loweffortsaltbox.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/4/42/3D_Map_by_loweffortsaltbox.png/revision/latest/?format=original",
                 "ReserveExpandedUnderground.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/d/d0/ReserveExpandedUnderground.png/revision/latest/?format=original",
@@ -107,15 +85,10 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/d/d5/Banner_shoreline.png/revision/latest/?format=original",
             "Name": "Shoreline",
             "MapUrl": "Shoreline",
-            "Features": "A large map that runs along a shoreline. A small town, a sunken village, a gas station, a pier, a guarded pill-box, a radio station, and, most notably, a large 3-story health resort are included. The health resort also has a basement in-ground pool, a gym, tennis courts, and a theatre.",
+            "Description": "The Shoreline makes up a large part of the outskirts of Tarkov and is located next to the Port. The area houses a partially abandoned village, modern private housing, agricultural fields, long stretches of beach, a boating facility, gas station, weather station, and cellular tower as well as other commercial facilities. Shorelines main point of interest is the \"Azure Coast\" health resort which consists of several luxurious buildings. The resort is exclusively powered by a nearby hydroelectric power plant. The resort had previously been used as temporary accomodation for members of TerraGroup and the corporations associated divisions in preparation for the evacuation of Tarkov Port",
             "Duration": "50 ",
             "Players": "10-13",
-            "Enemies": [
-                "Cultists",
-                "Scavs",
-                "Sanitar"
-            ],
-            "Release State": "Released",
+            "Release state": "Released",
             "Images": {
                 "Shoreline Map - 12.7.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/a/ac/Shoreline_Map_-_12.7.png/revision/latest/?format=original",
                 "Shoreline marvelin 2 updated.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/d/d4/Shoreline_marvelin_2_updated.png/revision/latest/?format=original",
@@ -131,13 +104,11 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/d/d7/TheLabBanner.png/revision/latest/?format=original",
             "Name": "The Lab",
             "MapUrl": "The_Lab",
-            "Features": "Underground laboratory complex TerraGroup Labs is a secret object right under the center of Tarkov. Officially, this research center does not exist and, based on data scraps, is engaged in R&D, testing and simulation projects in chemistry, physics, biology, and high-tech areas.",
+            "Description": "Underground laboratory complex TerraGroup Labs is a secret object right under the center of Tarkov. Officially, this research center does not exist and, based on data scraps, is engaged in R&D, testing and simulation projects in chemistry, physics, biology, and high-tech areas.",
             "Duration": "40 ",
             "Players": "6-10",
-            "Enemies": [
-                "ScavRaiders"
-            ],
-            "Release State": "Released",
+            "Enemy types": "Scav Raiders",
+            "Release state": "Released",
             "Images": {
                 "TheLabBasementByLogiwonk.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/0/06/TheLabBasementByLogiwonk.png/revision/latest/?format=original",
                 "TheLabFirstFloorByLogiwonk.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/3/35/TheLabFirstFloorByLogiwonk.png/revision/latest/?format=original",
@@ -153,15 +124,10 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/3/3e/Banner_woods.png/revision/latest/?format=original",
             "Name": "Woods",
             "MapUrl": "Woods",
-            "Features": "A moderately sized section of woods with some open fields, small hills, a logging camp, and a couple of bunkers.",
+            "Description": "The Priozersk Natural Reserve recently became part of the state-protected wildlife reserves of the North Western Federal District.",
             "Duration": "40 ",
             "Players": "9-14",
-            "Enemies": [
-                "Cultists",
-                "Scavs",
-                "Shturman"
-            ],
-            "Release State": "Released",
+            "Release state": "Released",
             "Images": {
                 "Glory4lyfeWoods map v4 marked.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/0/05/Glory4lyfeWoods_map_v4_marked.png/revision/latest/?format=original",
                 "VirazyWoods.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/8/89/VirazyWoods.jpg/revision/latest/?format=original",
@@ -173,78 +139,66 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/b/bc/Wiki.png/revision/latest/?format=original",
             "Name": "Arena",
             "MapUrl": "Arena",
-            "Features": "Not part of the escape.",
+            "Description": "A makeshift arena for gladiator fights, redesigned by remaining locals out of Equator-2 shopping mall.",
             "Duration": "",
             "Players": "",
-            "Enemies": [
-                ""
-            ],
-            "Release State": "Unreleased",
+            "Enemy types": "",
+            "Release state": "Unreleased",
             "Images": {}
         },
         "PRIVATESECTOR": {
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/b/bc/Wiki.png/revision/latest/?format=original",
             "Name": "Private Sector",
             "MapUrl": "Private_Sector",
-            "Features": "Private residential sector, built up with cottages of the upper-class citizens of Tarkov. In the first weeks of emerging chaos it served as a refugee staging camp, but has become a known scavenger haunt afterwards.",
+            "Description": "Private residential sector, built up with cottages of the upper-class citizens of Tarkov. In the first weeks of emerging chaos it served as a refugee staging camp, but has become a known scavenger haunt afterwards.",
             "Duration": "",
             "Players": "",
-            "Enemies": [
-                ""
-            ],
-            "Release State": "Unreleased",
+            "Enemy types": "",
+            "Release state": "Unreleased",
             "Images": {}
         },
         "STREETSOFTARKOV": {
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/4/41/Banner_streets.png/revision/latest/?format=original",
             "Name": "Streets of Tarkov",
             "MapUrl": "Streets_of_Tarkov",
-            "Features": "Downtown Tarkov houses, banks, malls, and hotels as well as all the other amenities a thriving metropolis could have needed.",
+            "Description": "Downtown Tarkov houses, banks, malls, and hotels as well as all the other amenities a thriving metropolis could have needed.",
             "Duration": "",
             "Players": "",
-            "Enemies": [
-                ""
-            ],
-            "Release State": "Unreleased",
+            "Enemy types": "",
+            "Release state": "Unreleased",
             "Images": {}
         },
         "SUBURBS": {
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/b/bc/Wiki.png/revision/latest/?format=original",
             "Name": "Suburbs",
             "MapUrl": "Suburbs",
-            "Features": "The suburb and commuter areas of Tarkov containing all the infrastructure and creature comforts for a long and happy life.",
+            "Description": "The suburb and commuter areas of Tarkov containing all the infrastructure and creature comforts for a long and happy life.",
             "Duration": "",
             "Players": "",
-            "Enemies": [
-                ""
-            ],
-            "Release State": "Unreleased",
+            "Enemy types": "",
+            "Release state": "Unreleased",
             "Images": {}
         },
         "TERMINAL": {
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/b/bc/Wiki.png/revision/latest/?format=original",
             "Name": "Terminal",
             "MapUrl": "Terminal",
-            "Features": "A large section of the harbour zone, rumoured to be the backup Emercom extraction point.",
+            "Description": "A large section of the harbour zone, rumoured to be the backup Emercom extraction point.",
             "Duration": "",
             "Players": "",
-            "Enemies": [
-                ""
-            ],
-            "Release State": "Unreleased",
+            "Enemy types": "",
+            "Release state": "Unreleased",
             "Images": {}
         },
         "TOWN": {
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/b/bc/Wiki.png/revision/latest/?format=original",
             "Name": "Town",
             "MapUrl": "Town",
-            "Features": "The Verkhneye urban settlement is a small town by the seaside, favoured by locals as an exceptional gardening and outdoor recreation spot.",
+            "Description": "The Verkhneye urban settlement is a small town by the seaside, favoured by locals as an exceptional gardening and outdoor recreation spot.",
             "Duration": "",
             "Players": "",
-            "Enemies": [
-                ""
-            ],
-            "Release State": "Unreleased",
+            "Enemy types": "",
+            "Release state": "Unreleased",
             "Images": {}
         }
     },
@@ -1550,14 +1504,14 @@
                 "Damage": "54",
                 "Penetration Power": "34",
                 "Armor Damage": "40",
-                "Accuracy": "+0",
+                "Accuracy": "",
                 "Recoil": "+5",
                 "FragmentationChance": "20%",
                 "Projectile Speed (m/s)": "37%",
                 "Light BleedingChance": "",
-                "Heavy BleedingChance": "+0",
+                "Heavy BleedingChance": "",
                 "RicochetChance": "442",
-                "Special Effects": "Red Tracer",
+                "Special Effects": "Tracer (red)",
                 "Sold by": "PeacekeeperLL3"
             },
             {
@@ -1572,7 +1526,7 @@
                 "FragmentationChance": "25%",
                 "Projectile Speed (m/s)": "10%",
                 "Light BleedingChance": "+22",
-                "Heavy BleedingChance": "+0",
+                "Heavy BleedingChance": "",
                 "RicochetChance": "723",
                 "Special Effects": "",
                 "Sold by": "SkierLL4"
@@ -1824,7 +1778,7 @@
             {
                 "Caliber": "7.62x54mmR",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/f/fc/7bt1_icon.png/revision/latest/?format=original",
-                "Name": "7.62x54R BT gzh",
+                "Name": "7.62x54mm R BT gzh",
                 "Damage": "78",
                 "Penetration Power": "59",
                 "Armor Damage": "87",
@@ -1858,7 +1812,7 @@
             {
                 "Caliber": "7.62x54mmR",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/d/d0/7N37_ICON.png/revision/latest/?format=original",
-                "Name": "7.62x54R BS",
+                "Name": "7.62x54mm R BS gs",
                 "Damage": "72",
                 "Penetration Power": "70",
                 "Armor Damage": "88",
@@ -1892,7 +1846,7 @@
             {
                 "Caliber": "7.62x54mmR",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/e/e1/SNBICON.png/revision/latest/?format=original",
-                "Name": "7.62x54R SNB",
+                "Name": "7.62x54mm R SNB gzh",
                 "Damage": "75",
                 "Penetration Power": "62",
                 "Armor Damage": "87",
@@ -1909,7 +1863,7 @@
             {
                 "Caliber": "7.62x54mmR",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/2/23/T46M_AMMO.png/revision/latest/?format=original",
-                "Name": "7.62x54R T-46M",
+                "Name": "7.62x54mm R T-46M gzh",
                 "Damage": "82",
                 "Penetration Power": "41",
                 "Armor Damage": "83",
@@ -2214,8 +2168,8 @@
                 "Armor Damage": "88",
                 "Accuracy": "17%",
                 "Recoil": "38%",
-                "FragmentationChance": "0",
-                "Projectile Speed (m/s)": "0",
+                "FragmentationChance": "",
+                "Projectile Speed (m/s)": "",
                 "Light BleedingChance": "818",
                 "Heavy BleedingChance": "",
                 "RicochetChance": "Loot Only"
@@ -2229,8 +2183,8 @@
                 "Armor Damage": "95",
                 "Accuracy": "17%",
                 "Recoil": "38%",
-                "FragmentationChance": "0",
-                "Projectile Speed (m/s)": "0",
+                "FragmentationChance": "",
+                "Projectile Speed (m/s)": "",
                 "Light BleedingChance": "818",
                 "Heavy BleedingChance": "ExplosiveTracer (green)",
                 "RicochetChance": "Loot Only"
@@ -2726,8 +2680,8 @@
                 "Damage": "199",
                 "Penetration Power": "1",
                 "Armor Damage": "95",
-                "Accuracy": "0",
-                "Recoil": "0",
+                "Accuracy": "",
+                "Recoil": "",
                 "FragmentationChance": "185",
                 "Projectile Speed (m/s)": "Subsonic",
                 "Light BleedingChance": ""

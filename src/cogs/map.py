@@ -53,7 +53,7 @@ class Map(commands.Cog):
                     pass
                 elif key == "MapUrl":
                     pass
-                elif key == "Features":
+                elif key == "Description":
                     featuresText = value
                     # 翻訳前言語
                     source = "en"
@@ -81,7 +81,7 @@ class Map(commands.Cog):
                     except:
                         desText += f"__{value}人__"
                     desText += "\n"
-                elif key == "Enemies":
+                elif key == "Enemy type":
                     desText += f"**出現敵兵**: "
                     for v in value:
                         if v == "ScavRaiders":
@@ -89,7 +89,7 @@ class Map(commands.Cog):
                         else:
                             desText += f"__[{v}]({self.bot.enWikiUrl}{v})__ "
                     desText += "\n"
-                elif key == "Release State":
+                elif key == "Release state":
                     if value == "Released":
                         color = releasedColor
                     else:
