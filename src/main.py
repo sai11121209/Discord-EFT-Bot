@@ -1185,7 +1185,7 @@ def GetMapList():
                                 tempData.update({key: value.replace("\n", "")})
                             mapList[mapName].update({columnData[j]: tempData})
 
-                        elif columnData[j] == "Enemies":
+                        elif columnData[j] == "Enemy types":
                             tempData = []
                             for map in mapData.contents:
                                 try:
@@ -1196,7 +1196,7 @@ def GetMapList():
                                 {columnData[j]: list(set(tempData))}
                             )
                     else:
-                        if columnData[j] == "Enemies":
+                        if columnData[j] == "Enemy types":
                             mapList[mapName].update(
                                 {
                                     columnData[j]: [

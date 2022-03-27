@@ -7,6 +7,11 @@
             "Description": "A large area of industrial park land situated adjacent to the factory. This area houses a customs terminal, fuel storage facilities, offices, and dorms as well as a variety of other infrastructure buildings.",
             "Duration": "35 ",
             "Players": "9-12",
+            "Enemy types": [
+                "Cultists",
+                "Reshala",
+                "Scavs"
+            ],
             "Release state": "Released",
             "Images": {
                 "CustomsMapRealNorthBW Reemr.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/4/49/CustomsMapRealNorthBW_Reemr.png/revision/latest/?format=original",
@@ -28,6 +33,14 @@
                 "Night": "25"
             },
             "Players": "4-6",
+            "Enemy types": [
+                "Night:",
+                "Tagilla",
+                "Day:",
+                "Cultists",
+                "Scavs",
+                ","
+            ],
             "Release state": "Released",
             "Images": {
                 "Factory 3D b Johnny Tushonka.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/c/cd/Factory_3D_b_Johnny_Tushonka.jpg/revision/latest/?format=original",
@@ -42,6 +55,10 @@
             "Description": "The South interchange is a key location for transport in the city. This strategic area connects the port and harbour with the industrial outskirts of Tarkov. Located in the center of the interchange is a huge ULTRA shopping mall which was used as the main base of operation for the EMERCOM evacuation.",
             "Duration": "45 ",
             "Players": "10-14",
+            "Enemy types": [
+                "Killa",
+                "Scavs"
+            ],
             "Release state": "Released",
             "Images": {
                 "InterchangeMap Updated 4.24.2020.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/e/e5/InterchangeMap_Updated_4.24.2020.png/revision/latest/?format=original",
@@ -56,6 +73,10 @@
             "Description": "The lighthouse at Cape Dalniy was an important strategic object on the way to Tarkov. During Contract Wars, it was the main entry point for USEC units and served as their base of operations. After the conflict, Scavs took a fancy to this place, until the old owners returned, who decided to stay in Tarkov and establish their own order.",
             "Duration": "40 ",
             "Players": "9-12",
+            "Enemy types": [
+                "Rogues",
+                "Scavs"
+            ],
             "Release state": "Released",
             "Images": {
                 "Jindouz Lighthouse Map V1.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/1/13/Jindouz_Lighthouse_Map_V1.png/revision/latest/?format=original",
@@ -71,6 +92,11 @@
             "Description": "The secret Federal State Reserve Agency base that, according to urban legends, contains enough supplies to last for years; food, medications and other resources, enough to survive an all-out nuclear war.",
             "Duration": "40 ",
             "Players": "9-12",
+            "Enemy types": [
+                "Glukhar",
+                "ScavRaiders",
+                "Scavs"
+            ],
             "Release state": "Released",
             "Images": {
                 "Re3mrReserveCardinalNorthWikiVer.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/3/38/Re3mrReserveCardinalNorthWikiVer.jpg/revision/latest/?format=original",
@@ -88,6 +114,11 @@
             "Description": "The Shoreline makes up a large part of the outskirts of Tarkov and is located next to the Port. The area houses a partially abandoned village, modern private housing, agricultural fields, long stretches of beach, a boating facility, gas station, weather station, and cellular tower as well as other commercial facilities. Shorelines main point of interest is the \"Azure Coast\" health resort which consists of several luxurious buildings. The resort is exclusively powered by a nearby hydroelectric power plant. The resort had previously been used as temporary accomodation for members of TerraGroup and the corporations associated divisions in preparation for the evacuation of Tarkov Port",
             "Duration": "50 ",
             "Players": "10-13",
+            "Enemy types": [
+                "Cultists",
+                "Sanitar",
+                "Scavs"
+            ],
             "Release state": "Released",
             "Images": {
                 "Shoreline Map - 12.7.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/a/ac/Shoreline_Map_-_12.7.png/revision/latest/?format=original",
@@ -107,7 +138,9 @@
             "Description": "Underground laboratory complex TerraGroup Labs is a secret object right under the center of Tarkov. Officially, this research center does not exist and, based on data scraps, is engaged in R&D, testing and simulation projects in chemistry, physics, biology, and high-tech areas.",
             "Duration": "40 ",
             "Players": "6-10",
-            "Enemy types": "Scav Raiders",
+            "Enemy types": [
+                "ScavRaiders"
+            ],
             "Release state": "Released",
             "Images": {
                 "TheLabBasementByLogiwonk.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/0/06/TheLabBasementByLogiwonk.png/revision/latest/?format=original",
@@ -127,6 +160,11 @@
             "Description": "The Priozersk Natural Reserve recently became part of the state-protected wildlife reserves of the North Western Federal District.",
             "Duration": "40 ",
             "Players": "9-14",
+            "Enemy types": [
+                "Shturman",
+                "Cultists",
+                "Scavs"
+            ],
             "Release state": "Released",
             "Images": {
                 "Glory4lyfeWoods map v4 marked.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/0/05/Glory4lyfeWoods_map_v4_marked.png/revision/latest/?format=original",
@@ -142,7 +180,9 @@
             "Description": "A makeshift arena for gladiator fights, redesigned by remaining locals out of Equator-2 shopping mall.",
             "Duration": "",
             "Players": "",
-            "Enemy types": "",
+            "Enemy types": [
+                ""
+            ],
             "Release state": "Unreleased",
             "Images": {}
         },
@@ -153,7 +193,9 @@
             "Description": "Private residential sector, built up with cottages of the upper-class citizens of Tarkov. In the first weeks of emerging chaos it served as a refugee staging camp, but has become a known scavenger haunt afterwards.",
             "Duration": "",
             "Players": "",
-            "Enemy types": "",
+            "Enemy types": [
+                ""
+            ],
             "Release state": "Unreleased",
             "Images": {}
         },
@@ -164,7 +206,9 @@
             "Description": "Downtown Tarkov houses, banks, malls, and hotels as well as all the other amenities a thriving metropolis could have needed.",
             "Duration": "",
             "Players": "",
-            "Enemy types": "",
+            "Enemy types": [
+                ""
+            ],
             "Release state": "Unreleased",
             "Images": {}
         },
@@ -175,7 +219,9 @@
             "Description": "The suburb and commuter areas of Tarkov containing all the infrastructure and creature comforts for a long and happy life.",
             "Duration": "",
             "Players": "",
-            "Enemy types": "",
+            "Enemy types": [
+                ""
+            ],
             "Release state": "Unreleased",
             "Images": {}
         },
@@ -186,7 +232,9 @@
             "Description": "A large section of the harbour zone, rumoured to be the backup Emercom extraction point.",
             "Duration": "",
             "Players": "",
-            "Enemy types": "",
+            "Enemy types": [
+                ""
+            ],
             "Release state": "Unreleased",
             "Images": {}
         },
@@ -197,7 +245,9 @@
             "Description": "The Verkhneye urban settlement is a small town by the seaside, favoured by locals as an exceptional gardening and outdoor recreation spot.",
             "Duration": "",
             "Players": "",
-            "Enemy types": "",
+            "Enemy types": [
+                ""
+            ],
             "Release state": "Unreleased",
             "Images": {}
         }
@@ -1466,7 +1516,7 @@
             {
                 "Caliber": ".300 Blackout",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/4/40/BlackoutAP_Icon_.png/revision/latest/?format=original",
-                "Name": ".300 AAC Blackout AP",
+                "Name": ".300 Blackout AP",
                 "Damage": "51",
                 "Penetration Power": "45",
                 "Armor Damage": "65",
@@ -1483,7 +1533,7 @@
             {
                 "Caliber": ".300 Blackout",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/4/46/BlackoutBPZ_Icon.png/revision/latest/?format=original",
-                "Name": ".300 AAC Blackout BCP FMJ",
+                "Name": ".300 Blackout BCP FMJ",
                 "Damage": "60",
                 "Penetration Power": "29",
                 "Armor Damage": "36",
@@ -2109,7 +2159,7 @@
             {
                 "Caliber": "12.7x55mm STs-130",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/6/68/12.7x55_PS12_icon.png/revision/latest/?format=original",
-                "Name": "12.7x55 mm PS12",
+                "Name": "12.7x55mm PS12",
                 "Damage": "115",
                 "Penetration Power": "28",
                 "Armor Damage": "60",
@@ -2126,7 +2176,7 @@
             {
                 "Caliber": "12.7x55mm STs-130",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/7/7a/12.7x55_PS12A_icon.png/revision/latest/?format=original",
-                "Name": "12.7x55 mm PS12A",
+                "Name": "12.7x55mm PS12A",
                 "Damage": "165",
                 "Penetration Power": "10",
                 "Armor Damage": "22",
@@ -2143,7 +2193,7 @@
             {
                 "Caliber": "12.7x55mm STs-130",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/f/fb/12.7x55_PS12B_icon.png/revision/latest/?format=original",
-                "Name": "12.7x55 mm PS12B",
+                "Name": "12.7x55mm PS12B",
                 "Damage": "102",
                 "Penetration Power": "46",
                 "Armor Damage": "57",
@@ -2162,7 +2212,7 @@
             {
                 "Caliber": "12.7x108mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/5/5f/B32FIFTY.png/revision/latest/?format=original",
-                "Name": "12.7x108 mm B-32 gl",
+                "Name": "12.7x108mm B-32 gl",
                 "Damage": "182",
                 "Penetration Power": "88",
                 "Armor Damage": "88",
@@ -2177,7 +2227,7 @@
             {
                 "Caliber": "12.7x108mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/e/ef/BZT44FIFTY.png/revision/latest/?format=original",
-                "Name": "12.7x108 mm BZT-44M gzh",
+                "Name": "12.7x108mm BZT-44M gzh",
                 "Damage": "199",
                 "Penetration Power": "80",
                 "Armor Damage": "95",
@@ -2194,7 +2244,7 @@
             {
                 "Caliber": "12x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/a/a0/Poleva3_Icon.png/revision/latest/?format=original",
-                "Name": "12/70 \"Poleva-3\" Slug",
+                "Name": "12/70 \"Poleva-3\" slug",
                 "Damage": "140",
                 "Penetration Power": "17",
                 "Armor Damage": "40",
@@ -2211,7 +2261,7 @@
             {
                 "Caliber": "12x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/c/c2/1270Poleva6SlugIcon.png/revision/latest/?format=original",
-                "Name": "12/70 \"Poleva-6u\" Slug",
+                "Name": "12/70 \"Poleva-6u\" slug",
                 "Damage": "150",
                 "Penetration Power": "20",
                 "Armor Damage": "50",
@@ -2228,7 +2278,7 @@
             {
                 "Caliber": "12x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/4/4e/1270525BuckshotIcon.png/revision/latest/?format=original",
-                "Name": "12/70 5.25mm Buckshot",
+                "Name": "12/70 5.25mm buckshot",
                 "Damage": "8x37",
                 "Penetration Power": "1",
                 "Armor Damage": "15",
@@ -2245,7 +2295,7 @@
             {
                 "Caliber": "12x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/6/6d/127065ExpressMagnumIcon.png/revision/latest/?format=original",
-                "Name": "12/70 8.5mm \"Magnum\" Buckshot",
+                "Name": "12/70 8.5mm Magnum buckshot",
                 "Damage": "8x50",
                 "Penetration Power": "2",
                 "Armor Damage": "26",
@@ -2262,7 +2312,7 @@
             {
                 "Caliber": "12x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/3/3e/12-70_AP-20_icon.png/revision/latest/?format=original",
-                "Name": "12/70 AP-20 Slug",
+                "Name": "12/70 AP-20 armor-piercing slug",
                 "Damage": "164",
                 "Penetration Power": "37",
                 "Armor Damage": "65",
@@ -2279,7 +2329,7 @@
             {
                 "Caliber": "12x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/c/cf/12-70_Dual_Sabot_icon.png/revision/latest/?format=original",
-                "Name": "12/70 Dual Sabot Slug",
+                "Name": "12/70 Dual Sabot slug",
                 "Damage": "2x85",
                 "Penetration Power": "17",
                 "Armor Damage": "65",
@@ -2296,7 +2346,7 @@
             {
                 "Caliber": "12x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/b/b0/12-70_Flechette_icon.png/revision/latest/?format=original",
-                "Name": "12/70 Flechette",
+                "Name": "12/70 flechette",
                 "Damage": "8x25",
                 "Penetration Power": "31",
                 "Armor Damage": "26",
@@ -2313,7 +2363,7 @@
             {
                 "Caliber": "12x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/9/97/FTX_Slug_Icon.png/revision/latest/?format=original",
-                "Name": "12/70 FTX Custom Lite Slug",
+                "Name": "12/70 FTX Custom Lite slug",
                 "Damage": "183",
                 "Penetration Power": "20",
                 "Armor Damage": "50",
@@ -2330,7 +2380,7 @@
             {
                 "Caliber": "12x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/0/00/1270Grizzly40SlugIcon.png/revision/latest/?format=original",
-                "Name": "12/70 Grizzly 40 Slug",
+                "Name": "12/70 Grizzly 40 slug",
                 "Damage": "190",
                 "Penetration Power": "12",
                 "Armor Damage": "48",
@@ -2347,7 +2397,7 @@
             {
                 "Caliber": "12x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/4/4e/12-70_HP_SF_icon.png/revision/latest/?format=original",
-                "Name": "12/70 SuperFormance HP Slug",
+                "Name": "12/70 SuperFormance HP slug",
                 "Damage": "220",
                 "Penetration Power": "5",
                 "Armor Damage": "12",
@@ -2364,7 +2414,7 @@
             {
                 "Caliber": "12x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/b/b9/12x70SLUG_CSP-icon.png/revision/latest/?format=original",
-                "Name": "12/70 Copper Sabot Premier HP Slug",
+                "Name": "12/70 Copper Sabot Premier HP slug",
                 "Damage": "206",
                 "Penetration Power": "14",
                 "Armor Damage": "46",
@@ -2449,7 +2499,7 @@
             {
                 "Caliber": "12x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/0/0b/12-70_.50_BMG_icon.png/revision/latest/?format=original",
-                "Name": "12/70 shell with .50 BMG bullet",
+                "Name": "12/70 makeshift .50 BMG slug",
                 "Damage": "197",
                 "Penetration Power": "26",
                 "Armor Damage": "57",
@@ -2468,7 +2518,7 @@
             {
                 "Caliber": "20x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/3/3e/20x70BUCKSHOT_56.png/revision/latest/?format=original",
-                "Name": "20/70 5.6mm Buckshot",
+                "Name": "20/70 5.6mm buckshot",
                 "Damage": "8x26",
                 "Penetration Power": "1",
                 "Armor Damage": "12",
@@ -2485,7 +2535,7 @@
             {
                 "Caliber": "20x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/1/1c/207062mmBuckshotIcon.png/revision/latest/?format=original",
-                "Name": "20/70 6.2mm Buckshot",
+                "Name": "20/70 6.2mm buckshot",
                 "Damage": "8x22",
                 "Penetration Power": "2",
                 "Armor Damage": "13",
@@ -2502,7 +2552,7 @@
             {
                 "Caliber": "20x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/8/86/20x70BUCKSHOT_73.png/revision/latest/?format=original",
-                "Name": "20/70 7.3mm Buckshot",
+                "Name": "20/70 7.3mm buckshot",
                 "Damage": "9x23",
                 "Penetration Power": "3",
                 "Armor Damage": "13",
@@ -2519,7 +2569,7 @@
             {
                 "Caliber": "20x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/e/e1/2070DevastatorSlugIcon.png/revision/latest/?format=original",
-                "Name": "20/70 Devastator Slug",
+                "Name": "20/70 Devastator slug",
                 "Damage": "198",
                 "Penetration Power": "5",
                 "Armor Damage": "13",
@@ -2570,7 +2620,7 @@
             {
                 "Caliber": "20x70mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/6/61/20-70_Star_Slug_icon.png/revision/latest/?format=original",
-                "Name": "20/70 Star Slug",
+                "Name": "20/70 Star slug",
                 "Damage": "154",
                 "Penetration Power": "16",
                 "Armor Damage": "42",
@@ -2657,7 +2707,7 @@
             {
                 "Caliber": "23x75mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/a/a1/Shr25icon.png/revision/latest/?format=original",
-                "Name": "23x75mm Shrapnel-25 buckshot",
+                "Name": "23x75mm \"Shrapnel-25\" buckshot",
                 "Damage": "8x78",
                 "Penetration Power": "10",
                 "Armor Damage": "20",
@@ -2676,7 +2726,7 @@
             {
                 "Caliber": "30x29mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/4/46/VOG-30_icon.png/revision/latest/?format=original",
-                "Name": "30x29 mm VOG-30",
+                "Name": "30x29mm VOG-30",
                 "Damage": "199",
                 "Penetration Power": "1",
                 "Armor Damage": "95",
@@ -2691,7 +2741,7 @@
             {
                 "Caliber": "40x46 mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/2/28/M381Icon.png/revision/latest/?format=original",
-                "Name": "40x46mm M381(HE) grenade",
+                "Name": "40x46mm M381 (HE) grenade",
                 "Damage": "199",
                 "Penetration Power": "1",
                 "Armor Damage": "0.1",
@@ -2747,7 +2797,7 @@
             {
                 "Caliber": "40x46 mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/a/a9/M441Icon.png/revision/latest/?format=original",
-                "Name": "40x46mm M441(HE) grenade",
+                "Name": "40x46mm M441 (HE) grenade",
                 "Damage": "199",
                 "Penetration Power": "1",
                 "Armor Damage": "0.1",

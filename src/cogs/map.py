@@ -46,6 +46,7 @@ class Map(commands.Cog):
             # LABORATORYのみ海外公式wikiのURLがThe_Labとなるため例外
             desText = ""
             name = name.upper()
+            featuresText = ""
             for key, value in self.bot.mapData[name.upper()].items():
                 if key == "Banner":
                     pass
@@ -81,7 +82,7 @@ class Map(commands.Cog):
                     except:
                         desText += f"__{value}人__"
                     desText += "\n"
-                elif key == "Enemy type":
+                elif key == "Enemy types":
                     desText += f"**出現敵兵**: "
                     for v in value:
                         if v == "ScavRaiders":
@@ -95,6 +96,8 @@ class Map(commands.Cog):
                     else:
                         releaseText = "**未実装マップ**\n\n"
                         color = unreleasedColor
+
+            print(featuresText)
             embed = discord.Embed(
                 title=text,
                 description=releaseText + desText + featuresText,
