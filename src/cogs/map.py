@@ -67,7 +67,7 @@ class Map(commands.Cog):
                             except:
                                 desText += f"__{value}人__"
                             desText += "\n"
-                        elif key == "Enemies":
+                        elif key == "Enemy types":
                             desText += f"**出現敵兵**: "
                             for v in value:
                                 if v == "ScavRaiders":

@@ -902,7 +902,7 @@ def GetTraderName():
 
 
 def GetBossName():
-    res = rq.get(f"{enWikiUrl}Characters")
+    res = rq.get(f"{enWikiUrl}Bosses")
     soup = BeautifulSoup(res.text, "lxml")
     soup = soup.find_all(class_="wikitable sortable")
     return [
@@ -1313,13 +1313,11 @@ def GetTaskData():
     res = rq.get(f"{enWikiUrl}Quests")
     soup = BeautifulSoup(res.text, "lxml")
     taskData = {}
-    for tasks in soup.find_all("table", {"class": "wikitable"}):
-        dealerName = tasks.find_all("a")[0].text.replace("\n", "")
+    for tasks in soup.find_all("table", {"class": "wikitable"})[:8]:
+        dealerName = tasks.find("a").text.replace("\n", "")
         taskData[dealerName] = {
-            "dealerName": tasks.find_all("a")[0].text.replace("\n", ""),
-            "dealerUrl": tasks.find_all("th")[0]
-            .find("a")["href"]
-            .replace("/wiki/", "", 1),
+            "dealerName": tasks.find("a").text.replace("\n", ""),
+            "dealerUrl": tasks.find("a").text.replace("\n", ""),
             "tasks": [],
         }
         res = rq.get(f"{enWikiUrl}{taskData[dealerName]['dealerUrl']}")
