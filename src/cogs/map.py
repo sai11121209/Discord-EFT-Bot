@@ -97,7 +97,6 @@ class Map(commands.Cog):
                         releaseText = "**未実装マップ**\n\n"
                         color = unreleasedColor
 
-            print(featuresText)
             embed = discord.Embed(
                 title=text,
                 description=releaseText + desText + featuresText,
