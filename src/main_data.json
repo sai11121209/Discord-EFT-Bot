@@ -4,12 +4,12 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/9/9f/Customs_Banner.png/revision/latest/?format=original",
             "Name": "Customs",
             "MapUrl": "Customs",
-            "Description": "A large area of industrial park land situated adjacent to the factory. This area houses a customs terminal, fuel storage facilities, offices, and dorms as well as a variety of other infrastructure buildings.",
+            "Description": "A large area of industrial park land situated adjacent to the factory zone. The area houses a customs terminal, fuel storage facilities, offices, and dorms, as well as a variety of other infrastructure and buildings.",
             "Duration": "35 ",
             "Players": "9-12",
             "Enemy types": [
-                "Cultists",
                 "Reshala",
+                "Cultists",
                 "Scavs"
             ],
             "Release state": "Released",
@@ -27,19 +27,19 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/1/1a/Factory-Day_Banner.png/revision/latest/?format=original",
             "Name": "Factory",
             "MapUrl": "Factory",
-            "Description": "The industrial estate and facilities of Chemical Plant No. 16 were rented out illegally to the TerraGroup corporation. During the advent of the Contract Wars the plant became the scene of numerous firefights between USEC and BEAR that ultimately determined control of the industrial district of Tarkov. Later on, in the wake of the chaos the plant facilities became shelter for the remaining civilians, Scavs and military operatives including the scattered remains of the USEC and BEAR contingents.",
+            "Description": "The industrial estate and facilities of Chemical Plant No. 16 were rented out illegally to the TerraGroup corporation. During the advent of the Contract Wars, the plant became the scene of numerous firefights between BEAR and USEC that ultimately determined control over the industrial district of Tarkov. Later on, in the wake of the chaos, the plant facilities became a shelter for the remaining civilians, Scavs, and military operatives, including the scattered remains of the BEAR and USEC contingents.",
             "Duration": {
                 "Day": "20",
                 "Night": "25"
             },
             "Players": "4-6",
             "Enemy types": [
-                "Night:",
-                "Tagilla",
                 "Day:",
-                "Cultists",
                 "Scavs",
-                ","
+                "Cultists",
+                ",",
+                "Tagilla",
+                "Night:"
             ],
             "Release state": "Released",
             "Images": {
@@ -52,7 +52,7 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/3/3e/Banner_interchange.png/revision/latest/?format=original",
             "Name": "Interchange",
             "MapUrl": "Interchange",
-            "Description": "The South interchange is a key location for transport in the city. This strategic area connects the port and harbour with the industrial outskirts of Tarkov. Located in the center of the interchange is a huge ULTRA shopping mall which was used as the main base of operation for the EMERCOM evacuation.",
+            "Description": "The South Interchange is a key transport location for the city. This strategic area connects the port and harbor with the industrial outskirts of Tarkov. Located in the center of the interchange is a huge ULTRA shopping mall which was used as the main base of operation for the EMERCOM evacuation.",
             "Duration": "45 ",
             "Players": "10-14",
             "Enemy types": [
@@ -61,7 +61,8 @@
             ],
             "Release state": "Released",
             "Images": {
-                "InterchangeMap Updated 4.24.2020.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/e/e5/InterchangeMap_Updated_4.24.2020.png/revision/latest/?format=original",
+                "Interchange3DMapMrYundaz.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/8/8e/Interchange3DMapMrYundaz.jpg/revision/latest/?format=original",
+                "Interchange2DMapLorathor.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/2/27/Interchange2DMapLorathor.jpg/revision/latest/?format=original",
                 "Interchange hidden stash map.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/f/fe/Interchange_hidden_stash_map.jpg/revision/latest/?format=original",
                 "OfficialInterchangePaperMap.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/8/8b/OfficialInterchangePaperMap.jpg/revision/latest/?format=original"
             }
@@ -89,12 +90,12 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/f/f4/Reserve.png/revision/latest/?format=original",
             "Name": "Reserve",
             "MapUrl": "Reserve",
-            "Description": "The secret Federal State Reserve Agency base that, according to urban legends, contains enough supplies to last for years; food, medications and other resources, enough to survive an all-out nuclear war.",
+            "Description": "The secret Federal State Reserve Agency base that, according to urban legends, contains enough supplies to last for years: food, medications, and other resources, enough to survive an all-out nuclear war.",
             "Duration": "40 ",
             "Players": "9-12",
             "Enemy types": [
-                "Glukhar",
                 "ScavRaiders",
+                "Glukhar",
                 "Scavs"
             ],
             "Release state": "Released",
@@ -111,7 +112,7 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/d/d5/Banner_shoreline.png/revision/latest/?format=original",
             "Name": "Shoreline",
             "MapUrl": "Shoreline",
-            "Description": "The Shoreline makes up a large part of the outskirts of Tarkov and is located next to the Port. The area houses a partially abandoned village, modern private housing, agricultural fields, long stretches of beach, a boating facility, gas station, weather station, and cellular tower as well as other commercial facilities. Shorelines main point of interest is the \"Azure Coast\" health resort which consists of several luxurious buildings. The resort is exclusively powered by a nearby hydroelectric power plant. The resort had previously been used as temporary accomodation for members of TerraGroup and the corporations associated divisions in preparation for the evacuation of Tarkov Port",
+            "Description": "The Shoreline area makes up a large part of the outskirts of Tarkov and is located next to the Port. The area houses a partially abandoned village, modern private housing, agricultural fields, long stretches of beach, a boating facility, gas station, weather station, and a cellular tower as well as other commercial facilities. Shoreline's main point of interest is the \"Azure Coast\" health resort which consists of several luxurious buildings and facilities. The resort is exclusively powered by a nearby hydroelectric power plant. The resort had previously been used as temporary accommodation for members of TerraGroup and the corporation's associated divisions in preparation for the evacuation of the Tarkov Port.",
             "Duration": "50 ",
             "Players": "10-13",
             "Enemy types": [
@@ -124,9 +125,9 @@
                 "Shoreline Map - 12.7.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/a/ac/Shoreline_Map_-_12.7.png/revision/latest/?format=original",
                 "Shoreline marvelin 2 updated.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/d/d4/Shoreline_marvelin_2_updated.png/revision/latest/?format=original",
                 "Actual caches 37 map shoreline.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/e/e1/Actual_caches_37_map_shoreline.jpg/revision/latest/?format=original",
+                "ShorelineResortRoomsByreemr.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/b/b1/ShorelineResortRoomsByreemr.png/revision/latest/?format=original",
                 "Shoreline hidden stashes map with pics.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/8/8c/Shoreline_hidden_stashes_map_with_pics.jpg/revision/latest/?format=original",
                 "ShorelineKeySpawnsByStealtheh.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/7/7e/ShorelineKeySpawnsByStealtheh.jpg/revision/latest/?format=original",
-                "UNKSO Shoreline Resort Loot Map VER 2.0.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/3/34/UNKSO_Shoreline_Resort_Loot_Map_VER_2.0.png/revision/latest/?format=original",
                 "Map Shoreline.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/1/17/Map_Shoreline.jpg/revision/latest/?format=original",
                 "Map Shoreline Resort.jpg": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/a/a0/Map_Shoreline_Resort.jpg/revision/latest/?format=original"
             }
@@ -135,7 +136,7 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/d/d7/TheLabBanner.png/revision/latest/?format=original",
             "Name": "The Lab",
             "MapUrl": "The_Lab",
-            "Description": "Underground laboratory complex TerraGroup Labs is a secret object right under the center of Tarkov. Officially, this research center does not exist and, based on data scraps, is engaged in R&D, testing and simulation projects in chemistry, physics, biology, and high-tech areas.",
+            "Description": "Secret underground TerraGroup Labs facility hidden right under the center of Tarkov. Officially, this research center does not exist and, based on data scraps, is engaged in research and development as well as testing and simulation of projects in chemistry, physics, biology, and other high technology.",
             "Duration": "40 ",
             "Players": "6-10",
             "Enemy types": [
@@ -161,9 +162,9 @@
             "Duration": "40 ",
             "Players": "9-14",
             "Enemy types": [
-                "Shturman",
                 "Cultists",
-                "Scavs"
+                "Scavs",
+                "Shturman"
             ],
             "Release state": "Released",
             "Images": {
@@ -177,7 +178,7 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/b/bc/Wiki.png/revision/latest/?format=original",
             "Name": "Arena",
             "MapUrl": "Arena",
-            "Description": "A makeshift arena for gladiator fights, redesigned by remaining locals out of Equator-2 shopping mall.",
+            "Description": "A makeshift gladiator-style arena, redesigned by the remaining locals out of the Equator-2 shopping mall.",
             "Duration": "",
             "Players": "",
             "Enemy types": [
@@ -190,7 +191,7 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/b/bc/Wiki.png/revision/latest/?format=original",
             "Name": "Private Sector",
             "MapUrl": "Private_Sector",
-            "Description": "Private residential sector, built up with cottages of the upper-class citizens of Tarkov. In the first weeks of emerging chaos it served as a refugee staging camp, but has become a known scavenger haunt afterwards.",
+            "Description": "Private residential sector consisting of cottages of the upper-class citizens of Tarkov. In the first weeks of the emerging chaos, it served as a refugee staging camp but has since then become a known scavenger haunt.",
             "Duration": "",
             "Players": "",
             "Enemy types": [
@@ -203,20 +204,22 @@
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/4/41/Banner_streets.png/revision/latest/?format=original",
             "Name": "Streets of Tarkov",
             "MapUrl": "Streets_of_Tarkov",
-            "Description": "Downtown Tarkov houses, banks, malls, and hotels as well as all the other amenities a thriving metropolis could have needed.",
+            "Description": "Downtown Tarkov houses banks, malls, and hotels, as well as all the other amenities a thriving metropolis could have needed.",
             "Duration": "",
             "Players": "",
             "Enemy types": [
                 ""
             ],
             "Release state": "Unreleased",
-            "Images": {}
+            "Images": {
+                "Streets map sketch.png": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/e/e8/Streets_map_sketch.png/revision/latest/?format=original"
+            }
         },
         "SUBURBS": {
             "Banner": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/b/bc/Wiki.png/revision/latest/?format=original",
             "Name": "Suburbs",
             "MapUrl": "Suburbs",
-            "Description": "The suburb and commuter areas of Tarkov containing all the infrastructure and creature comforts for a long and happy life.",
+            "Description": "The suburb and commuter areas of Tarkov containing all the infrastructure and creature comforts needed for a long and happy life.",
             "Duration": "",
             "Players": "",
             "Enemy types": [
@@ -424,7 +427,7 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "519",
                 "Special Effects": "",
-                "Sold by": "PraporLL3"
+                "Sold by": "PraporLL3WorkbenchLV2"
             },
             {
                 "Caliber": "9x18mm Makarov",
@@ -446,7 +449,7 @@
             {
                 "Caliber": "9x18mm Makarov",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/2/28/9x18PPEGZH.png/revision/latest/?format=original",
-                "Name": "9x18mm PM Ppe gzh",
+                "Name": "9x18mm PM PPe gzh",
                 "Damage": "61",
                 "Penetration Power": "7",
                 "Armor Damage": "15",
@@ -611,27 +614,10 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "330",
                 "Special Effects": "Subsonic",
-                "Sold by": "PraporLL3"
+                "Sold by": "PraporLL3WorkbenchLV1"
             }
         ],
         "9x19mm Parabellum": [
-            {
-                "Caliber": "9x19mm Parabellum",
-                "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/e/eb/7N31Icon.png/revision/latest/?format=original",
-                "Name": "9x19mm PBP gzh",
-                "Damage": "52",
-                "Penetration Power": "39",
-                "Armor Damage": "53",
-                "Accuracy": "+15",
-                "Recoil": "+15",
-                "FragmentationChance": "5%",
-                "Projectile Speed (m/s)": "20%",
-                "Light BleedingChance": "",
-                "Heavy BleedingChance": "",
-                "RicochetChance": "560",
-                "Special Effects": "",
-                "Sold by": "Loot only"
-            },
             {
                 "Caliber": "9x19mm Parabellum",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/c/c6/9x19ap.png/revision/latest/?format=original",
@@ -647,24 +633,7 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "392",
                 "Special Effects": "",
-                "Sold by": "Loot only"
-            },
-            {
-                "Caliber": "9x19mm Parabellum",
-                "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/c/c2/9x19_mm_Green_Tracer_Icon.png/revision/latest/?format=original",
-                "Name": "9x19mm T gzh",
-                "Damage": "58",
-                "Penetration Power": "14",
-                "Armor Damage": "33",
-                "Accuracy": "-5",
-                "Recoil": "-6",
-                "FragmentationChance": "15%",
-                "Projectile Speed (m/s)": "5%",
-                "Light BleedingChance": "",
-                "Heavy BleedingChance": "",
-                "RicochetChance": "365",
-                "Special Effects": "Tracer (green)",
-                "Sold by": "MechanicLL3"
+                "Sold by": "WorkbenchLV2"
             },
             {
                 "Caliber": "9x19mm Parabellum",
@@ -682,6 +651,23 @@
                 "RicochetChance": "420",
                 "Special Effects": "",
                 "Sold by": "SkierLL4"
+            },
+            {
+                "Caliber": "9x19mm Parabellum",
+                "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/e/eb/7N31Icon.png/revision/latest/?format=original",
+                "Name": "9x19mm PBP gzh",
+                "Damage": "52",
+                "Penetration Power": "39",
+                "Armor Damage": "53",
+                "Accuracy": "+15",
+                "Recoil": "+15",
+                "FragmentationChance": "5%",
+                "Projectile Speed (m/s)": "20%",
+                "Light BleedingChance": "",
+                "Heavy BleedingChance": "",
+                "RicochetChance": "560",
+                "Special Effects": "",
+                "Sold by": "WorkbenchLV3"
             },
             {
                 "Caliber": "9x19mm Parabellum",
@@ -749,7 +735,24 @@
                 "Heavy BleedingChance": "+10",
                 "RicochetChance": "381",
                 "Special Effects": "",
-                "Sold by": "SkierLL4 (Barter) afterSetupJaegerLL4 (Barter)"
+                "Sold by": "SkierLL4 (Barter) afterSetupJaegerLL4 (Barter)WorkbenchLV3"
+            },
+            {
+                "Caliber": "9x19mm Parabellum",
+                "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/c/c2/9x19_mm_Green_Tracer_Icon.png/revision/latest/?format=original",
+                "Name": "9x19mm Green Tracer",
+                "Damage": "58",
+                "Penetration Power": "14",
+                "Armor Damage": "33",
+                "Accuracy": "-5",
+                "Recoil": "-6",
+                "FragmentationChance": "15%",
+                "Projectile Speed (m/s)": "5%",
+                "Light BleedingChance": "",
+                "Heavy BleedingChance": "",
+                "RicochetChance": "365",
+                "Special Effects": "Tracer (green)",
+                "Sold by": "MechanicLL3"
             }
         ],
         "9x21mm Gyurza": [
@@ -822,6 +825,76 @@
                 "Sold by": "PraporLL4"
             }
         ],
+        ".357 Magnum": [
+            {
+                "Caliber": ".357 Magnum",
+                "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/2/26/.357_Magnum.png/revision/latest/?format=original",
+                "Name": ".357 Magnum FMJ",
+                "Damage": "70",
+                "Penetration Power": "35",
+                "Armor Damage": "43",
+                "Accuracy": "",
+                "Recoil": "+12",
+                "FragmentationChance": "1%",
+                "Projectile Speed (m/s)": "6.5%",
+                "Light BleedingChance": "",
+                "Heavy BleedingChance": "+10",
+                "RicochetChance": "385",
+                "Special Effects": "",
+                "Sold by": "JaegerLL2"
+            },
+            {
+                "Caliber": ".357 Magnum",
+                "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/9/96/.357_Hollow_Point.png/revision/latest/?format=original",
+                "Name": ".357 Magnum Hollow Point",
+                "Damage": "99",
+                "Penetration Power": "18",
+                "Armor Damage": "20",
+                "Accuracy": "+15",
+                "Recoil": "+15",
+                "FragmentationChance": "60%",
+                "Projectile Speed (m/s)": "2.5%",
+                "Light BleedingChance": "+40",
+                "Heavy BleedingChance": "+30",
+                "RicochetChance": "481",
+                "Special Effects": "",
+                "Sold by": "JaegerLL2"
+            },
+            {
+                "Caliber": ".357 Magnum",
+                "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/0/09/.357_JHP.png/revision/latest/?format=original",
+                "Name": ".357 Magnum JHP",
+                "Damage": "88",
+                "Penetration Power": "24",
+                "Armor Damage": "28",
+                "Accuracy": "+15",
+                "Recoil": "+8",
+                "FragmentationChance": "60%",
+                "Projectile Speed (m/s)": "5.5%",
+                "Light BleedingChance": "+25",
+                "Heavy BleedingChance": "+25",
+                "RicochetChance": "425",
+                "Special Effects": "",
+                "Sold by": "JaegerLL3"
+            },
+            {
+                "Caliber": ".357 Magnum",
+                "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/0/00/.357_Soft_Point.png/revision/latest/?format=original",
+                "Name": ".357 Magnum Soft Point",
+                "Damage": "108",
+                "Penetration Power": "12",
+                "Armor Damage": "15",
+                "Accuracy": "+27",
+                "Recoil": "-29",
+                "FragmentationChance": "20%",
+                "Projectile Speed (m/s)": "3%",
+                "Light BleedingChance": "+35",
+                "Heavy BleedingChance": "+20",
+                "RicochetChance": "455",
+                "Special Effects": "",
+                "Sold by": "JaegerLL2"
+            }
+        ],
         ".45 ACP": [
             {
                 "Caliber": ".45 ACP",
@@ -838,7 +911,7 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "299",
                 "Special Effects": "Subsonic",
-                "Sold by": "PeacekeeperLL3"
+                "Sold by": "PeacekeeperLL3WorkbenchLV2"
             },
             {
                 "Caliber": ".45 ACP",
@@ -1116,7 +1189,7 @@
                 "Heavy BleedingChance": "+15",
                 "RicochetChance": "915",
                 "Special Effects": "",
-                "Sold by": ""
+                "Sold by": "Loot only"
             },
             {
                 "Caliber": "5.45x39mm",
@@ -1133,7 +1206,7 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "905",
                 "Special Effects": "",
-                "Sold by": "Loot only"
+                "Sold by": "WorkbenchLV3"
             },
             {
                 "Caliber": "5.45x39mm",
@@ -1235,7 +1308,7 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "886",
                 "Special Effects": "",
-                "Sold by": "PraporLL2"
+                "Sold by": "PraporLL2WorkbenchLV2"
             },
             {
                 "Caliber": "5.45x39mm",
@@ -1269,7 +1342,7 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "890",
                 "Special Effects": "",
-                "Sold by": "PraporLL1 afterDelivery from the past"
+                "Sold by": "PraporLL1 afterDelivery from the Past"
             },
             {
                 "Caliber": "5.45x39mm",
@@ -1424,7 +1497,7 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "940",
                 "Special Effects": "Tracer (red)",
-                "Sold by": "PeacekeeperLL2 afterThe Cult - Part 1"
+                "Sold by": "PeacekeeperLL2 afterThe Cult - Part 1WorkbenchLV2"
             },
             {
                 "Caliber": "5.56x45mm NATO",
@@ -1441,7 +1514,7 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "1013",
                 "Special Effects": "",
-                "Sold by": "Loot only"
+                "Sold by": "WorkbenchLV3"
             },
             {
                 "Caliber": "5.56x45mm NATO",
@@ -1509,7 +1582,7 @@
                 "Heavy BleedingChance": "+20",
                 "RicochetChance": "936",
                 "Special Effects": "",
-                "Sold by": "PeacekeeperLL3 (Barter)JaegerLL4 (Barter)"
+                "Sold by": "PeacekeeperLL3 (Barter)JaegerLL4 (Barter)WorkbenchLV3"
             }
         ],
         ".300 Blackout": [
@@ -1584,7 +1657,7 @@
             {
                 "Caliber": ".300 Blackout",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/6/68/Whisper_Icon.png/revision/latest/?format=original",
-                "Name": ".300 Blackout Whisper",
+                "Name": ".300 Whisper",
                 "Damage": "90",
                 "Penetration Power": "14",
                 "Armor Damage": "19",
@@ -1615,7 +1688,7 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "730",
                 "Special Effects": "",
-                "Sold by": "PraporLL3 afterThe Punisher - Part 5"
+                "Sold by": "PraporLL3 afterThe Punisher - Part 5WorkbenchLV3"
             },
             {
                 "Caliber": "7.62x39mm",
@@ -1736,7 +1809,7 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "849",
                 "Special Effects": "",
-                "Sold by": "PeacekeeperLL4 afterWet Job - Part 6"
+                "Sold by": "PeacekeeperLL4 afterWet Job - Part 6WorkbenchLV3"
             },
             {
                 "Caliber": "7.62x51mm NATO",
@@ -1908,7 +1981,7 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "875",
                 "Special Effects": "",
-                "Sold by": "PraporLL4"
+                "Sold by": "PraporLL4WorkbenchLV2"
             },
             {
                 "Caliber": "7.62x54mmR",
@@ -2014,7 +2087,7 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "295",
                 "Special Effects": "Subsonic",
-                "Sold by": "PraporLL4 (Barter) afterGrenadier"
+                "Sold by": "PraporLL4 (Barter) afterGrenadierWorkbenchLV3"
             },
             {
                 "Caliber": "9x39mm",
@@ -2031,7 +2104,7 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "320",
                 "Special Effects": "Subsonic",
-                "Sold by": ""
+                "Sold by": "Loot only"
             },
             {
                 "Caliber": "9x39mm",
@@ -2065,7 +2138,7 @@
                 "Heavy BleedingChance": "10%",
                 "RicochetChance": "305",
                 "Special Effects": "Subsonic",
-                "Sold by": "PraporLL3"
+                "Sold by": "PraporLL3WorkbenchLV2"
             },
             {
                 "Caliber": "9x39mm",
@@ -2082,7 +2155,7 @@
                 "Heavy BleedingChance": "20%",
                 "RicochetChance": "310",
                 "Special Effects": "Subsonic",
-                "Sold by": "PraporLL3 (Barter)PraporLL4 afterTest drive - Part 1"
+                "Sold by": "PraporLL3 (Barter)PraporLL4 afterTest Drive - Part 1WorkbenchLV3"
             }
         ],
         ".366 TKM": [
@@ -2101,7 +2174,7 @@
                 "Heavy BleedingChance": "+10",
                 "RicochetChance": "602",
                 "Special Effects": "",
-                "Sold by": "MechanicLL3"
+                "Sold by": "MechanicLL3WorkbenchLV2"
             },
             {
                 "Caliber": ".366 TKM",
@@ -2212,7 +2285,7 @@
             {
                 "Caliber": "12.7x108mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/5/5f/B32FIFTY.png/revision/latest/?format=original",
-                "Name": "12.7x108mm B-32 gl",
+                "Name": "12.7x108mm B-32",
                 "Damage": "182",
                 "Penetration Power": "88",
                 "Armor Damage": "88",
@@ -2222,12 +2295,12 @@
                 "Projectile Speed (m/s)": "",
                 "Light BleedingChance": "818",
                 "Heavy BleedingChance": "",
-                "RicochetChance": "Loot Only"
+                "RicochetChance": ""
             },
             {
                 "Caliber": "12.7x108mm",
                 "Icon": "https://static.wikia.nocookie.net/escapefromtarkov_gamepedia/images/e/ef/BZT44FIFTY.png/revision/latest/?format=original",
-                "Name": "12.7x108mm BZT-44M gzh",
+                "Name": "12.7x108mm BZT-44M",
                 "Damage": "199",
                 "Penetration Power": "80",
                 "Armor Damage": "95",
@@ -2237,7 +2310,7 @@
                 "Projectile Speed (m/s)": "",
                 "Light BleedingChance": "818",
                 "Heavy BleedingChance": "ExplosiveTracer (green)",
-                "RicochetChance": "Loot Only"
+                "RicochetChance": ""
             }
         ],
         "12x70mm": [
@@ -2307,7 +2380,7 @@
                 "Heavy BleedingChance": "+10",
                 "RicochetChance": "385",
                 "Special Effects": "",
-                "Sold by": "JaegerLL2"
+                "Sold by": "JaegerLL2WorkbenchLV1"
             },
             {
                 "Caliber": "12x70mm",
@@ -2324,7 +2397,7 @@
                 "Heavy BleedingChance": "+10",
                 "RicochetChance": "510",
                 "Special Effects": "",
-                "Sold by": "JaegerLL4"
+                "Sold by": "JaegerLL4WorkbenchLV3"
             },
             {
                 "Caliber": "12x70mm",
@@ -2358,7 +2431,7 @@
                 "Heavy BleedingChance": "+25",
                 "RicochetChance": "320",
                 "Special Effects": "Subsonic",
-                "Sold by": "JaegerLL3"
+                "Sold by": "JaegerLL3WorkbenchLV2"
             },
             {
                 "Caliber": "12x70mm",
@@ -2409,7 +2482,7 @@
                 "Heavy BleedingChance": "+40",
                 "RicochetChance": "594",
                 "Special Effects": "",
-                "Sold by": "JaegerLL4"
+                "Sold by": "JaegerLL4WorkbenchLV2"
             },
             {
                 "Caliber": "12x70mm",
@@ -2685,7 +2758,7 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "80",
                 "Special Effects": "Flashbang",
-                "Sold by": "PraporLL3 afterOur Own Land"
+                "Sold by": "PraporLL3 afterOur Own LandWorkbenchLV3"
             },
             {
                 "Caliber": "23x75mm",
@@ -2702,7 +2775,7 @@
                 "Heavy BleedingChance": "",
                 "RicochetChance": "270",
                 "Special Effects": "",
-                "Sold by": "PraporLL2"
+                "Sold by": "PraporLL3"
             },
             {
                 "Caliber": "23x75mm",
@@ -2744,7 +2817,7 @@
                 "Name": "40x46mm M381 (HE) grenade",
                 "Damage": "199",
                 "Penetration Power": "1",
-                "Armor Damage": "0.1",
+                "Armor Damage": "0.015",
                 "Accuracy": "1-7",
                 "Recoil": "70",
                 "FragmentationChance": "10xM67 Shrapnel",
@@ -2758,7 +2831,7 @@
                 "Name": "40x46mm M386 (HE) grenade",
                 "Damage": "199",
                 "Penetration Power": "1",
-                "Armor Damage": "0.3",
+                "Armor Damage": "0.145",
                 "Accuracy": "1-7",
                 "Recoil": "70",
                 "FragmentationChance": "10xM67 Shrapnel",
@@ -2772,7 +2845,7 @@
                 "Name": "40x46mm M406 (HE) grenade",
                 "Damage": "199",
                 "Penetration Power": "1",
-                "Armor Damage": "0.3",
+                "Armor Damage": "0.145",
                 "Accuracy": "1-7",
                 "Recoil": "70",
                 "FragmentationChance": "10xM67 Shrapnel",
@@ -2786,7 +2859,7 @@
                 "Name": "40x46mm M433 (HEDP) grenade",
                 "Damage": "199",
                 "Penetration Power": "1",
-                "Armor Damage": "0.3",
+                "Armor Damage": "0.145",
                 "Accuracy": "1-5",
                 "Recoil": "90",
                 "FragmentationChance": "15xF1 Shrapnel",
@@ -2800,7 +2873,7 @@
                 "Name": "40x46mm M441 (HE) grenade",
                 "Damage": "199",
                 "Penetration Power": "1",
-                "Armor Damage": "0.1",
+                "Armor Damage": "0.015",
                 "Accuracy": "1-8",
                 "Recoil": "80",
                 "FragmentationChance": "10xM67 Shrapnel",
@@ -2814,7 +2887,7 @@
                 "Name": "40x46mm M576 (MP-APERS) grenade",
                 "Damage": "15x160",
                 "Penetration Power": "5",
-                "Armor Damage": "0.1",
+                "Armor Damage": "0.015",
                 "Accuracy": "-",
                 "Recoil": "-",
                 "FragmentationChance": "-",
