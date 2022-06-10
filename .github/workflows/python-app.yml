@@ -30,6 +30,6 @@ jobs:
     - name: Install Library
       run: |
         pip install -r requirements.txt
-    - name: Run Python
+    - name: Test Get Data
       run: |
-        python src/test.py
+        python src/test_get_data.py
