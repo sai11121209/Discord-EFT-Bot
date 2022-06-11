@@ -66,7 +66,6 @@ jaWikiUrl = "https://wikiwiki.jp/eft/"
 enWikiUrl = "https://escapefromtarkov.fandom.com/wiki/"
 marketUrl = "https://tarkov-market.com/item/"
 sendTemplatetext = "EFT(Escape from Tarkov) Wiki "
-voiceChatRole = 839773477095211018
 receivedtext = None
 mapData = None
 slash = None
@@ -742,49 +741,6 @@ class EFTBot(commands.Bot):
             self.server_status = res
             self.server_status_count += 1
 
-    # 役職追加時発火
-    @client.event
-    async def add_role(self, member):
-        role = member.guild.get_role(voiceChatRole)
-        await member.add_roles(role)
-
-    # 役職剥奪時発火
-    @client.event
-    async def remove_role(self, member):
-        role = member.guild.get_role(voiceChatRole)
-        await member.remove_roles(role)
-
-    # ボイスチャンネル参加・退出時発火
-    @client.event
-    async def on_voice_state_update(self, member, before, after):
-        # 本番テキストチャンネル
-        channel = self.get_channel(818751361511718942)
-        # テストテキストチャンネル
-        # channel = client.get_channel(808821063387316254)
-        user = str(member).split("#")[0]
-        if before.channel == None and after.channel:
-            await channel.send(
-                f"@everyone {user} がボイスチャンネル {after.channel} にてボイスチャットを開始しました。"
-            )
-            await self.add_role(member)
-        elif (
-            before.channel
-            and after.channel
-            and before.deaf == after.deaf
-            and before.mute == after.mute
-            and before.self_deaf == after.self_deaf
-            and before.self_mute == after.self_mute
-            and before.self_stream == after.self_stream
-            and before.self_video == after.self_video
-            and before.channel.id != after.channel.id
-        ):
-            await channel.send(
-                f"@everyone {user} がボイスチャンネル {before.channel} からボイスチャンネル {after.channel} に移動しました。"
-            )
-        elif before.channel and after.channel == None:
-            # await channel.send(f"@everyone {user} がボイスチャンネル {before.channel} を退出しました。")
-            await self.remove_role(member)
-
     # リアクション反応時発火
     @client.event
     async def on_reaction_add(self, reaction, user):
@@ -984,22 +940,6 @@ class EFTBot(commands.Bot):
         # メッセージ送信者がBotだった場合は無視する
         if not len(message.content):
             return 0
-        if not message.author.bot:
-            if message.channel.id == notificationGneralChannelId:
-                await message.delete()
-                if message.reference:
-                    user = [
-                        member
-                        for member in message.guild.members
-                        if message.reference.resolved.content.split(" by ")[1]
-                        == member.name
-                    ][0]
-                    await message.channel.send(f"{user.mention} {message.content}")
-                else:
-                    await message.channel.send(
-                        f"@everyone {message.content} by {message.author.name}"
-                    )
-                    return 0
         if message.author.bot and LOCAL_HOST == False:
             # 本番テキストチャンネル
             specificChannelId = 811566006132408340
@@ -1030,18 +970,6 @@ class EFTBot(commands.Bot):
                     text += f"{message.content}\n\n"
                     text += f"多分英語わからんやろ... 翻訳したるわ。感謝しな\n\n{res['text']}"
                     await channel.send(f"{text}{message.content}")
-
-        if message.author.bot == False and self.LOCAL_HOST == False:
-            if re.search(r"出会い|繋がりたい|美女|美男|可愛い|募集|フレンド", message.content):
-                text = f"本discordサーバでは**出会い**を目的とした**フレンド募集**を含む投稿を全面的に禁止しています。\n\n 以下の文章が違反している可能性があります。\n\n **以下違反文** \n ```{message.content}```"
-                embed = discord.Embed(
-                    title="警告!!",
-                    description=text,
-                    color=0xFF0000,
-                )
-
-                await message.channel.send(f"{message.author.mention}")
-                await message.channel.send(embed=embed)
 
         if (
             self.developMode
@@ -1074,24 +1002,6 @@ class EFTBot(commands.Bot):
                 elif message.content == f"{self.command_prefix}develop":
                     await message.delete()
                     # await bot.process_commands(message)
-        else:
-            try:
-                if (
-                    message.guild.get_role(voiceChatRole) in message.author.roles
-                    and message.channel.id != notificationGneralChannelId
-                    and message.channel.id != 890618625508122624
-                ):
-                    await message.delete()
-                    if message.mentions:
-                        await message.channel.send(
-                            f"<@&{voiceChatRole}> {message.mentions[0].mention} {message.content} by {message.author.name}"
-                        )
-                    else:
-                        await message.channel.send(
-                            f"<@&{voiceChatRole}> {message.content} by {message.author.name}"
-                        )
-            except:
-                pass
 
 
 def Initialize():
