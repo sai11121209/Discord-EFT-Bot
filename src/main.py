@@ -29,7 +29,7 @@ try:
 except ImportError:
     import keep_alive
 
-    keep_alive.keep_alive()
+    # keep_alive.keep_alive()
 
 
 # 自分のBotのアクセストークンに置き換えてください
