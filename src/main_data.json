@@ -8,8 +8,8 @@
             "Duration": "35 ",
             "Players": "9-12",
             "Enemy types": [
-                "Reshala",
                 "Cultists",
+                "Reshala",
                 "Scavs"
             ],
             "Release state": "Released",
@@ -34,12 +34,12 @@
             },
             "Players": "4-6",
             "Enemy types": [
-                "Day:",
-                "Scavs",
                 "Cultists",
+                "Night:",
+                "Day:",
                 ",",
-                "Tagilla",
-                "Night:"
+                "Scavs",
+                "Tagilla"
             ],
             "Release state": "Released",
             "Images": {
@@ -163,8 +163,8 @@
             "Players": "9-14",
             "Enemy types": [
                 "Cultists",
-                "Scavs",
-                "Shturman"
+                "Shturman",
+                "Scavs"
             ],
             "Release state": "Released",
             "Images": {

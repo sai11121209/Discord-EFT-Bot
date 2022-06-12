@@ -1,0 +1,15 @@
+[Unit]
+Description=Discord Bot EFT Process
+After=syslog.target network.target
+
+[Service]
+EnvironmentFile=/etc/sysconfig/discord-bot-eft-env
+WorkingDirectory=/home/sai11121209
+ExecStart=/home/sai11121209/envs/discord-bot-eft/bin/python /home/sai11121209/Discord-EFT-Bot/src/main.py
+Restart=always
+CPUShares=128
+CPUQuota=15%
+
+[Install]
+WantedBy=multi-user.target
+
