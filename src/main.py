@@ -1174,7 +1174,7 @@ def GetMapData(mapLists):
 def GetTraderName():
     res = rq.get(f"{enWikiUrl}Trading")
     soup = BeautifulSoup(res.text, "lxml")
-    soup = soup.find(class_="wikitable sortable")
+    soup = soup.find(class_="wikitable")
     return [
         s.find_all("a")[0].get_text().replace(" ", "")
         for s in soup.find_all("tr")
@@ -1185,7 +1185,7 @@ def GetTraderName():
 def GetBossName():
     res = rq.get(f"{enWikiUrl}Scav_Bosses")
     soup = BeautifulSoup(res.text, "lxml")
-    soup = soup.find(class_="wikitable sortable")
+    soup = soup.find(class_="wikitable")
     return [
         s.find_all("a")[0].get_text().replace(" ", "")
         for s in soup.find_all("tr")
